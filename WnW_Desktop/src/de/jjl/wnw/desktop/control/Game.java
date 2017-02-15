@@ -2,6 +2,7 @@ package de.jjl.wnw.desktop.control;
 
 import de.jjl.wnw.base.consts.Const;
 import de.jjl.wnw.desktop.gui.GUI;
+import de.jjl.wnw.desktop.gui.def.DefaultMainMenu;
 
 /**
  * This is class.
@@ -24,6 +25,7 @@ public class Game
 	public void start()
 	{
 		gui.setTitle(Const.TITLE);
+		gui.setScene(new DefaultMainMenu());
 		gui.show();
 	}
 }

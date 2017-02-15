@@ -13,8 +13,5 @@ public interface GUI
 
 	public void setTitle(String title);
 
-	/**
-	 * Returns to the main menu of the @{code GUI}.
-	 */
-	public void goToMain();
+	void setScene(JFXFrame root);
 }

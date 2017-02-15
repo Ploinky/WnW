@@ -1,6 +1,8 @@
 package de.jjl.wnw.desktop.gui.def;
 
 import de.jjl.wnw.desktop.gui.GUI;
+import de.jjl.wnw.desktop.gui.JFXFrame;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 /**
@@ -15,12 +17,6 @@ public class DefaultGUI implements GUI
 	public DefaultGUI(Stage stage)
 	{
 		this.stage = stage;
-		init();
-	}
-
-	private void init()
-	{
-		goToMain();
 	}
 
 	@Override
@@ -42,8 +38,8 @@ public class DefaultGUI implements GUI
 	}
 
 	@Override
-	public void goToMain()
+	public void setScene(JFXFrame root)
 	{
-		stage.setScene(new DefaultMainMenu());
+		stage.setScene(new Scene(root));
 	}
 }
