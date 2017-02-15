@@ -1,6 +1,6 @@
-package de.jjl.wnw.desktop.gui;
+package de.jjl.wnw.desktop.gui.def;
 
-import de.jjl.wnw.desktop.gui.menu.DefaultMainMenu;
+import de.jjl.wnw.desktop.gui.GUI;
 import javafx.stage.Stage;
 
 /**

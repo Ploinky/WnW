@@ -1,8 +1,8 @@
 package de.jjl.wnw.desktop.start;
 
 import de.jjl.wnw.desktop.control.Game;
-import de.jjl.wnw.desktop.gui.DefaultGUI;
 import de.jjl.wnw.desktop.gui.GUI;
+import de.jjl.wnw.desktop.gui.def.DefaultGUI;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
