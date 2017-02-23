@@ -21,7 +21,7 @@ public class DefaultMainMenu extends JFXFrame
 		setVgap(10);
 
 		Label lblTitle = new Label(Const.TITLE);
-		lblTitle.setStyle("-fx-font-size: 25pt; -fx-font-weight: bold;");
+		lblTitle.setFont(Const.FONT_TITLE);
 		add(lblTitle);
 
 		nextRow();
