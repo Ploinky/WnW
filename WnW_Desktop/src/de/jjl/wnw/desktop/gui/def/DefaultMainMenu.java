@@ -29,6 +29,7 @@ public class DefaultMainMenu extends JFXFrame
 
 		Button btnHost = new Button("Host");
 		btnHost.setStyle("-fx-font-size: 18pt;");
+		btnHost.setPrefWidth(250);
 		add(btnHost).setHGrow(Priority.ALWAYS).setVGrow(Priority.SOMETIMES).setAligment(HPos.CENTER, VPos.CENTER);
 		btnHost.setOnAction(e ->
 		{
@@ -37,6 +38,7 @@ public class DefaultMainMenu extends JFXFrame
 
 		Button btnExit = new Button("Exit");
 		btnExit.setStyle("-fx-font-size: 18pt;");
+		btnExit.setPrefWidth(250);
 		add(btnExit).setHGrow(Priority.ALWAYS).setVGrow(Priority.SOMETIMES).setAligment(HPos.CENTER, VPos.CENTER);
 		btnExit.setOnAction(e ->
 		{
