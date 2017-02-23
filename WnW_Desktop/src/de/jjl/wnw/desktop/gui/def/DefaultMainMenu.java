@@ -28,19 +28,13 @@ public class DefaultMainMenu extends JFXFrame
 
 		DefaultButton btnHost = new DefaultButton("Host");
 		add(btnHost).setVGrow(Priority.SOMETIMES);
-		btnHost.setOnAction(e ->
-		{
-			Platform.exit();
-		});
+		btnHost.setOnAction(e -> listeners.forEach(c -> c.requestHost()));
 
 		nextRow();
 
 		DefaultButton btnExit = new DefaultButton("Exit");
 		add(btnExit).setVGrow(Priority.SOMETIMES);
-		btnExit.setOnAction(e ->
-		{
-			Platform.exit();
-		});
+		btnExit.setOnAction(e -> Platform.exit());
 
 		nextRow();
 
