@@ -1,11 +1,15 @@
 package de.jjl.wnw.desktop.gui;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 
-import javafx.geometry.*;
+import javafx.geometry.HPos;
+import javafx.geometry.Pos;
+import javafx.geometry.VPos;
 import javafx.scene.Node;
-import javafx.scene.layout.*;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
 
 public class JFXFrame extends GridPane
 {
@@ -14,9 +18,9 @@ public class JFXFrame extends GridPane
 	private int colIndex;
 
 	private Node lastChild;
-	
+
 	private GUI parent;
-	
+
 	protected List<GuiListener> listeners;
 
 	public JFXFrame()
@@ -38,18 +42,17 @@ public class JFXFrame extends GridPane
 	 * Adds a {@code Node} to the Frame, using the following default values:
 	 *
 	 * <ul>
-	 * <li> Column Span: <b>Remaining</b>
-	 * <li> Vertical Grow: <b>Always</b>
-	 * <li> Horizontal Grow: <b>Always</b>
-	 * <li> Vertical Alignment: <b>Center</b>
-	 * <li> Horizontal Alignment: <b>Center</b>
+	 * <li>Column Span: <b>Remaining</b>
+	 * <li>Vertical Grow: <b>Always</b>
+	 * <li>Horizontal Grow: <b>Always</b>
+	 * <li>Vertical Alignment: <b>Center</b>
+	 * <li>Horizontal Alignment: <b>Center</b>
 	 * </ul>
 	 */
 	public JFXFrame add(Node n)
 	{
 		add(n, colIndex++, rowIndex, 1, 1);
 		lastChild = n;
-		setColSpan(GridPane.REMAINING);
 		setVGrow(Priority.ALWAYS);
 		setHGrow(Priority.ALWAYS);
 		GridPane.setHalignment(lastChild, HPos.CENTER);
@@ -75,7 +78,7 @@ public class JFXFrame extends GridPane
 		GridPane.setValignment(lastChild, vAlignment);
 		return this;
 	}
-	
+
 	public JFXFrame setColSpan(int colSpan)
 	{
 		GridPane.setColumnSpan(lastChild, colSpan);
@@ -86,22 +89,22 @@ public class JFXFrame extends GridPane
 	{
 		this.parent = parent;
 	}
-	
+
 	public GUI getParentGUI()
 	{
 		return parent;
 	}
-	
+
 	public void addListener(GuiListener g)
 	{
 		listeners.add(g);
 	}
-	
+
 	public void removeListener(GuiListener g)
 	{
 		listeners.remove(g);
 	}
-	
+
 	protected void fireEvent(Consumer<GuiListener> c)
 	{
 		listeners.forEach(c::accept);
