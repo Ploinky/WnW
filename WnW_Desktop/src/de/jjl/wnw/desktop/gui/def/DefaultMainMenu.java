@@ -3,7 +3,6 @@ package de.jjl.wnw.desktop.gui.def;
 import de.jjl.wnw.base.consts.Const;
 import de.jjl.wnw.desktop.gui.JFXFrame;
 import javafx.application.Platform;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
@@ -27,9 +26,7 @@ public class DefaultMainMenu extends JFXFrame
 
 		nextRow();
 
-		Button btnHost = new Button("Host");
-		btnHost.setStyle("-fx-font-size: 18pt;");
-		btnHost.setPrefWidth(250);
+		DefaultButton btnHost = new DefaultButton("Host");
 		add(btnHost).setVGrow(Priority.SOMETIMES);
 		btnHost.setOnAction(e ->
 		{
@@ -38,9 +35,7 @@ public class DefaultMainMenu extends JFXFrame
 
 		nextRow();
 
-		Button btnExit = new Button("Exit");
-		btnExit.setStyle("-fx-font-size: 18pt;");
-		btnExit.setPrefWidth(250);
+		DefaultButton btnExit = new DefaultButton("Exit");
 		add(btnExit).setVGrow(Priority.SOMETIMES);
 		btnExit.setOnAction(e ->
 		{
