@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import javafx.geometry.HPos;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
@@ -29,6 +30,7 @@ public class JFXFrame extends GridPane
 		colIndex = 0;
 		listeners = new ArrayList<>();
 		setAlignment(Pos.CENTER);
+		setPadding(new Insets(10, 10, 10, 10));
 	}
 
 	public JFXFrame nextRow()
@@ -83,6 +85,13 @@ public class JFXFrame extends GridPane
 	{
 		GridPane.setColumnSpan(lastChild, colSpan);
 		return this;
+	}
+
+	public JFXFrame addFrame()
+	{
+		JFXFrame childFrame = new JFXFrame();
+		add(childFrame);
+		return childFrame;
 	}
 
 	public void setParentGUI(GUI parent)

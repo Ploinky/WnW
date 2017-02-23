@@ -5,8 +5,13 @@ package de.jjl.wnw.desktop.gui.def;
 
 import de.jjl.wnw.base.consts.Const;
 import de.jjl.wnw.desktop.gui.JFXFrame;
-import javafx.scene.control.*;
-import javafx.scene.layout.*;
+import javafx.geometry.HPos;
+import javafx.geometry.Insets;
+import javafx.geometry.VPos;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
 
 public class DefaultHostMenu extends JFXFrame
 {
@@ -24,37 +29,39 @@ public class DefaultHostMenu extends JFXFrame
 		lblTitle.setFont(Const.FONT_TITLE);
 		add(lblTitle);
 
-		nextRow();		
-		
+		nextRow();
+
+		JFXFrame f = addFrame();
+
 		Label lblIp = new Label("IP:");
 		lblIp.setFont(Const.FONT_DEFAULT);
-		add(lblIp).setVGrow(Priority.SOMETIMES);
+		lblIp.setPadding(new Insets(0, 10, 0, 0));
+		f.add(lblIp).setAligment(HPos.RIGHT, VPos.CENTER);
 
-		TextField txtIp = new TextField("Enter ip");
+		TextField txtIp = new TextField("");
 		txtIp.setFont(Const.FONT_DEFAULT);
-		add(txtIp).setVGrow(Priority.SOMETIMES);
-		
-		
-		nextRow();		
-
-		Button btnStart = new Button("Start");
-		btnStart.setFont(Const.FONT_DEFAULT);
-		add(btnStart).setVGrow(Priority.SOMETIMES);
-		
-		nextRow();		
-		
-		Button btnBack= new Button("Back");
-		btnBack.setFont(Const.FONT_DEFAULT);
-		add(btnBack).setVGrow(Priority.SOMETIMES);
-		btnBack.setOnAction(e ->
+		txtIp.textProperty().addListener((p, o, n) ->
 		{
-			fireEvent(l -> 
+			if (n.matches(".*(\\D).*"))
 			{
-				l.requestMain();
-			});
+				txtIp.setText(o);
+			}
 		});
-		
-		nextRow();		
+		f.add(txtIp);
+		f.add(new Pane());
+
+		nextRow();
+
+		DefaultButton btnStart = new DefaultButton("Start");
+		add(btnStart).setVGrow(Priority.SOMETIMES);
+
+		nextRow();
+
+		DefaultButton btnBack = new DefaultButton("Back");
+		add(btnBack).setVGrow(Priority.SOMETIMES);
+		btnBack.setOnAction(e -> fireEvent(l -> l.requestMain()));
+
+		nextRow();
 
 		add(new Pane()).setVGrow(Priority.ALWAYS);
 	}
