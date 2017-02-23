@@ -3,12 +3,8 @@ package de.jjl.wnw.desktop.gui.def;
 import de.jjl.wnw.base.consts.Const;
 import de.jjl.wnw.desktop.gui.JFXFrame;
 import javafx.application.Platform;
-import javafx.geometry.HPos;
-import javafx.geometry.VPos;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
 
 public class DefaultMainMenu extends JFXFrame
 {

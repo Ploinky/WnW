@@ -13,5 +13,9 @@ public interface GUI
 
 	public void setTitle(String title);
 
-	void setScene(JFXFrame root);
+	public void setScene(JFXFrame root);
+	
+	public void addListener(GuiListener g);
+
+	public void removeListener(GuiListener g);
 }
