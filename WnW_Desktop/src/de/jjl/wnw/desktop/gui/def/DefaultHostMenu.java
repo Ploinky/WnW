@@ -42,7 +42,7 @@ public class DefaultHostMenu extends JFXFrame
 		txtIp.setFont(Const.FONT_DEFAULT);
 		txtIp.textProperty().addListener((p, o, n) ->
 		{
-			if (n.matches(".*(\\D).*"))
+			if (!n.matches("[0-9]{0,3}\\.?[0-9]{0,3}\\.?[0-9]{0,3}\\.?[0-9]{0,3}"))
 			{
 				txtIp.setText(o);
 			}
@@ -63,7 +63,7 @@ public class DefaultHostMenu extends JFXFrame
 
 		nextRow();
 
-		add(new Pane()).setVGrow(Priority.ALWAYS);
+		add(new Pane());
 	}
 
 }
