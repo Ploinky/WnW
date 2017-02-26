@@ -60,6 +60,8 @@ public class WnWServer
 		public ServerThread() throws IOException
 		{
 			server = new ServerSocket(port);
+			
+			setDaemon(true);
 		}
 		
 		public void stopThread()

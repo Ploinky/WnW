@@ -103,6 +103,8 @@ public class WnWConnection implements Closeable
 		public RcvThread(Reader reader)
 		{
 			this.reader = new BufferedReader(reader);
+			
+			setDaemon(true);
 		}
 		
 		@Override
@@ -159,6 +161,8 @@ public class WnWConnection implements Closeable
 		public SendThread(Writer writer)
 		{
 			this.writer = new BufferedWriter(writer);
+			
+			setDaemon(true);
 		}
 		
 		@Override

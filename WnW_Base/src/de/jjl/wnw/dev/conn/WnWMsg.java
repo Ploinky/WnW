@@ -42,10 +42,6 @@ public class WnWMsg
 			{
 				throw new IllegalArgumentException("Msg<" + msg + "> is invalid, parameter<" + p + "> has no key");
 			}
-			if(idx == p.length() - 1)
-			{
-				throw new IllegalArgumentException("Msg<" + msg + "> is invalid, parameter<" + p + "> has no value");
-			}
 			
 			params.put(p.substring(0, i), p.substring(i + 1));
 		}
