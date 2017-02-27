@@ -5,7 +5,6 @@ package de.jjl.wnw.desktop.gui.def;
 
 import de.jjl.wnw.base.consts.Const;
 import de.jjl.wnw.desktop.gui.JFXFrame;
-import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.Priority;
 
@@ -31,18 +30,32 @@ public class DefaultLobby extends JFXFrame
 			
 			JFXFrame chatContainer = lobbyContainer.addFrame();
 			
-			Label lblChat = new Label();
-			lblChat.setAlignment(Pos.BOTTOM_LEFT);
-			lblChat.setFont(Const.FONT_SMALL);
-			chatContainer.add(lblChat);
-			
-			lblChat.setText("Testing123");
+			TextArea areaChat = new TextArea();
+			areaChat.setEditable(false);
+			chatContainer.add(areaChat);
 			
 			chatContainer.nextRow();
 			
+			JFXFrame inputContainer = chatContainer.addFrame();
+			chatContainer.vGrow(Priority.NEVER);
+			
 			TextField txtChat = new TextField();
 			txtChat.setFont(Const.FONT_SMALL);
-			chatContainer.add(txtChat).vGrow(Priority.NEVER);
+			txtChat.onActionProperty().set(e ->
+			{
+				areaChat.appendText(txtChat.getText() + "\n");
+				txtChat.clear();
+			});
+			inputContainer.add(txtChat).vGrow(Priority.NEVER);
+			
+			Button btnSend = new Button("Send");
+			btnSend.setFont(Const.FONT_SMALL);
+			btnSend.setOnAction(e -> 
+			{
+				areaChat.appendText(txtChat.getText() + "\n");
+				txtChat.clear();
+			});
+			inputContainer.add(btnSend).vGrow(Priority.NEVER).hGrow(Priority.NEVER);
 			
 			ListView<String> listClients = new ListView<>();
 			lobbyContainer.add(listClients);
