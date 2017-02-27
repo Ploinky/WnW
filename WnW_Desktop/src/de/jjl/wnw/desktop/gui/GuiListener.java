@@ -8,4 +8,6 @@ public interface GuiListener
 	public void requestHost();
 
 	public void requestMain();
+
+	public void requestLobby();
 }

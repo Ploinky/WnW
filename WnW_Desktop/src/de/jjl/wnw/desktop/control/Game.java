@@ -41,4 +41,10 @@ public class Game implements GuiListener
 	{
 		gui.setScene(new DefaultMainMenu());
 	}
+
+	@Override
+	public void requestLobby()
+	{
+		gui.setScene(new DefaultLobby());
+	}
 }

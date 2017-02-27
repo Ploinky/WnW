@@ -62,6 +62,7 @@ public class DefaultHostMenu extends JFXFrame
 		
 		DefaultButton btnStart = new DefaultButton("Start");
 		add(btnStart).vGrow(Priority.SOMETIMES);
+		btnStart.setOnAction(e -> fireEvent(l -> l.requestLobby()));
 
 		nextRow();
 
