@@ -27,13 +27,13 @@ public class DefaultMainMenu extends JFXFrame
 		nextRow();
 
 		DefaultButton btnHost = new DefaultButton("Host");
-		add(btnHost).setVGrow(Priority.SOMETIMES);
+		add(btnHost).vGrow(Priority.SOMETIMES);
 		btnHost.setOnAction(e -> listeners.forEach(c -> c.requestHost()));
 
 		nextRow();
 
 		DefaultButton btnExit = new DefaultButton("Exit");
-		add(btnExit).setVGrow(Priority.SOMETIMES);
+		add(btnExit).vGrow(Priority.SOMETIMES);
 		btnExit.setOnAction(e -> Platform.exit());
 
 		nextRow();

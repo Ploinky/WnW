@@ -55,14 +55,14 @@ public class JFXFrame extends GridPane
 	{
 		add(n, colIndex++, rowIndex, 1, 1);
 		lastChild = n;
-		setVGrow(Priority.ALWAYS);
+		vGrow(Priority.ALWAYS);
 		setHGrow(Priority.ALWAYS);
 		GridPane.setHalignment(lastChild, HPos.CENTER);
 		GridPane.setValignment(lastChild, VPos.CENTER);
 		return this;
 	}
 
-	public JFXFrame setVGrow(Priority v)
+	public JFXFrame vGrow(Priority v)
 	{
 		GridPane.setVgrow(lastChild, v);
 		return this;

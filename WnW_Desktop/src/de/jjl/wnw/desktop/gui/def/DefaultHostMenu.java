@@ -5,13 +5,9 @@ package de.jjl.wnw.desktop.gui.def;
 
 import de.jjl.wnw.base.consts.Const;
 import de.jjl.wnw.desktop.gui.JFXFrame;
-import javafx.geometry.HPos;
-import javafx.geometry.Insets;
-import javafx.geometry.VPos;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
+import javafx.geometry.*;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
 
 public class DefaultHostMenu extends JFXFrame
 {
@@ -30,13 +26,19 @@ public class DefaultHostMenu extends JFXFrame
 		add(lblTitle);
 
 		nextRow();
+		
+		add(new Pane()).vGrow(Priority.ALWAYS);
+		
+		nextRow();
 
 		JFXFrame f = addFrame();
+		f.setVgap(10);
+		vGrow(Priority.NEVER);
 
 		Label lblIp = new Label("IP:");
 		lblIp.setFont(Const.FONT_DEFAULT);
 		lblIp.setPadding(new Insets(0, 10, 0, 0));
-		f.add(lblIp).setAligment(HPos.RIGHT, VPos.CENTER);
+		f.add(lblIp).setAligment(HPos.RIGHT, VPos.CENTER).vGrow(Priority.NEVER);
 
 		TextField txtIp = new TextField("");
 		txtIp.setFont(Const.FONT_DEFAULT);
@@ -47,18 +49,35 @@ public class DefaultHostMenu extends JFXFrame
 				txtIp.setText(o);
 			}
 		});
-		f.add(txtIp);
+		f.add(txtIp).vGrow(Priority.NEVER);
 		f.add(new Pane());
+		
+		f.nextRow();
 
+		Label lblName = new Label("Name:");
+		lblName.setFont(Const.FONT_DEFAULT);
+		lblName.setPadding(new Insets(0, 10, 0, 0));
+		f.add(lblName).setAligment(HPos.RIGHT, VPos.CENTER).vGrow(Priority.NEVER);
+
+		TextField txtName = new TextField("");
+		txtName.setFont(Const.FONT_DEFAULT);
+		f.add(txtName).vGrow(Priority.NEVER);
+		
+		f.add(new Pane()).vGrow(Priority.NEVER);
+		
+		nextRow();
+		
+		add(new Pane()).vGrow(Priority.ALWAYS);
+		
 		nextRow();
 
 		DefaultButton btnStart = new DefaultButton("Start");
-		add(btnStart).setVGrow(Priority.SOMETIMES);
+		add(btnStart).vGrow(Priority.SOMETIMES);
 
 		nextRow();
 
 		DefaultButton btnBack = new DefaultButton("Back");
-		add(btnBack).setVGrow(Priority.SOMETIMES);
+		add(btnBack).vGrow(Priority.SOMETIMES);
 		btnBack.setOnAction(e -> fireEvent(l -> l.requestMain()));
 
 		nextRow();
