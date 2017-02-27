@@ -1,16 +1,11 @@
 package de.jjl.wnw.desktop.gui;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.function.Consumer;
 
-import javafx.geometry.HPos;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.geometry.VPos;
+import javafx.geometry.*;
 import javafx.scene.Node;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
+import javafx.scene.layout.*;
 
 public class JFXFrame extends GridPane
 {
@@ -39,6 +34,13 @@ public class JFXFrame extends GridPane
 		colIndex = 0;
 		return this;
 	}
+	
+	public JFXFrame colBuffer()
+	{
+		add(new Pane()).vGrow(Priority.NEVER).hGrow(Priority.ALWAYS);
+		
+		return this;
+	}
 
 	/**
 	 * Adds a {@code Node} to the Frame, using the following default values:
@@ -56,9 +58,17 @@ public class JFXFrame extends GridPane
 		add(n, colIndex++, rowIndex, 1, 1);
 		lastChild = n;
 		vGrow(Priority.ALWAYS);
-		setHGrow(Priority.ALWAYS);
+		hGrow(Priority.ALWAYS);
 		GridPane.setHalignment(lastChild, HPos.CENTER);
 		GridPane.setValignment(lastChild, VPos.CENTER);
+		return this;
+	}
+	
+	public JFXFrame rowBuffer()
+	{
+		nextRow();
+		add(new Pane()).vGrow(Priority.ALWAYS).hGrow(Priority.NEVER);
+		nextRow();
 		return this;
 	}
 
@@ -68,7 +78,7 @@ public class JFXFrame extends GridPane
 		return this;
 	}
 
-	public JFXFrame setHGrow(Priority v)
+	public JFXFrame hGrow(Priority v)
 	{
 		GridPane.setHgrow(lastChild, v);
 		return this;

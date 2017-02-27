@@ -7,7 +7,7 @@ import de.jjl.wnw.base.consts.Const;
 import de.jjl.wnw.desktop.gui.JFXFrame;
 import javafx.geometry.*;
 import javafx.scene.control.*;
-import javafx.scene.layout.*;
+import javafx.scene.layout.Priority;
 
 public class DefaultHostMenu extends JFXFrame
 {
@@ -24,12 +24,8 @@ public class DefaultHostMenu extends JFXFrame
 		Label lblTitle = new Label(Const.TITLE_HOST);
 		lblTitle.setFont(Const.FONT_TITLE);
 		add(lblTitle);
-
-		nextRow();
 		
-		add(new Pane()).vGrow(Priority.ALWAYS);
-		
-		nextRow();
+		rowBuffer();
 
 		JFXFrame f = addFrame();
 		f.setVgap(10);
@@ -49,8 +45,7 @@ public class DefaultHostMenu extends JFXFrame
 				txtIp.setText(o);
 			}
 		});
-		f.add(txtIp).vGrow(Priority.NEVER);
-		f.add(new Pane());
+		f.add(txtIp).vGrow(Priority.NEVER).colBuffer();
 		
 		f.nextRow();
 
@@ -61,16 +56,10 @@ public class DefaultHostMenu extends JFXFrame
 
 		TextField txtName = new TextField("");
 		txtName.setFont(Const.FONT_DEFAULT);
-		f.add(txtName).vGrow(Priority.NEVER);
-		
-		f.add(new Pane()).vGrow(Priority.NEVER);
-		
-		nextRow();
-		
-		add(new Pane()).vGrow(Priority.ALWAYS);
-		
-		nextRow();
+		f.add(txtName).vGrow(Priority.NEVER).colBuffer();
 
+		rowBuffer();
+		
 		DefaultButton btnStart = new DefaultButton("Start");
 		add(btnStart).vGrow(Priority.SOMETIMES);
 
@@ -80,9 +69,7 @@ public class DefaultHostMenu extends JFXFrame
 		add(btnBack).vGrow(Priority.SOMETIMES);
 		btnBack.setOnAction(e -> fireEvent(l -> l.requestMain()));
 
-		nextRow();
-
-		add(new Pane());
+		rowBuffer();
 	}
 
 }
