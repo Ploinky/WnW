@@ -1,5 +1,7 @@
 package de.jjl.wnw.desktop.gui;
 
+import java.util.Locale;
+
 /**
  * Represents the view of the game.
  *
@@ -14,7 +16,9 @@ public interface GUI
 	public void setTitle(String title);
 
 	public void setScene(JFXFrame root);
-	
+
+	public void setLocale(Locale l);
+
 	public void addListener(GuiListener g);
 
 	public void removeListener(GuiListener g);

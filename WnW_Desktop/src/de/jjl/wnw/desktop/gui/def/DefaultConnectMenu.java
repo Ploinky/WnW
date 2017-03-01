@@ -1,6 +1,3 @@
-/*
- * Copyright © 2017 Unitechnik Systems GmbH. All Rights Reserved.
- */
 package de.jjl.wnw.desktop.gui.def;
 
 import de.jjl.wnw.base.consts.Const;
@@ -12,9 +9,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Priority;
 
-public class DefaultHostMenu extends JFXFrame
+public class DefaultConnectMenu extends JFXFrame
 {
-	public DefaultHostMenu()
+	public DefaultConnectMenu()
 	{
 		init();
 	}
@@ -33,6 +30,24 @@ public class DefaultHostMenu extends JFXFrame
 		JFXFrame f = addFrame();
 		f.setVgap(10);
 		vGrow(Priority.NEVER);
+
+		Label lblIp = new Label("IP:");
+		lblIp.setFont(Const.FONT_DEFAULT);
+		lblIp.setPadding(new Insets(0, 10, 0, 0));
+		f.add(lblIp).setAligment(HPos.RIGHT, VPos.CENTER).vGrow(Priority.NEVER);
+
+		TextField txtIp = new TextField("");
+		txtIp.setFont(Const.FONT_DEFAULT);
+		txtIp.textProperty().addListener((p, o, n) ->
+		{
+			if (!n.matches("[0-9]{0,3}\\.?[0-9]{0,3}\\.?[0-9]{0,3}\\.?[0-9]{0,3}"))
+			{
+				txtIp.setText(o);
+			}
+		});
+		f.add(txtIp).vGrow(Priority.NEVER).colBuffer();
+
+		f.nextRow();
 
 		Label lblName = new Label("Name:");
 		lblName.setFont(Const.FONT_DEFAULT);

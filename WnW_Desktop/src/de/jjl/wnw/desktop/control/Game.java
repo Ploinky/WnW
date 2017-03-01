@@ -1,8 +1,12 @@
 package de.jjl.wnw.desktop.control;
 
 import de.jjl.wnw.base.consts.Const;
-import de.jjl.wnw.desktop.gui.*;
-import de.jjl.wnw.desktop.gui.def.*;
+import de.jjl.wnw.desktop.gui.GUI;
+import de.jjl.wnw.desktop.gui.GuiListener;
+import de.jjl.wnw.desktop.gui.def.DefaultConnectMenu;
+import de.jjl.wnw.desktop.gui.def.DefaultHostMenu;
+import de.jjl.wnw.desktop.gui.def.DefaultLobby;
+import de.jjl.wnw.desktop.gui.def.DefaultMainMenu;
 
 /**
  * This is class.
@@ -46,5 +50,11 @@ public class Game implements GuiListener
 	public void requestLobby()
 	{
 		gui.setScene(new DefaultLobby());
+	}
+
+	@Override
+	public void requestConnect()
+	{
+		gui.setScene(new DefaultConnectMenu());
 	}
 }

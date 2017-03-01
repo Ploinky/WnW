@@ -1,5 +1,7 @@
 package de.jjl.wnw.desktop.gui.def;
 
+import java.util.Locale;
+
 import de.jjl.wnw.desktop.gui.JFXFrame;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -41,5 +43,12 @@ public class DefaultGUI extends BaseGUI
 	{
 		listeners.forEach(root::addListener);
 		stage.setScene(new Scene(root));
+	}
+
+	@Override
+	public void setLocale(Locale l)
+	{
+		// TODO Auto-generated method stub
+
 	}
 }

@@ -1,6 +1,7 @@
 package de.jjl.wnw.desktop.gui.def;
 
 import de.jjl.wnw.base.consts.Const;
+import de.jjl.wnw.base.lang.Translator;
 import de.jjl.wnw.desktop.gui.JFXFrame;
 import javafx.application.Platform;
 import javafx.scene.control.Label;
@@ -26,13 +27,19 @@ public class DefaultMainMenu extends JFXFrame
 
 		nextRow();
 
+		DefaultButton btnConnect = new DefaultButton("Connect");
+		add(btnConnect).vGrow(Priority.SOMETIMES);
+		btnConnect.setOnAction(e -> listeners.forEach(c -> c.requestConnect()));
+
+		nextRow();
+
 		DefaultButton btnHost = new DefaultButton("Host");
 		add(btnHost).vGrow(Priority.SOMETIMES);
 		btnHost.setOnAction(e -> listeners.forEach(c -> c.requestHost()));
 
 		nextRow();
 
-		DefaultButton btnExit = new DefaultButton("Exit");
+		DefaultButton btnExit = new DefaultButton(Translator.translate("BtnKey"));
 		add(btnExit).vGrow(Priority.SOMETIMES);
 		btnExit.setOnAction(e -> Platform.exit());
 

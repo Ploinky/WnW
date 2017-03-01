@@ -10,4 +10,6 @@ public interface GuiListener
 	public void requestMain();
 
 	public void requestLobby();
+
+	public void requestConnect();
 }
