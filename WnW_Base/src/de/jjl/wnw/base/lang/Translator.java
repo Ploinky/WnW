@@ -9,11 +9,11 @@ public class Translator
 
 	private static Locale currentLocale;
 
-	public Translator get()
+	public static Translator get()
 	{
 		if (instance == null)
 		{
-			instance = new Translator(Locale.ENGLISH);
+			instance = new Translator(new Locale("en"));
 		}
 
 		return instance;
@@ -24,7 +24,7 @@ public class Translator
 		currentLocale = locale;
 	}
 
-	public static String translate(String key)
+	public String translate(String key)
 	{
 		ResourceBundle bundleMenu = ResourceBundle.getBundle("de.jjl.wnw.base.lang.menu", currentLocale);
 		return bundleMenu.getString(key);

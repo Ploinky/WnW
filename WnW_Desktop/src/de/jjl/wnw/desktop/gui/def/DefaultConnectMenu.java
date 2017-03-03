@@ -1,6 +1,7 @@
 package de.jjl.wnw.desktop.gui.def;
 
 import de.jjl.wnw.base.consts.Const;
+import de.jjl.wnw.base.lang.Translator;
 import de.jjl.wnw.desktop.gui.JFXFrame;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
@@ -31,7 +32,7 @@ public class DefaultConnectMenu extends JFXFrame
 		f.setVgap(10);
 		vGrow(Priority.NEVER);
 
-		Label lblIp = new Label("IP:");
+		Label lblIp = new Label(Translator.get().translate("LblIp") + ":");
 		lblIp.setFont(Const.FONT_DEFAULT);
 		lblIp.setPadding(new Insets(0, 10, 0, 0));
 		f.add(lblIp).setAligment(HPos.RIGHT, VPos.CENTER).vGrow(Priority.NEVER);
@@ -49,7 +50,7 @@ public class DefaultConnectMenu extends JFXFrame
 
 		f.nextRow();
 
-		Label lblName = new Label("Name:");
+		Label lblName = new Label(Translator.get().translate("LblName") + ":");
 		lblName.setFont(Const.FONT_DEFAULT);
 		lblName.setPadding(new Insets(0, 10, 0, 0));
 		f.add(lblName).setAligment(HPos.RIGHT, VPos.CENTER).vGrow(Priority.NEVER);
@@ -60,13 +61,13 @@ public class DefaultConnectMenu extends JFXFrame
 
 		rowBuffer();
 
-		DefaultButton btnStart = new DefaultButton("Start");
+		DefaultButton btnStart = new DefaultButton("BtnStart");
 		add(btnStart).vGrow(Priority.SOMETIMES);
 		btnStart.setOnAction(e -> fireEvent(l -> l.requestLobby()));
 
 		nextRow();
 
-		DefaultButton btnBack = new DefaultButton("Back");
+		DefaultButton btnBack = new DefaultButton("BtnBack");
 		add(btnBack).vGrow(Priority.SOMETIMES);
 		btnBack.setOnAction(e -> fireEvent(l -> l.requestMain()));
 
