@@ -12,4 +12,6 @@ public interface GuiListener
 	public void requestLobby();
 
 	public void requestConnect();
+
+	public void requestOptions();
 }

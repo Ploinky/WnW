@@ -8,7 +8,6 @@ import de.jjl.wnw.desktop.gui.JFXFrame;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.VPos;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Priority;
 
@@ -24,7 +23,7 @@ public class DefaultHostMenu extends JFXFrame
 		setPrefSize(800, 600);
 		setVgap(10);
 
-		Label lblTitle = new Label(Const.TITLE_HOST);
+		DefaultLabel lblTitle = new DefaultLabel(Const.TITLE_HOST);
 		lblTitle.setFont(Const.FONT_TITLE);
 		add(lblTitle);
 
@@ -34,7 +33,7 @@ public class DefaultHostMenu extends JFXFrame
 		f.setVgap(10);
 		vGrow(Priority.NEVER);
 
-		Label lblName = new Label("Name:");
+		DefaultLabel lblName = new DefaultLabel("LblName");
 		lblName.setFont(Const.FONT_DEFAULT);
 		lblName.setPadding(new Insets(0, 10, 0, 0));
 		f.add(lblName).setAligment(HPos.RIGHT, VPos.CENTER).vGrow(Priority.NEVER);
@@ -45,13 +44,13 @@ public class DefaultHostMenu extends JFXFrame
 
 		rowBuffer();
 
-		DefaultButton btnStart = new DefaultButton("Start");
+		DefaultButton btnStart = new DefaultButton("BtnStart");
 		add(btnStart).vGrow(Priority.SOMETIMES);
 		btnStart.setOnAction(e -> fireEvent(l -> l.requestLobby()));
 
 		nextRow();
 
-		DefaultButton btnBack = new DefaultButton("Back");
+		DefaultButton btnBack = new DefaultButton("BtnBack");
 		add(btnBack).vGrow(Priority.SOMETIMES);
 		btnBack.setOnAction(e -> fireEvent(l -> l.requestMain()));
 

@@ -1,12 +1,10 @@
 package de.jjl.wnw.desktop.gui.def;
 
 import de.jjl.wnw.base.consts.Const;
-import de.jjl.wnw.base.lang.Translator;
 import de.jjl.wnw.desktop.gui.JFXFrame;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.VPos;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Priority;
 
@@ -22,7 +20,7 @@ public class DefaultConnectMenu extends JFXFrame
 		setPrefSize(800, 600);
 		setVgap(10);
 
-		Label lblTitle = new Label(Const.TITLE_HOST);
+		DefaultLabel lblTitle = new DefaultLabel(Const.TITLE_HOST);
 		lblTitle.setFont(Const.FONT_TITLE);
 		add(lblTitle);
 
@@ -32,7 +30,7 @@ public class DefaultConnectMenu extends JFXFrame
 		f.setVgap(10);
 		vGrow(Priority.NEVER);
 
-		Label lblIp = new Label(Translator.get().translate("LblIp") + ":");
+		DefaultLabel lblIp = new DefaultLabel("LblIp");
 		lblIp.setFont(Const.FONT_DEFAULT);
 		lblIp.setPadding(new Insets(0, 10, 0, 0));
 		f.add(lblIp).setAligment(HPos.RIGHT, VPos.CENTER).vGrow(Priority.NEVER);
@@ -50,7 +48,7 @@ public class DefaultConnectMenu extends JFXFrame
 
 		f.nextRow();
 
-		Label lblName = new Label(Translator.get().translate("LblName") + ":");
+		DefaultLabel lblName = new DefaultLabel("LblName");
 		lblName.setFont(Const.FONT_DEFAULT);
 		lblName.setPadding(new Insets(0, 10, 0, 0));
 		f.add(lblName).setAligment(HPos.RIGHT, VPos.CENTER).vGrow(Priority.NEVER);

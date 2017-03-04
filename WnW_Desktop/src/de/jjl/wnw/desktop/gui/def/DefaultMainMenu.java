@@ -3,7 +3,6 @@ package de.jjl.wnw.desktop.gui.def;
 import de.jjl.wnw.base.consts.Const;
 import de.jjl.wnw.desktop.gui.JFXFrame;
 import javafx.application.Platform;
-import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 
@@ -20,7 +19,7 @@ public class DefaultMainMenu extends JFXFrame
 		setPrefSize(800, 600);
 		setVgap(10);
 
-		Label lblTitle = new Label(Const.TITLE);
+		DefaultLabel lblTitle = new DefaultLabel(Const.TITLE);
 		lblTitle.setFont(Const.FONT_TITLE);
 		add(lblTitle);
 
@@ -35,6 +34,12 @@ public class DefaultMainMenu extends JFXFrame
 		DefaultButton btnHost = new DefaultButton("BtnHost");
 		add(btnHost).vGrow(Priority.SOMETIMES);
 		btnHost.setOnAction(e -> listeners.forEach(c -> c.requestHost()));
+
+		nextRow();
+
+		DefaultButton btnOptions = new DefaultButton("BtnOptions");
+		add(btnOptions).vGrow(Priority.SOMETIMES);
+		btnOptions.setOnAction(e -> listeners.forEach(c -> c.requestOptions()));
 
 		nextRow();
 

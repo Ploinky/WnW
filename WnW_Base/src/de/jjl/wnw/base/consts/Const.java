@@ -1,6 +1,7 @@
 package de.jjl.wnw.base.consts;
 
-import javafx.scene.text.*;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 
 /**
  * Contains all constants used in the project.
@@ -9,11 +10,12 @@ import javafx.scene.text.*;
  */
 public class Const
 {
-	public static final String TITLE = "Witchcraft and Wizardry";
-	public static final String TITLE_HOST = "Hosting Game";
-	public static final String TITLE_LOBBY = "Lobby";
-	
-	public static final Font FONT_TITLE = Font.font(null, FontWeight.BOLD, null, 25);
-	public static final Font FONT_DEFAULT = new Font(18);
-	public static final Font FONT_SMALL = new Font(12);
+	public static final String TITLE = "TitleWnW";
+	public static final String TITLE_HOST = "TitleHost";
+	public static final String TITLE_LOBBY = "TitleLobby";
+	public static final String TITLE_OPTIONS = "TitleOptions";
+
+	public static final Font FONT_TITLE = Font.font("Comic Sans MS", FontWeight.BOLD, null, 25);
+	public static final Font FONT_DEFAULT = new Font("Comic Sans MS", 18);
+	public static final Font FONT_SMALL = new Font("Comic Sans MS", 12);
 }

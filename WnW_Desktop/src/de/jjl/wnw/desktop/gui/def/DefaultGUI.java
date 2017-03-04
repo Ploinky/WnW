@@ -2,8 +2,10 @@ package de.jjl.wnw.desktop.gui.def;
 
 import java.util.Locale;
 
+import de.jjl.wnw.base.lang.Translator;
 import de.jjl.wnw.desktop.gui.JFXFrame;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 /**
@@ -18,6 +20,7 @@ public class DefaultGUI extends BaseGUI
 	public DefaultGUI(Stage stage)
 	{
 		this.stage = stage;
+		stage.getIcons().add(new Image(getClass().getResourceAsStream("./../../../base/res/1-freepik.jpg")));
 	}
 
 	@Override
@@ -35,7 +38,7 @@ public class DefaultGUI extends BaseGUI
 	@Override
 	public void setTitle(String title)
 	{
-		stage.setTitle(title);
+		stage.setTitle(Translator.get().translate(title));
 	}
 
 	@Override

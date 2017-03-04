@@ -2,32 +2,27 @@ package de.jjl.wnw.desktop.gui.def;
 
 import java.util.MissingResourceException;
 
-import de.jjl.wnw.base.consts.Const;
 import de.jjl.wnw.base.lang.Translator;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
-import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 
-public class DefaultButton extends Button implements InvalidationListener
+public class DefaultLabel extends Label implements InvalidationListener
 {
 	private String text;
 
-	public DefaultButton()
+	public DefaultLabel()
 	{
 		this("");
 	}
 
-	public DefaultButton(String text)
+	public DefaultLabel(String text)
 	{
 		super(text);
 
 		this.text = text;
 
-		setFont(Const.FONT_DEFAULT);
-		setPrefWidth(250);
-
 		translateText();
-
 	}
 
 	@Override

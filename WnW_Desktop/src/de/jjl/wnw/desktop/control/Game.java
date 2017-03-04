@@ -7,6 +7,7 @@ import de.jjl.wnw.desktop.gui.def.DefaultConnectMenu;
 import de.jjl.wnw.desktop.gui.def.DefaultHostMenu;
 import de.jjl.wnw.desktop.gui.def.DefaultLobby;
 import de.jjl.wnw.desktop.gui.def.DefaultMainMenu;
+import de.jjl.wnw.desktop.gui.def.DefaultOptionsMenu;
 
 /**
  * This is class.
@@ -56,5 +57,11 @@ public class Game implements GuiListener
 	public void requestConnect()
 	{
 		gui.setScene(new DefaultConnectMenu());
+	}
+
+	@Override
+	public void requestOptions()
+	{
+		gui.setScene(new DefaultOptionsMenu());
 	}
 }
