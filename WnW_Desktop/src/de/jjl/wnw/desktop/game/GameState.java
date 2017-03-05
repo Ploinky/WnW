@@ -2,6 +2,7 @@ package de.jjl.wnw.desktop.game;
 
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -25,6 +26,7 @@ public class GameState {
 		return instance;
 	}
 
+	// Language
 	public String getCurrentLanguage() {
 		if (this.currentLanguage != null)
 			return currentLanguage.get();
@@ -35,6 +37,19 @@ public class GameState {
 		this.currentLanguage.set(currentLanguage);
 	}
 
+	public void addPropertyListenerLanguage(ChangeListener<String> listener) {
+		if (listener == null || this.currentLanguage == null)
+			return;
+		this.currentLanguage.addListener(listener);
+	}
+
+	public void removePropertyListenerLanguage(ChangeListener<String> listener) {
+		if (listener == null || this.currentLanguage == null)
+			return;
+		this.currentLanguage.removeListener(listener);
+	}
+
+	// ConnectedPlayers
 	public boolean addConnectedPlayer(Object connectedPlayer) {
 		if (connectedPlayer == null || connectedPlayers == null || connectedPlayers.get() == null
 				|| connectedPlayers.get().contains(connectedPlayer))
@@ -49,5 +64,17 @@ public class GameState {
 			return false;
 		connectedPlayers.get().remove(disconnectedPlayer);
 		return true;
+	}
+
+	public void addPropertyListenerPlayers(ChangeListener<Object> listener) {
+		if (this.connectedPlayers == null || listener == null)
+			return;
+		this.connectedPlayers.addListener(listener);
+	}
+
+	public void removePropertyListenerPlayers(ChangeListener<Object> listener) {
+		if (this.connectedPlayers == null || listener == null)
+			return;
+		this.connectedPlayers.removeListener(listener);
 	}
 }
