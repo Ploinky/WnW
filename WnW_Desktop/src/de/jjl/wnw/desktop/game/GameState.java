@@ -7,7 +7,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class GameState {
-	private GameState instance;
+	private static GameState instance;
 	private StringProperty currentLanguage;
 	// TODO Create player Object and replace the ObjectType of the List
 	private SimpleListProperty<Object> connectedPlayers;
@@ -18,7 +18,7 @@ public class GameState {
 		this.connectedPlayers = new SimpleListProperty<Object>(observableList);
 	}
 
-	public GameState getInstance() {
+	public static GameState getInstance() {
 		if (instance == null) {
 			instance = new GameState();
 		}
