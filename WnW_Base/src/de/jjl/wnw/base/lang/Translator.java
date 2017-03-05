@@ -17,6 +17,8 @@ public class Translator implements Observable
 
 	private final List<InvalidationListener> listeners;
 
+	private ResourceBundle bundle;
+
 	public static Translator get()
 	{
 		if (instance == null)
@@ -29,14 +31,13 @@ public class Translator implements Observable
 
 	private Translator(Locale locale)
 	{
-		currentLocale = locale;
 		listeners = new ArrayList<>();
+		changeLocale(locale);
 	}
 
 	public String translate(String key)
 	{
-		ResourceBundle bundleMenu = ResourceBundle.getBundle("de.jjl.wnw.base.lang.menu", currentLocale);
-		return bundleMenu.getString(key);
+		return bundle.getString(key);
 	}
 
 	@Override
@@ -54,6 +55,7 @@ public class Translator implements Observable
 	public void changeLocale(Locale newLocale)
 	{
 		this.currentLocale = newLocale;
+		bundle = ResourceBundle.getBundle("de.jjl.wnw.base.lang.menu", currentLocale);
 		invalidate();
 	}
 

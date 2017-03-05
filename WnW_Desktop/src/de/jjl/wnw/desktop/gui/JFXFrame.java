@@ -71,6 +71,7 @@ public class JFXFrame extends GridPane
 	public JFXFrame addFrame()
 	{
 		JFXFrame newFrame = new JFXFrame(listener);
+		newFrame.setPrefSize(0, 0);
 		add(newFrame);
 		return newFrame;
 	}

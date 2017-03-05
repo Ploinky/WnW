@@ -41,6 +41,9 @@ public class Game extends Application implements FrameListener
 			case "SETTINGS":
 				gui.setScene(new FXOptionMenu(this));
 				break;
+			case "MAIN":
+				gui.setScene(new FXMainMenu(this));
+				break;
 
 		}
 	}
