@@ -1,5 +1,6 @@
 package de.jjl.wnw.desktop.gui;
 
+import de.jjl.wnw.desktop.game.FrameListener;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -19,10 +20,14 @@ public class JFXFrame extends GridPane
 
 	private GUI parent;
 
-	public JFXFrame()
+	protected FrameListener listener;
+
+	public JFXFrame(FrameListener listener)
 	{
+		setPrefSize(800, 600);
 		rowIndex = 0;
 		colIndex = 0;
+		this.listener = listener;
 		setAlignment(Pos.CENTER);
 		setPadding(new Insets(10, 10, 10, 10));
 	}
@@ -94,13 +99,6 @@ public class JFXFrame extends GridPane
 	{
 		GridPane.setColumnSpan(lastChild, colSpan);
 		return this;
-	}
-
-	public JFXFrame addFrame()
-	{
-		JFXFrame childFrame = new JFXFrame();
-		add(childFrame);
-		return childFrame;
 	}
 
 	public void setParentGUI(GUI parent)

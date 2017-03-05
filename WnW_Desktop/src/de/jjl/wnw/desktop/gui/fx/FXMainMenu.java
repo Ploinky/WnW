@@ -1,6 +1,7 @@
 package de.jjl.wnw.desktop.gui.fx;
 
 import de.jjl.wnw.base.consts.Const;
+import de.jjl.wnw.desktop.game.FrameListener;
 import de.jjl.wnw.desktop.gui.JFXFrame;
 import de.jjl.wnw.desktop.gui.fx.comp.FXButton;
 import de.jjl.wnw.desktop.gui.fx.comp.FXLabel;
@@ -10,14 +11,14 @@ import javafx.scene.layout.Priority;
 
 public class FXMainMenu extends JFXFrame
 {
-	public FXMainMenu()
+	public FXMainMenu(FrameListener listener)
 	{
+		super(listener);
 		init();
 	}
 
 	private void init()
 	{
-		setPrefSize(800, 600);
 		setVgap(10);
 
 		FXLabel lblTitle = new FXLabel(Const.TITLE);
@@ -37,6 +38,10 @@ public class FXMainMenu extends JFXFrame
 
 		FXButton btnSettings = new FXButton("BtnOptions");
 		add(btnSettings).vGrow(Priority.SOMETIMES);
+		btnSettings.setOnAction(e ->
+		{
+			listener.requestSceneChange("SETTINGS");
+		});
 
 		nextRow();
 
