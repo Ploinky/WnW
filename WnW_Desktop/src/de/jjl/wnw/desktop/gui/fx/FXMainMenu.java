@@ -35,6 +35,11 @@ public class FXMainMenu extends JFXFrame
 
 		nextRow();
 
+		FXButton btnSettings = new FXButton("BtnOptions");
+		add(btnSettings).vGrow(Priority.SOMETIMES);
+
+		nextRow();
+
 		FXButton btnExit = new FXButton("BtnQuit");
 		add(btnExit).vGrow(Priority.SOMETIMES);
 		btnExit.setOnAction(e -> Platform.exit());

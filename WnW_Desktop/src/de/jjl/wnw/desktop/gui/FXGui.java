@@ -1,6 +1,8 @@
 package de.jjl.wnw.desktop.gui;
 
+import de.jjl.wnw.desktop.game.Game;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public class FXGui implements GUI
@@ -10,6 +12,7 @@ public class FXGui implements GUI
 	public FXGui(Stage primaryStage)
 	{
 		stage = primaryStage;
+		stage.getIcons().add(new Image(Game.class.getResourceAsStream("/de/jjl/wnw/base/res/1-freepik.jpg")));
 	}
 
 	@Override

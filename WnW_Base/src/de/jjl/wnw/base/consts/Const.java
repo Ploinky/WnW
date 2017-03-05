@@ -16,7 +16,5 @@ public class Const
 	public static final Font FONT_DEFAULT = new Font("Comic Sans MS", 18);
 	public static final Font FONT_SMALL = new Font("Comic Sans MS", 12);
 
-	public static final String SCENE_HOST = "SceneHost";
-
 	public static final int DEFAULT_PORT = 2556;
 }
