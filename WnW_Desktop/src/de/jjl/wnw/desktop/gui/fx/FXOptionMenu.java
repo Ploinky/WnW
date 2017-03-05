@@ -23,7 +23,6 @@ public class FXOptionMenu extends JFXFrame
 	{
 		super(listener);
 		init();
-		setGridLinesVisible(true);
 	}
 
 	private void init()
@@ -35,17 +34,16 @@ public class FXOptionMenu extends JFXFrame
 		nextRow();
 
 		JFXFrame frameLang = addFrame();
-		frameLang.setGridLinesVisible(true);
-		setVgrow(frameLang, Priority.NEVER);
+		setVgrow(frameLang, Priority.SOMETIMES);
 		frameLang.setHgap(10);
 
 		FXLabel lblLang = new FXLabel("LblLang");
 		lblLang.setFont(Const.FONT_DEFAULT);
-		frameLang.add(lblLang).vGrow(Priority.NEVER).setAligment(HPos.RIGHT, VPos.CENTER);
+		frameLang.add(lblLang).vGrow(Priority.SOMETIMES).setAligment(HPos.RIGHT, VPos.CENTER);
 
 		ComboBox<Language> combLang = new ComboBox<>();
 		combLang.setStyle("-fx-font: 18 'Comic Sans MS' ");
-		frameLang.add(combLang).vGrow(Priority.NEVER).setAligment(HPos.LEFT, VPos.CENTER);
+		frameLang.add(combLang).vGrow(Priority.SOMETIMES).setAligment(HPos.LEFT, VPos.CENTER);
 		Arrays.asList(Language.values()).forEach(l ->
 		{
 			combLang.getItems().add(l);
@@ -56,6 +54,10 @@ public class FXOptionMenu extends JFXFrame
 			Settings.get().setLanguage(n);
 			Translator.get().changeLocale(n.getLocale());
 		});
+
+		nextRow();
+
+		add(new Pane()).vGrow(Priority.ALWAYS);
 
 		nextRow();
 
