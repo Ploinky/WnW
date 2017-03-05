@@ -1,5 +1,7 @@
 package de.jjl.wnw.desktop.game;
 
+import java.util.List;
+
 import de.jjl.wnw.base.player.Player;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.StringProperty;
@@ -88,5 +90,11 @@ public class GameState
 		if (this.connectedPlayers == null || listener == null)
 			return;
 		this.connectedPlayers.removeListener(listener);
+	}
+	
+	public List<Player> getConnectedPlayers(){
+		if(this.connectedPlayers == null || this.connectedPlayers.get() == null)
+			return null;
+		return this.connectedPlayers.get();
 	}
 }
