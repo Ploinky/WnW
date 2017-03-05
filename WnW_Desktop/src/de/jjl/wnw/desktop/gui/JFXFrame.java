@@ -68,6 +68,13 @@ public class JFXFrame extends GridPane
 		return this;
 	}
 
+	public JFXFrame addFrame()
+	{
+		JFXFrame newFrame = new JFXFrame(listener);
+		add(newFrame);
+		return newFrame;
+	}
+
 	public JFXFrame rowBuffer()
 	{
 		nextRow();
