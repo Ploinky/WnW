@@ -11,9 +11,6 @@ import javafx.scene.text.FontWeight;
 public class Const
 {
 	public static final String TITLE = "TitleWnW";
-	public static final String TITLE_HOST = "TitleHost";
-	public static final String TITLE_LOBBY = "TitleLobby";
-	public static final String TITLE_OPTIONS = "TitleOptions";
 
 	public static final Font FONT_TITLE = Font.font("Comic Sans MS", FontWeight.BOLD, null, 25);
 	public static final Font FONT_DEFAULT = new Font("Comic Sans MS", 18);
