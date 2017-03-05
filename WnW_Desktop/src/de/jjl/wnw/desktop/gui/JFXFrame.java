@@ -1,11 +1,13 @@
 package de.jjl.wnw.desktop.gui;
 
-import java.util.*;
-import java.util.function.Consumer;
-
-import javafx.geometry.*;
+import javafx.geometry.HPos;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.geometry.VPos;
 import javafx.scene.Node;
-import javafx.scene.layout.*;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
 
 public class JFXFrame extends GridPane
 {
@@ -17,13 +19,10 @@ public class JFXFrame extends GridPane
 
 	private GUI parent;
 
-	protected List<GuiListener> listeners;
-
 	public JFXFrame()
 	{
 		rowIndex = 0;
 		colIndex = 0;
-		listeners = new ArrayList<>();
 		setAlignment(Pos.CENTER);
 		setPadding(new Insets(10, 10, 10, 10));
 	}
@@ -34,11 +33,11 @@ public class JFXFrame extends GridPane
 		colIndex = 0;
 		return this;
 	}
-	
+
 	public JFXFrame colBuffer()
 	{
 		add(new Pane()).vGrow(Priority.NEVER).hGrow(Priority.ALWAYS);
-		
+
 		return this;
 	}
 
@@ -63,7 +62,7 @@ public class JFXFrame extends GridPane
 		GridPane.setValignment(lastChild, VPos.CENTER);
 		return this;
 	}
-	
+
 	public JFXFrame rowBuffer()
 	{
 		nextRow();
@@ -112,20 +111,5 @@ public class JFXFrame extends GridPane
 	public GUI getParentGUI()
 	{
 		return parent;
-	}
-
-	public void addListener(GuiListener g)
-	{
-		listeners.add(g);
-	}
-
-	public void removeListener(GuiListener g)
-	{
-		listeners.remove(g);
-	}
-
-	protected void fireEvent(Consumer<GuiListener> c)
-	{
-		listeners.forEach(c::accept);
 	}
 }

@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-import de.jjl.wnw.base.cfg.Options;
+import de.jjl.wnw.base.cfg.Settings;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 
@@ -21,7 +21,7 @@ public class Translator implements Observable
 	{
 		if (instance == null)
 		{
-			instance = new Translator(Options.get().getLanguage().getLocale());
+			instance = new Translator(Settings.get().getLanguage().getLocale());
 		}
 
 		return instance;

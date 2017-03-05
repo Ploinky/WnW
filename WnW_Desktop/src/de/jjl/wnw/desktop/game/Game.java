@@ -1,18 +1,19 @@
-package de.jjl.wnw.desktop.start;
+package de.jjl.wnw.desktop.game;
 
-import de.jjl.wnw.desktop.control.Game;
+import de.jjl.wnw.desktop.gui.FXGui;
 import de.jjl.wnw.desktop.gui.GUI;
-import de.jjl.wnw.desktop.gui.def.DefaultGUI;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
 /**
- * Starts the actual game.
+ * This is class.
  *
  * @author johannes.litger
  */
-public class Starter extends Application
+public class Game extends Application
 {
+	private GUI gui;
+
 	public static void main(String[] args)
 	{
 		launch(args);
@@ -22,9 +23,7 @@ public class Starter extends Application
 	@Override
 	public void start(Stage primaryStage) throws Exception
 	{
-		GUI gui = new DefaultGUI(primaryStage);
-		Game game = new Game(gui);
-		game.start();
+		gui = new FXGui(primaryStage);
 	}
 
 }

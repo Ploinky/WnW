@@ -2,24 +2,24 @@ package de.jjl.wnw.base.cfg;
 
 import de.jjl.wnw.base.lang.Language;
 
-public class Options
+public class Settings
 {
-	private static Options instance;
+	private static Settings instance;
 
 	private Language lang;
 
-	private Options()
+	private Settings()
 	{
 		lang = Language.LANG_ENGLISH;
 	}
 
-	public static Options get()
+	public static Settings get()
 	{
 		// TODO $Li Mar 4, 2017 Read options from file?!
 
 		if (instance == null)
 		{
-			instance = new Options();
+			instance = new Settings();
 		}
 
 		return instance;
