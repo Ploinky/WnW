@@ -3,6 +3,7 @@ package de.jjl.wnw.base.lang;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 import de.jjl.wnw.base.cfg.Settings;
@@ -37,7 +38,19 @@ public class Translator implements Observable
 
 	public String translate(String key)
 	{
-		return bundle.getString(key);
+		String s = "?" + key + "?";
+
+		try
+		{
+			s = bundle.getString(key);
+		}
+		catch (MissingResourceException e)
+		{
+			// TODO $Li Mar 10, 2017 Does this need more handling?!
+			System.err.println("Missing resource! Can't find translation for " + key + ".");
+		}
+
+		return s;
 	}
 
 	@Override

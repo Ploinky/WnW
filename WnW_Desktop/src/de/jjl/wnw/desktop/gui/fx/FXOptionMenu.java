@@ -27,7 +27,7 @@ public class FXOptionMenu extends JFXFrame
 
 	private void init()
 	{
-		FXLabel lblSettings = new FXLabel("TitleOptions");
+		FXLabel lblSettings = new FXLabel(Const.TITLE_SETTINGS);
 		lblSettings.setFont(Const.FONT_TITLE);
 		add(lblSettings).vGrow(Priority.ALWAYS);
 
@@ -65,7 +65,7 @@ public class FXOptionMenu extends JFXFrame
 		add(btnBack).vGrow(Priority.SOMETIMES);
 		btnBack.setOnAction(a ->
 		{
-			listener.requestSceneChange("MAIN");
+			listener.requestSceneChange(Const.MENU_MAIN);
 		});
 
 		nextRow();

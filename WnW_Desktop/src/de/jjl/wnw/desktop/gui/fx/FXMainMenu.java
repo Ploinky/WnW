@@ -28,6 +28,10 @@ public class FXMainMenu extends JFXFrame
 
 		FXButton btnConnect = new FXButton("BtnConnect");
 		add(btnConnect).vGrow(Priority.SOMETIMES);
+		btnConnect.setOnAction(e ->
+		{
+			listener.requestSceneChange(Const.MENU_CONNECT);
+		});
 
 		nextRow();
 
@@ -40,7 +44,7 @@ public class FXMainMenu extends JFXFrame
 		add(btnSettings).vGrow(Priority.SOMETIMES);
 		btnSettings.setOnAction(e ->
 		{
-			listener.requestSceneChange("SETTINGS");
+			listener.requestSceneChange(Const.MENU_SETTINGS);
 		});
 
 		nextRow();

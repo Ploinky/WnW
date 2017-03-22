@@ -18,8 +18,6 @@ public class JFXFrame extends GridPane
 
 	private Node lastChild;
 
-	private GUI parent;
-
 	protected FrameListener listener;
 
 	public JFXFrame(FrameListener listener)
@@ -107,15 +105,5 @@ public class JFXFrame extends GridPane
 	{
 		GridPane.setColumnSpan(lastChild, colSpan);
 		return this;
-	}
-
-	public void setParentGUI(GUI parent)
-	{
-		this.parent = parent;
-	}
-
-	public GUI getParentGUI()
-	{
-		return parent;
 	}
 }

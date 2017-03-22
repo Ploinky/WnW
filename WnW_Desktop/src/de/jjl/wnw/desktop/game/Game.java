@@ -1,12 +1,15 @@
 package de.jjl.wnw.desktop.game;
 
+import java.io.IOException;
+
 import de.jjl.wnw.base.consts.Const;
 import de.jjl.wnw.base.lang.Translator;
-import de.jjl.wnw.desktop.gui.FXGui;
-import de.jjl.wnw.desktop.gui.GUI;
+import de.jjl.wnw.desktop.gui.fx.FXConnectMenu;
 import de.jjl.wnw.desktop.gui.fx.FXMainMenu;
 import de.jjl.wnw.desktop.gui.fx.FXOptionMenu;
+import de.jjl.wnw.dev.conn.WnWConnection;
 import javafx.application.Application;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 /**
@@ -16,7 +19,9 @@ import javafx.stage.Stage;
  */
 public class Game extends Application implements FrameListener
 {
-	private GUI gui;
+	private Stage stage;
+
+	private WnWConnection conn;
 
 	public static void main(String[] args)
 	{
@@ -27,10 +32,10 @@ public class Game extends Application implements FrameListener
 	@Override
 	public void start(Stage primaryStage) throws Exception
 	{
-		gui = new FXGui(primaryStage);
-		gui.setTitle(Translator.get().translate(Const.TITLE));
-		gui.setScene(new FXMainMenu(this));
-		gui.show();
+		stage = primaryStage;
+		stage.setTitle(Translator.get().translate(Const.TITLE));
+		stage.setScene(new Scene(new FXMainMenu(this)));
+		stage.show();
 	}
 
 	@Override
@@ -38,13 +43,30 @@ public class Game extends Application implements FrameListener
 	{
 		switch (newFrame)
 		{
-			case "SETTINGS":
-				gui.setScene(new FXOptionMenu(this));
+			case Const.MENU_SETTINGS:
+				stage.getScene().setRoot(new FXOptionMenu(this));
 				break;
-			case "MAIN":
-				gui.setScene(new FXMainMenu(this));
+			case Const.MENU_CONNECT:
+				stage.getScene().setRoot(new FXConnectMenu(this));
+				break;
+			case Const.MENU_MAIN:
+				stage.getScene().setRoot(new FXMainMenu(this));
 				break;
 
+		}
+	}
+
+	@Override
+	public void requestConnect(String host, String name)
+	{
+		try
+		{
+			conn = new WnWConnection(host, Const.DEFAULT_PORT);
+		}
+		catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 }
