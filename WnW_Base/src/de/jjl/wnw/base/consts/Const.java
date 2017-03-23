@@ -1,7 +1,6 @@
 package de.jjl.wnw.base.consts;
 
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
+import javafx.scene.text.*;
 
 /**
  * Contains all constants used in the project.
@@ -19,6 +18,7 @@ public class Const
 	public static final Font FONT_SMALL = new Font("Comic Sans MS", 12);
 
 	public static final int DEFAULT_PORT = 2556;
+	public static final String DEFAULT_NAME = "DefaultClient";
 
 	public static final String MENU_MAIN = "MAIN";
 	public static final String MENU_SETTINGS = "SETTINGS";

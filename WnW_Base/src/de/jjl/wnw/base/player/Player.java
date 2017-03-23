@@ -1,5 +1,6 @@
 package de.jjl.wnw.base.player;
 
+import de.jjl.wnw.base.consts.Const;
 import de.jjl.wnw.dev.conn.WnWConnection;
 
 public class Player
@@ -10,6 +11,7 @@ public class Player
 
 	public Player(WnWConnection conn)
 	{
+		name = Const.DEFAULT_NAME;
 		this.setConn(conn);
 	}
 
@@ -31,5 +33,11 @@ public class Player
 	public void setName(String name)
 	{
 		this.name = name;
+	}
+	
+	@Override
+	public String toString()
+	{
+		return name;
 	}
 }

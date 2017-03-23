@@ -1,18 +1,50 @@
 package de.jjl.wnw.desktop.server;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
+import de.jjl.wnw.base.consts.Const;
 import de.jjl.wnw.base.player.Player;
-import de.jjl.wnw.desktop.game.GameState;
-import de.jjl.wnw.dev.conn.WnWConnection;
-import de.jjl.wnw.dev.conn.WnWConnectionListener;
-import de.jjl.wnw.dev.conn.WnWServer;
+import de.jjl.wnw.desktop.gui.ServerGui;
+import de.jjl.wnw.desktop.gui.fx.FxServerGui;
+import de.jjl.wnw.dev.conn.*;
+import javafx.application.Application;
+import javafx.stage.Stage;
 
-public class Server implements WnWConnectionListener
+public class Server extends Application implements WnWConnectionListener, WnWMsgListener
 {
-	public Server()
+	private WnWServer server;
+	
+	private List<Player> players;
+	
+	private ServerGui gui;
+	
+	public static void main(String[] args)
 	{
-		WnWServer server = new WnWServer(2556);
+		launch();
+	}
+
+	@Override
+	public void connectionEstablished(WnWConnection conn)
+	{	
+		conn.addMsgListener(this);
+		Player np = new Player(conn);
+		players.add(np);
+		gui.addClient(np);
+	}
+
+	@Override
+	public void start(Stage primaryStage) throws Exception
+	{
+		gui = new FxServerGui(primaryStage);
+		
+		gui.setVisible(true);
+		
+		players = new CopyOnWriteArrayList<Player>();
+		
+		server = new WnWServer(Const.DEFAULT_PORT);
+				
 		try
 		{
 			server.start();
@@ -26,14 +58,27 @@ public class Server implements WnWConnectionListener
 		server.setConnectionHandler(this);
 	}
 
-	public static void main(String[] args)
+	@Override
+	public void msgReceived(WnWConnection conn, WnWMsg msg)
 	{
-		new Server();
+		switch(msg.getType())
+		{
+			case "NAME":
+					changePlayerName(conn, msg.getParams().get("VALUE"));
+				break;
+		}
 	}
 
-	@Override
-	public void connectionEstablished(WnWConnection conn)
+	private void changePlayerName(WnWConnection conn, String name)
 	{
-		GameState.getInstance().addConnectedPlayer(new Player(conn));
+		players.forEach(p ->
+		{
+			if(p.getConn() == conn)
+			{
+				p.setName(name);
+				players.remove(p);
+				players.add(p);
+			}
+		});
 	}
 }
