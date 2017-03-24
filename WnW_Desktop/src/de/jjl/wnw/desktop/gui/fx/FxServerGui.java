@@ -5,6 +5,7 @@ package de.jjl.wnw.desktop.gui.fx;
 
 import de.jjl.wnw.base.player.Player;
 import de.jjl.wnw.desktop.gui.ServerGui;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.ListView;
 import javafx.stage.Stage;
@@ -25,14 +26,14 @@ public class FxServerGui implements ServerGui
 	@Override
 	public void addClient(Player p)
 	{
-		playerList.getItems().add(p);
+		Platform.runLater(() -> playerList.getItems().add(p));
 		playerList.refresh();
 	}
 
 	@Override
-	public void removePlayer(Player p)
+	public void removeClient(Player p)
 	{
-		playerList.getItems().remove(p);
+		Platform.runLater(() -> playerList.getItems().remove(p));
 	}
 
 	@Override

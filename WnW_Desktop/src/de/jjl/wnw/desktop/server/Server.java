@@ -71,14 +71,15 @@ public class Server extends Application implements WnWConnectionListener, WnWMsg
 
 	private void changePlayerName(WnWConnection conn, String name)
 	{
-		players.forEach(p ->
+		players.stream().filter(p -> p.getConn() == conn).findAny().ifPresent(p ->
 		{
-			if(p.getConn() == conn)
-			{
+				// TODO Remove when no longer needed
+				System.out.println("Changing name of player " + p.getName() + " to " + name);
 				p.setName(name);
 				players.remove(p);
+				gui.removeClient(p);
 				players.add(p);
-			}
+				gui.addClient(p);
 		});
 	}
 }

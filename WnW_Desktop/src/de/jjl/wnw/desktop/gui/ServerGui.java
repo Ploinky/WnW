@@ -9,7 +9,7 @@ public interface ServerGui
 {
 	public void addClient(Player p);
 	
-	public void removePlayer(Player p);
+	public void removeClient(Player p);
 	
 	public void setVisible(boolean visible);
 }
