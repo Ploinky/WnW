@@ -1,12 +1,18 @@
 package de.jjl.wnw.desktop.game;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 import de.jjl.wnw.base.consts.Const;
 import de.jjl.wnw.base.lang.Translator;
-import de.jjl.wnw.desktop.gui.fx.*;
-import de.jjl.wnw.dev.conn.*;
+import de.jjl.wnw.base.msg.MsgConst;
+import de.jjl.wnw.desktop.gui.fx.FXConnectMenu;
+import de.jjl.wnw.desktop.gui.fx.FXMainMenu;
+import de.jjl.wnw.desktop.gui.fx.FXOptionMenu;
+import de.jjl.wnw.dev.conn.WnWConnection;
+import de.jjl.wnw.dev.conn.WnWMsg;
+import de.jjl.wnw.dev.conn.WnWMsgListener;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -22,15 +28,17 @@ public class Game extends Application implements FrameListener, WnWMsgListener
 
 	private WnWConnection conn;
 
+	private String name;
+
 	public static void main(String[] args)
 	{
 		launch(args);
-
 	}
 
 	@Override
 	public void start(Stage primaryStage) throws Exception
 	{
+		name = MsgConst.DEFAULT_NAME;
 		stage = primaryStage;
 		stage.setTitle(Translator.get().translate(Const.TITLE));
 		stage.setScene(new Scene(new FXMainMenu(this)));
@@ -58,28 +66,12 @@ public class Game extends Application implements FrameListener, WnWMsgListener
 	@Override
 	public void requestConnect(String host, String name)
 	{
+		this.name = name;
 		try
 		{
 			conn = new WnWConnection(host, Const.DEFAULT_PORT);
-			conn.addMsgListener(this);
-			
-			Map<String, String> info = new HashMap<>();
-			info.put("VALUE", name);
-			conn.sendMsg(new WnWMsg("NAME", info));
-			
-			Thread.sleep(1000);
-
-			Map<String, String> info2 = new HashMap<>();
-			info2.put("VALUE", "TESTING123");
-			conn.sendMsg(new WnWMsg("NAME", info2));
-			
 		}
 		catch (IOException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		catch(InterruptedException e)
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -89,7 +81,13 @@ public class Game extends Application implements FrameListener, WnWMsgListener
 	@Override
 	public void msgReceived(WnWConnection conn, WnWMsg msg)
 	{
-		// TODO Auto-generated method stub
-		
+		switch (msg.getType())
+		{
+			case MsgConst.TYPE_REQ_NAME:
+				Map<String, String> info = new HashMap<>();
+				info.put(MsgConst.PARAM_NAME, name);
+				conn.sendMsg(new WnWMsg(MsgConst.TYPE_NAME, info));
+				break;
+		}
 	}
 }
