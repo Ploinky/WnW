@@ -39,7 +39,23 @@ public class Server extends Application implements WnWConnectionListener, WnWMsg
 		players.add(np);
 		gui.addClient(np);
 
-		conn.sendMsg(new WnWMsg(MsgConst.TYPE_REQ_NAME));
+		new Thread(() ->
+		{
+			for (int i = 0; i < 10 && np.getName().equals(Const.DEFAULT_NAME); i++)
+			{
+				try
+				{
+					Thread.sleep(100);
+				}
+				catch (InterruptedException e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				conn.sendMsg(new WnWMsg(MsgConst.TYPE_REQ_NAME));
+			}
+		}).start();
 	}
 
 	@Override

@@ -67,9 +67,11 @@ public class Game extends Application implements FrameListener, WnWMsgListener
 	public void requestConnect(String host, String name)
 	{
 		this.name = name;
+
 		try
 		{
 			conn = new WnWConnection(host, Const.DEFAULT_PORT);
+			conn.addMsgListener(this);
 		}
 		catch (IOException e)
 		{
