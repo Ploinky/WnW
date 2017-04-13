@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="true"
+        jar="D:\programmieren\java\git\WnW\WnW_Android\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\25.3.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="70f23cb87278f89aa51e6f57e8f0fd5266572d95">
+        <dex dex="D:\programmieren\java\git\WnW\WnW_Android\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-appcompat-v7-25.3.0_94d1331269170be4f25a7fb165d7800a6b378fd5\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\programmieren\java\git\WnW\WnW_Android\app\build\intermediates\exploded-aar\com.android.support\support-core-ui\25.3.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="5cc5ef8347a6bafa14556cbd35230aa9b3431bb0">
+        <dex dex="D:\programmieren\java\git\WnW\WnW_Android\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-core-ui-25.3.0_336fe50b7f5e0a479f152558b860949f58ba2859\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\programmieren\java\git\WnW\WnW_Android\app\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="c3a5035d7696c6945f298ccffbe9a718e3f50d03">
+        <dex dex="D:\programmieren\java\git\WnW\WnW_Android\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run_30468fee6548daff8e73d2a4bc01287378a8eddb\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\programmieren\java\git\WnW\WnW_Android\app\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="a9a4db13046920e3b97bc5699a28a698ba9ed562">
+        <dex dex="D:\programmieren\java\git\WnW\WnW_Android\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run-bootstrap_77e852cd553146ca38e924f2456af85256949aab\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\programmieren\java\git\WnW\WnW_Android\app\build\intermediates\exploded-aar\com.android.support\support-media-compat\25.3.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="425c7b17887e5c3f8cbdf67ba171bc246f29b42c">
+        <dex dex="D:\programmieren\java\git\WnW\WnW_Android\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-media-compat-25.3.0_a6c4769b7ad1f8addacc578c76174559e2f25352\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\programmieren\java\git\WnW\WnW_Android\app\build\intermediates\exploded-aar\com.android.support\support-v4\25.3.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
+        <dex dex="D:\programmieren\java\git\WnW\WnW_Android\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-v4-25.3.0_9546f0c31578d86dfb1428fecf123304afb8bd53\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\programmieren\java\git\WnW\WnW_Android\app\build\intermediates\exploded-aar\com.android.support\support-fragment\25.3.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="93c1199fcb0a34b980e6fff8350daff62e696ec2">
+        <dex dex="D:\programmieren\java\git\WnW\WnW_Android\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-fragment-25.3.0_07c2a8d7a6f47ecb86da4d6684cae3cdf3f9965c\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\programmieren\java\git\WnW\WnW_Android\app\build\intermediates\exploded-aar\com.android.support\support-compat\25.3.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="93c10d68ab5ea070f15782ae6d3a28d1f1d8f45e">
+        <dex dex="D:\programmieren\java\git\WnW\WnW_Android\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-compat-25.3.0_f6f03eb807ef1ca0534f06768eb0834e23e3221d\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\programmieren\java\git\WnW\WnW_Android\app\build\intermediates\exploded-aar\com.android.support\support-vector-drawable\25.3.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="d6a04527c17597019dad82777c5094a3d60d1c33">
+        <dex dex="D:\programmieren\java\git\WnW\WnW_Android\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-vector-drawable-25.3.0_6198575c6d2fc264f305ca4f02cb42f6a0c0b36f\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\herte\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\25.3.0\support-annotations-25.3.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="dd84903d2e1af25a6081ef9038ad863cb14ca3a0">
+        <dex dex="D:\programmieren\java\git\WnW\WnW_Android\app\build\intermediates\transforms\dex\debug\folders\1000\10\support-annotations-25.3.0_4cdb1b5d5ebc395221dec20c9443d0f4e87a0b48\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\programmieren\java\git\WnW\WnW_Android\app\build\intermediates\exploded-aar\com.android.support\support-core-utils\25.3.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="518768f3200963fbfec652f498da2c9d39245234">
+        <dex dex="D:\programmieren\java\git\WnW\WnW_Android\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-core-utils-25.3.0_f33692b75eafdb9bc10084a60b00442d8f237cdc\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\programmieren\java\git\WnW\WnW_Android\app\build\intermediates\exploded-aar\com.android.support\animated-vector-drawable\25.3.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="4b746ef0fd46acb5aaf3d9ab9a4cec22c28d3211">
+        <dex dex="D:\programmieren\java\git\WnW\WnW_Android\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-animated-vector-drawable-25.3.0_39bf85c42cbff95106abba2ff8284750c0a44a83\classes.dex" />
+    </item>
+
+</items>

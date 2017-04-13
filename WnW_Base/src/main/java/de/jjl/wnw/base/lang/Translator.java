@@ -7,8 +7,8 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 import de.jjl.wnw.base.cfg.Settings;
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
+import de.jjl.wnw.base.util.InvalidationListener;
+import de.jjl.wnw.base.util.Observable;
 
 public class Translator implements Observable
 {
@@ -74,6 +74,9 @@ public class Translator implements Observable
 
 	private void invalidate()
 	{
-		listeners.forEach(l -> l.invalidated(this));
+		for(InvalidationListener l : listeners)
+		{
+			l.invalidated(this);
+		}
 	}
 }

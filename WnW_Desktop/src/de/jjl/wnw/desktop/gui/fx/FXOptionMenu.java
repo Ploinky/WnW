@@ -6,6 +6,7 @@ import de.jjl.wnw.base.cfg.Settings;
 import de.jjl.wnw.base.consts.Const;
 import de.jjl.wnw.base.lang.Language;
 import de.jjl.wnw.base.lang.Translator;
+import de.jjl.wnw.desktop.consts.DesktopConsts;
 import de.jjl.wnw.desktop.game.FrameListener;
 import de.jjl.wnw.desktop.gui.JFXFrame;
 import de.jjl.wnw.desktop.gui.fx.comp.FXButton;
@@ -28,7 +29,7 @@ public class FXOptionMenu extends JFXFrame
 	private void init()
 	{
 		FXLabel lblSettings = new FXLabel(Const.TITLE_SETTINGS);
-		lblSettings.setFont(Const.FONT_TITLE);
+		lblSettings.setFont(DesktopConsts.FONT_TITLE);
 		add(lblSettings).vGrow(Priority.ALWAYS);
 
 		nextRow();
@@ -38,7 +39,7 @@ public class FXOptionMenu extends JFXFrame
 		frameLang.setHgap(10);
 
 		FXLabel lblLang = new FXLabel("LblLang");
-		lblLang.setFont(Const.FONT_DEFAULT);
+		lblLang.setFont(DesktopConsts.FONT_DEFAULT);
 		frameLang.add(lblLang).vGrow(Priority.SOMETIMES).setAligment(HPos.RIGHT, VPos.CENTER);
 
 		ComboBox<Language> combLang = new ComboBox<>();

@@ -31,10 +31,10 @@ public class MsgFactory
 	{
 		Map<String, String> params = new HashMap<>();
 
-		Arrays.asList(players).forEach(p ->
+		for(String p : players)
 		{
 			params.put("PLAYER" + params.size(), p);
-		});
+		}
 
 		return new WnWMsg(MsgType.PLAYER_LIST, params);
 	}
