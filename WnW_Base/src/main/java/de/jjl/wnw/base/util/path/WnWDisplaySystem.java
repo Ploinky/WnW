@@ -1,7 +1,5 @@
 package de.jjl.wnw.base.util.path;
 
-import java.awt.Point;
-
 public class WnWDisplaySystem
 {
 	public static WnWDisplaySystem getFor(int width, int height, boolean xAxis, boolean yAxis)
