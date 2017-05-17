@@ -26,8 +26,6 @@ public class DrawPanel extends Pane
 
 	private int cols;
 
-	private boolean drawing;
-
 	private Path rune;
 
 	private List<DetSquare> squares;
@@ -40,8 +38,6 @@ public class DrawPanel extends Pane
 		rows = y;
 
 		drawRaster();
-
-		drawing = false;
 
 		rune = new Path();
 
@@ -63,8 +59,6 @@ public class DrawPanel extends Pane
 			
 			squares.forEach(s -> s.setRuned(false));
 			
-			drawing = true;
-
 			rune.getElements().clear();
 
 			MoveTo moveTo = new MoveTo();
@@ -74,18 +68,8 @@ public class DrawPanel extends Pane
 			rune.getElements().add(moveTo);
 		});
 
-		setOnMouseReleased(e ->
-		{
-			drawing = false;
-		});
-
 		setOnMouseDragged(e ->
 		{
-			if (!drawing)
-			{
-				return;
-			}
-
 			// Then start drawing a line
 			LineTo lineTo = new LineTo();
 			lineTo.setX(e.getSceneX());
