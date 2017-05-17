@@ -35,6 +35,15 @@ public class FXMainMenu extends JFXFrame
 
 		nextRow();
 
+		FXButton btnPractice = new FXButton("BtnPractice");
+		add(btnPractice).vGrow(Priority.SOMETIMES);
+		btnPractice.setOnAction(e ->
+		{
+			listener.requestSceneChange(Const.MENU_PRACTICE);
+		});
+
+		nextRow();
+
 		FXButton btnHost = new FXButton("BtnHost");
 		add(btnHost).vGrow(Priority.SOMETIMES);
 

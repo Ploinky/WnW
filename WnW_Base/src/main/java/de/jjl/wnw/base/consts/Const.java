@@ -17,4 +17,5 @@ public class Const
 	public static final String MENU_MAIN = "MAIN";
 	public static final String MENU_SETTINGS = "SETTINGS";
 	public static final String MENU_CONNECT = "CONNECT";
+	public static final String MENU_PRACTICE = "PRACTICE";
 }

@@ -10,6 +10,7 @@ import de.jjl.wnw.base.msg.MsgConst;
 import de.jjl.wnw.desktop.gui.fx.FXConnectMenu;
 import de.jjl.wnw.desktop.gui.fx.FXMainMenu;
 import de.jjl.wnw.desktop.gui.fx.FXOptionMenu;
+import de.jjl.wnw.desktop.gui.fx.FXPractice;
 import de.jjl.wnw.dev.conn.WnWConnection;
 import de.jjl.wnw.dev.conn.WnWMsg;
 import de.jjl.wnw.dev.conn.WnWMsgListener;
@@ -59,7 +60,9 @@ public class Game extends Application implements FrameListener, WnWMsgListener
 			case Const.MENU_MAIN:
 				stage.getScene().setRoot(new FXMainMenu(this));
 				break;
-
+			case Const.MENU_PRACTICE:
+				stage.getScene().setRoot(new FXPractice(this));
+				break;
 		}
 	}
 
