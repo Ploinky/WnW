@@ -1,24 +1,13 @@
 package de.jjl.wnw.desktop.controls;
 
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import javafx.beans.value.ChangeListener;
 import javafx.scene.Node;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderStrokeStyle;
-import javafx.scene.layout.BorderWidths;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Paint;
-import javafx.scene.shape.Line;
-import javafx.scene.shape.LineTo;
-import javafx.scene.shape.MoveTo;
-import javafx.scene.shape.Path;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.*;
 
 public class DrawPanel extends Pane
 {
@@ -103,9 +92,9 @@ public class DrawPanel extends Pane
 			getChildren().clear();
 			squares.clear();
 
-			for (int j = 0; j <= rows; j++)
+			for (int j = 0; j <= rows - 1; j++)
 			{
-				for (int i = 0; i <= cols; i++)
+				for (int i = 0; i <= cols - 1; i++)
 				{
 					DetSquare sq = new DetSquare();
 
