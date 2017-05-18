@@ -1,208 +1,61 @@
 package de.jjl.wnw.desktop.controls;
 
 
-import java.util.*;
+import java.io.*;
 
-import javafx.beans.value.ChangeListener;
-import javafx.scene.Node;
-import javafx.scene.layout.*;
-import javafx.scene.paint.Paint;
-import javafx.scene.shape.*;
+import javax.imageio.ImageIO;
+
+import de.jjl.wnw.base.util.path.*;
+import de.jjl.wnw.desktop.util.WnWDesktopPath;
+import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.SnapshotParameters;
+import javafx.scene.image.WritableImage;
+import javafx.scene.layout.Pane;
 
 public class DrawPanel extends Pane
 {
-	private int rows;
-
-	private int cols;
-
-	private Path rune;
-
-	private List<DetSquare> squares;
-
-	public DrawPanel(int x, int y)
-	{
-		squares = new ArrayList<>();
-
-		cols = x;
-		rows = y;
-
-		drawRaster();
-
-		rune = new Path();
-
-		setOnMousePressed(e ->
-		{
-			Iterator<Node> it = getChildren().iterator();
-			
-			while(it.hasNext())
-			{
-				Node n = it.next();
-				
-				if(n instanceof Rectangle || n instanceof Path)
-				{
-					it.remove();
-				}
-			};
-			
-			getChildren().add(rune);
-			
-			squares.forEach(s -> s.setRuned(false));
-			
-			rune.getElements().clear();
-
-			MoveTo moveTo = new MoveTo();
-			moveTo.setX(e.getSceneX());
-			moveTo.setY(e.getSceneY());
-			
-			rune.getElements().add(moveTo);
-		});
-
-		setOnMouseDragged(e ->
-		{
-			// Then start drawing a line
-			LineTo lineTo = new LineTo();
-			lineTo.setX(e.getSceneX());
-			lineTo.setY(e.getSceneY());
-			
-			squares.stream().filter(s -> !s.isRuned()).filter(s -> s.isInSquare(e.getSceneX(), e.getSceneY())).forEach(s ->
-			{
-				Rectangle r = new Rectangle(s.getX() + 1, s.getY() + 1, s.getWidth() -2, s.getHeight() - 2);
-				r.setFill(Paint.valueOf("Lightgrey"));
-				s.setRuned(true);
-				getChildren().add(r);
-				rune.toFront();
-			});
-			
-			rune.getElements().add(lineTo);
-		});
-	}
+	private WnWDesktopPath path;
+	
+	private WnWDisplaySystem disSys;
 
 	public DrawPanel()
 	{
-		this(2, 3);
-	}
+		disSys = new WnWDisplaySystem(new WnWPoint(0, 0),
+			new WnWPoint((int) getWidth(), (int)getHeight()),
+			true, false);
 
-	private void drawRaster()
-	{
-		setBorder(new Border(new BorderStroke(Paint.valueOf("Black"), BorderStrokeStyle.SOLID, CornerRadii.EMPTY,
-				BorderWidths.DEFAULT)));
+		
 
-		ChangeListener<Number> lis = (p, o, n) ->
+		setOnMousePressed(e ->
 		{
-			getChildren().clear();
-			squares.clear();
-
-			for (int j = 0; j <= rows - 1; j++)
+			if(path != null)
 			{
-				for (int i = 0; i <= cols - 1; i++)
-				{
-					DetSquare sq = new DetSquare();
-
-					sq.setHeight(getHeight() / rows);
-					sq.setWidth(getWidth() / cols);
-
-					sq.setX(sq.getWidth() * i);
-					sq.setY(sq.getHeight() * j);
-
-					squares.add(sq);
-				}
+				getChildren().remove(path.getFXPath());
 			}
+			path = new WnWDesktopPath(disSys);
+			getChildren().add(path.getFXPath());
 
-			squares.forEach(sq ->
+			path.addPoint((float) e.getX(), (float) e.getY());
+		});
+		
+		setOnMouseDragged(e ->
+		{
+			path.addPoint((float) e.getX(), (float) e.getY());
+		});
+		
+		setOnMouseReleased(e ->
+		{
+			WritableImage snapshot = snapshot(new SnapshotParameters(), null);
+			
+			try
 			{
-				Line top = new Line(sq.getX(), sq.getY(), sq.getX() + sq.getWidth(), sq.getY());
-				Line right = new Line(sq.getX() + sq.getWidth(), sq.getY(), sq.getX() + sq.getWidth(), sq.getY() + sq.getHeight());
-				Line bottom = new Line(sq.getX(), sq.getY() + sq.getHeight(), sq.getX() + sq.getWidth(), sq.getY() + sq.getHeight());
-				Line left = new Line(sq.getX(), sq.getY(), sq.getX(), sq.getY() + sq.getHeight());
-				
-				getChildren().addAll(top, right, bottom, left);
-			});
-		};
-
-		heightProperty().addListener(lis);
-		widthProperty().addListener(lis);
-	}
-
-	private class DetSquare
-	{
-		private boolean runed;
-		
-		private double x;
-
-		private double y;
-
-		private double width;
-
-		private double height;
-
-		public DetSquare()
-		{
-			this(0, 0, 0, 0);
-		}
-
-		public DetSquare(double x, double y, double width, double height)
-		{
-			runed = false;
-			this.x = x;
-			this.y = y;
-			this.width = width;
-			this.height = height;
-		}
-
-		public double getHeight()
-		{
-			return height;
-		}
-
-		public void setHeight(double height)
-		{
-			this.height = height;
-		}
-
-		public double getWidth()
-		{
-			return width;
-		}
-
-		public void setWidth(double width)
-		{
-			this.width = width;
-		}
-
-		public double getX()
-		{
-			return x;
-		}
-
-		public void setX(double x)
-		{
-			this.x = x;
-		}
-
-		public double getY()
-		{
-			return y;
-		}
-
-		public void setY(double y)
-		{
-			this.y = y;
-		}
-		
-		public boolean isRuned()
-		{
-			return runed;
-		}
-		
-		public void setRuned(boolean runed)
-		{
-			this.runed = runed;
-		}
-		
-		public boolean isInSquare(double x, double y)
-		{
-			return x > getX() && x < getX() + getWidth()
-				&& y > getY() && y < getY() + getHeight();
-		}
+				ImageIO.write(SwingFXUtils.fromFXImage(snapshot, null), "png", new File("C:\\rune.png"));
+			}
+			catch(IOException e1)
+			{
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		});
 	}
 }
