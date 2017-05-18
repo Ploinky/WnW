@@ -53,7 +53,7 @@ public class DrawPanel extends Pane
 			MoveTo moveTo = new MoveTo();
 			moveTo.setX(e.getSceneX());
 			moveTo.setY(e.getSceneY());
-
+			
 			rune.getElements().add(moveTo);
 		});
 

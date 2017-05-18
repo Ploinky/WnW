@@ -1,21 +1,16 @@
 package de.jjl.wnw.desktop.game;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Function;
 
 import de.jjl.wnw.base.consts.Const;
 import de.jjl.wnw.base.lang.Translator;
 import de.jjl.wnw.base.msg.MsgConst;
-import de.jjl.wnw.desktop.gui.fx.FXConnectMenu;
-import de.jjl.wnw.desktop.gui.fx.FXMainMenu;
-import de.jjl.wnw.desktop.gui.fx.FXOptionMenu;
-import de.jjl.wnw.desktop.gui.fx.FXPractice;
-import de.jjl.wnw.dev.conn.WnWConnection;
-import de.jjl.wnw.dev.conn.WnWMsg;
-import de.jjl.wnw.dev.conn.WnWMsgListener;
+import de.jjl.wnw.desktop.gui.fx.*;
+import de.jjl.wnw.dev.conn.*;
 import javafx.application.Application;
-import javafx.scene.Scene;
+import javafx.scene.*;
 import javafx.stage.Stage;
 
 /**
@@ -30,6 +25,8 @@ public class Game extends Application implements FrameListener, WnWMsgListener
 	private WnWConnection conn;
 
 	private String name;
+	
+	private Map<String, Function<Game, Parent>> map;
 
 	public static void main(String[] args)
 	{
@@ -44,26 +41,24 @@ public class Game extends Application implements FrameListener, WnWMsgListener
 		stage.setTitle(Translator.get().translate(Const.TITLE));
 		stage.setScene(new Scene(new FXMainMenu(this)));
 		stage.show();
+		
+		map = new HashMap<>();
+		
+		addFrame(Const.MENU_SETTINGS, FXOptionMenu::new);
+		addFrame(Const.MENU_CONNECT, FXConnectMenu::new);
+		addFrame(Const.MENU_MAIN, FXMainMenu::new);
+		addFrame(Const.MENU_PRACTICE, FXPractice::new);
+	}
+	
+	public void addFrame(String name, Function<Game, Parent> func)
+	{
+		map.put(name, func);
 	}
 
 	@Override
 	public void requestSceneChange(String newFrame)
 	{
-		switch (newFrame)
-		{
-			case Const.MENU_SETTINGS:
-				stage.getScene().setRoot(new FXOptionMenu(this));
-				break;
-			case Const.MENU_CONNECT:
-				stage.getScene().setRoot(new FXConnectMenu(this));
-				break;
-			case Const.MENU_MAIN:
-				stage.getScene().setRoot(new FXMainMenu(this));
-				break;
-			case Const.MENU_PRACTICE:
-				stage.getScene().setRoot(new FXPractice(this));
-				break;
-		}
+		stage.getScene().setRoot(map.get(newFrame).apply(this));
 	}
 
 	@Override
