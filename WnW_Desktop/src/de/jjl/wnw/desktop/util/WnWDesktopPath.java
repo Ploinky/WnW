@@ -6,6 +6,7 @@ package de.jjl.wnw.desktop.util;
 import java.util.Iterator;
 
 import de.jjl.wnw.base.util.path.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.*;
 
 public class WnWDesktopPath extends WnWPath
@@ -16,6 +17,11 @@ public class WnWDesktopPath extends WnWPath
 	{
 		super(system);
 		path = new Path();
+	}
+	
+	public void addPoint(MouseEvent e)
+	{
+		addPoint((float) e.getX(), (float) e.getY());
 	}
 	
 	@Override
