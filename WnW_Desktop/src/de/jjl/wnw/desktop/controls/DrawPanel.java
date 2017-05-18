@@ -1,15 +1,8 @@
 package de.jjl.wnw.desktop.controls;
 
 
-import java.io.*;
-
-import javax.imageio.ImageIO;
-
 import de.jjl.wnw.base.util.path.*;
 import de.jjl.wnw.desktop.util.WnWDesktopPath;
-import javafx.embed.swing.SwingFXUtils;
-import javafx.scene.SnapshotParameters;
-import javafx.scene.image.WritableImage;
 import javafx.scene.layout.Pane;
 
 public class DrawPanel extends Pane
@@ -45,17 +38,7 @@ public class DrawPanel extends Pane
 		
 		setOnMouseReleased(e ->
 		{
-			WritableImage snapshot = snapshot(new SnapshotParameters(), null);
-			
-			try
-			{
-				ImageIO.write(SwingFXUtils.fromFXImage(snapshot, null), "png", new File("C:\\rune.png"));
-			}
-			catch(IOException e1)
-			{
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			// TODO $Li 18.05.2017 display rune in chain
 		});
 	}
 }
