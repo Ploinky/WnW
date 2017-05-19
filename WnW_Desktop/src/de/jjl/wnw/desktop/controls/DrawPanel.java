@@ -39,7 +39,14 @@ public class DrawPanel extends Pane implements Observable
 			path.addPoint(e);
 		});
 		
-		setOnMouseDragged(e -> path.addPoint(e));
+		setOnMouseDragged(e ->
+		{
+			if(e.getX() < 0 || e.getX() > getWidth() || e.getY() < 0 || e.getY() > getHeight())
+			{
+				return;
+			}
+			path.addPoint(e);
+		});
 		
 		setOnMouseReleased(e -> listeners.forEach(l -> l.invalidated(this)));
 	}
