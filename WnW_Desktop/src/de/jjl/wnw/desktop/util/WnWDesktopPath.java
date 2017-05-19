@@ -9,8 +9,14 @@ import de.jjl.wnw.base.util.path.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.*;
 
+/**
+ * Represents a path drawn on the desktop app.
+ *
+ * @author johannes.litger
+ */
 public class WnWDesktopPath extends WnWPath
 {
+	/** FX-Path that is shown on screen */
 	private Path path;
 	
 	public WnWDesktopPath(WnWDisplaySystem system)
@@ -29,13 +35,7 @@ public class WnWDesktopPath extends WnWPath
 	{
 		super.addPoint(x, y);
 		
-		if(path.getElements().isEmpty())
-		{
-			path.getElements().add(new MoveTo(x, y));
-			return;
-		}
-		
-		path.getElements().add(new LineTo(x, y));
+		path.getElements().add(path.getElements().isEmpty() ? new MoveTo(x, y) : new LineTo(x, y));
 	}
 	
 	public Path getFXPath()
@@ -43,28 +43,18 @@ public class WnWDesktopPath extends WnWPath
 		return path;
 	}
 	
-	public void clear()
-	{
-		path.getElements().clear();
-
-		Iterator<WnWPoint> it = iterator();
-		
-		while(it.hasNext())
-		{
-			it.next();
-			it.remove();
-		}
-	}
-	
-	public Path getFXPath(int width, int height)
+	/**
+	 * Scales the path to the specified dimensions and moves it to the top left of the node that it is
+	 * placed in.
+	 */
+	public Path getFXPathScaled(int width, int height)
 	{
 		Path p = new Path();
 		
 		WnWPoint left = null, right = null, top = null, bottom = null;
-		
-		Iterator<WnWPoint> it = iterator();
-		
+
 		// Determine outermost points
+		Iterator<WnWPoint> it = iterator();
 		while(it.hasNext())
 		{
 			WnWPoint point = it.next();
@@ -90,13 +80,10 @@ public class WnWDesktopPath extends WnWPath
 		while(it.hasNext())
 		{
 			WnWPoint point = it.next();
-			
-			if(p.getElements().isEmpty())
-			{
-				p.getElements().add(new MoveTo((point.x - left.x) / relSize, (point.y - top.y) / relSize));
-			}
 
-			p.getElements().add(new LineTo((point.x - left.x) / relSize, (point.y - top.y) / relSize));
+			p.getElements().add(p.getElements().isEmpty() ?
+						new MoveTo((point.x - left.x) / relSize, (point.y - top.y) / relSize)
+						: new LineTo((point.x - left.x) / relSize, (point.y - top.y) / relSize));
 		}
 
 		return p;

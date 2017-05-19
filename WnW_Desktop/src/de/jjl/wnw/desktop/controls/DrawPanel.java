@@ -10,6 +10,11 @@ import de.jjl.wnw.base.util.path.*;
 import de.jjl.wnw.desktop.util.WnWDesktopPath;
 import javafx.scene.layout.Pane;
 
+/**
+ * This pane can be drawn on by pressing and dragging the mouse. It is used by players to drawn runes.
+ *
+ * @author johannes.litger
+ */
 public class DrawPanel extends Pane implements Observable
 {
 	private WnWDesktopPath path;
@@ -22,9 +27,7 @@ public class DrawPanel extends Pane implements Observable
 	{
 		listeners = new ArrayList<>();
 		
-		disSys = new WnWDisplaySystem(new WnWPoint(0, 0),
-			new WnWPoint((int) getWidth(), (int)getHeight()),
-			true, false);
+		disSys = new WnWDisplaySystem(new WnWPoint(0, 0), new WnWPoint((int) getWidth(), (int)getHeight()), true, false);
 
 		setOnMousePressed(e ->
 		{
@@ -35,7 +38,6 @@ public class DrawPanel extends Pane implements Observable
 			
 			path = new WnWDesktopPath(disSys);
 			getChildren().add(path.getFXPath());
-
 			path.addPoint(e);
 		});
 		

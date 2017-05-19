@@ -22,7 +22,7 @@ public class JFXFrame extends GridPane
 
 	public JFXFrame(FrameListener listener)
 	{
-		setPrefSize(800, 600);
+		setPrefSize(1650, 1080);
 		rowIndex = 0;
 		colIndex = 0;
 		this.listener = listener;
