@@ -21,6 +21,7 @@ public class DrawPanel extends Pane implements Observable
 	public DrawPanel()
 	{
 		listeners = new ArrayList<>();
+		
 		disSys = new WnWDisplaySystem(new WnWPoint(0, 0),
 			new WnWPoint((int) getWidth(), (int)getHeight()),
 			true, false);

@@ -4,11 +4,14 @@ import de.jjl.wnw.base.util.*;
 import de.jjl.wnw.desktop.controls.DrawPanel;
 import de.jjl.wnw.desktop.game.FrameListener;
 import de.jjl.wnw.desktop.gui.JFXFrame;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Paint;
 
 public class FXPractice extends JFXFrame implements InvalidationListener
 {
-	private Pane chain;
+	private GridPane chain;
 
 	public FXPractice(FrameListener listener)
 	{
@@ -19,9 +22,13 @@ public class FXPractice extends JFXFrame implements InvalidationListener
 
 	private void init()
 	{
-		chain = new Pane();
-		add(chain).vGrow(Priority.SOMETIMES).hGrow(Priority.ALWAYS);
-		
+		chain = new GridPane();
+		add(chain).vGrow(Priority.NEVER).hGrow(Priority.SOMETIMES).setAlignment(Pos.BASELINE_RIGHT);
+		chain.setHgap(10);
+		chain.setBorder(new Border(new BorderStroke(Paint.valueOf("Black"), BorderStrokeStyle.SOLID,
+				CornerRadii.EMPTY, BorderWidths.DEFAULT, Insets.EMPTY)));
+		chain.setMinHeight(102);
+		chain.setBackground(new Background(new BackgroundFill(Paint.valueOf("white"), CornerRadii.EMPTY, Insets.EMPTY)));
 		
 		nextRow();
 		
@@ -44,8 +51,15 @@ public class FXPractice extends JFXFrame implements InvalidationListener
 			return;
 		}
 		
-		chain.getChildren().add(p.getPath().scaledFXPath(100, 100));
+		Pane pane = new Pane();
+		pane.getChildren().add(p.getPath().getFXPath(100, 100));
+		pane.setMaxSize(110, 110);
+		pane.setMinSize(110, 110);
+		pane.setBorder(new Border(new BorderStroke(Paint.valueOf("Black"), BorderStrokeStyle.SOLID,
+				CornerRadii.EMPTY, BorderWidths.DEFAULT, Insets.EMPTY)));
+		pane.setPadding(new Insets(5, 5, 5, 5));
 		
+		chain.add(pane, chain.getChildren().size(), 0);
 	}
 
 }

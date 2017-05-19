@@ -56,38 +56,36 @@ public class WnWDesktopPath extends WnWPath
 		}
 	}
 	
-	public Path scaledFXPath(int width, int height)
+	public Path getFXPath(int width, int height)
 	{
 		Path p = new Path();
-		WnWPoint left = null;
-		WnWPoint top = null;
 		
-		// Find leftmost point
+		WnWPoint left = null, right = null, top = null, bottom = null;
+		
 		Iterator<WnWPoint> it = iterator();
+		
+		// Determine outermost points
 		while(it.hasNext())
 		{
 			WnWPoint point = it.next();
 			
-			if(left == null)
-			{
-				left = point;
-			}
-			if(top == null)
-			{
-				top = point;
-			}
-			
-			if(point.x < left.x)
-			{
-				left = point;
-			}
-			if(point.y < top.y)
-			{
-				top = point;
-			}
+			left	= left == null		|| point.x < left.x		? point : left;
+			right	= right == null		|| point.x > right.x	? point : right;
+			top		= top == null		|| point.y < top.y		? point : top;
+			bottom	= bottom == null	|| point.y > bottom.y		? point : bottom;
 		}
 		
-		// Move path left
+		// Scale path
+		float pathWidth = right.x - left.x;
+		float pathHeight = bottom.y - top.y;
+		float relWidth = pathWidth / width;
+		float relHeight = pathHeight / height;
+		
+		// Use the largest scale that will fit the defined rectangle
+		float relSize = relWidth < relHeight ? relHeight : relWidth;
+		
+		
+		// Move path left and scale
 		it = iterator();
 		while(it.hasNext())
 		{
@@ -95,12 +93,11 @@ public class WnWDesktopPath extends WnWPath
 			
 			if(p.getElements().isEmpty())
 			{
-				p.getElements().add(new MoveTo(point.x - left.x, point.y - top.y));
+				p.getElements().add(new MoveTo((point.x - left.x) / relSize, (point.y - top.y) / relSize));
 			}
 
-			p.getElements().add(new LineTo(point.x - left.x, point.y - top.y));
+			p.getElements().add(new LineTo((point.x - left.x) / relSize, (point.y - top.y) / relSize));
 		}
-		
 
 		return p;
 	}
