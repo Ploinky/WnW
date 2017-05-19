@@ -1,18 +1,10 @@
 package de.jjl.wnw.desktop.gui.fx;
 
-import de.jjl.wnw.base.util.InvalidationListener;
-import de.jjl.wnw.base.util.Observable;
+import de.jjl.wnw.base.util.*;
 import de.jjl.wnw.desktop.controls.DrawPanel;
 import de.jjl.wnw.desktop.game.FrameListener;
 import de.jjl.wnw.desktop.gui.JFXFrame;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderStrokeStyle;
-import javafx.scene.layout.BorderWidths;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
-import javafx.scene.paint.Paint;
+import javafx.scene.layout.*;
 
 public class FXPractice extends JFXFrame implements InvalidationListener
 {
@@ -29,12 +21,9 @@ public class FXPractice extends JFXFrame implements InvalidationListener
 	{
 		chain = new Pane();
 		add(chain).vGrow(Priority.SOMETIMES).hGrow(Priority.ALWAYS);
-		chain.maxHeightProperty().bind(heightProperty().divide(8));
-		chain.setBorder(new Border(new BorderStroke(Paint.valueOf("Black"),
-				BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));;
+		
 		
 		nextRow();
-		
 		
 		DrawPanel p = new DrawPanel();
 		p.addListener(this);
@@ -55,17 +44,7 @@ public class FXPractice extends JFXFrame implements InvalidationListener
 			return;
 		}
 		
-		if(!p.isResizable())
-		{
-			throw new RuntimeException("Cannot resize!");
-		}
-		else
-		{
-			// TODO Remove if no longer needed
-			System.out.println("resizing");
-			p.resize(100, 100);
-		}
-		chain.getChildren().add(p.getPath().getFXPath());
+		chain.getChildren().add(p.getPath().scaledFXPath(100, 100));
 		
 	}
 

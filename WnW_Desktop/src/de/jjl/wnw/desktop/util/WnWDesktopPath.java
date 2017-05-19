@@ -55,5 +55,54 @@ public class WnWDesktopPath extends WnWPath
 			it.remove();
 		}
 	}
+	
+	public Path scaledFXPath(int width, int height)
+	{
+		Path p = new Path();
+		WnWPoint left = null;
+		WnWPoint top = null;
+		
+		// Find leftmost point
+		Iterator<WnWPoint> it = iterator();
+		while(it.hasNext())
+		{
+			WnWPoint point = it.next();
+			
+			if(left == null)
+			{
+				left = point;
+			}
+			if(top == null)
+			{
+				top = point;
+			}
+			
+			if(point.x < left.x)
+			{
+				left = point;
+			}
+			if(point.y < top.y)
+			{
+				top = point;
+			}
+		}
+		
+		// Move path left
+		it = iterator();
+		while(it.hasNext())
+		{
+			WnWPoint point = it.next();
+			
+			if(p.getElements().isEmpty())
+			{
+				p.getElements().add(new MoveTo(point.x - left.x, point.y - top.y));
+			}
+
+			p.getElements().add(new LineTo(point.x - left.x, point.y - top.y));
+		}
+		
+
+		return p;
+	}
 
 }
