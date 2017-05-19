@@ -27,7 +27,8 @@ public class FXPractice extends JFXFrame implements InvalidationListener
 		chain.setHgap(10);
 		chain.setBorder(new Border(new BorderStroke(Paint.valueOf("Black"), BorderStrokeStyle.SOLID,
 				CornerRadii.EMPTY, BorderWidths.DEFAULT, Insets.EMPTY)));
-		chain.setMinHeight(102);
+		chain.setMinHeight(112);
+		chain.setPadding(new Insets(5, 5, 5, 5));
 		chain.setBackground(new Background(new BackgroundFill(Paint.valueOf("white"), CornerRadii.EMPTY, Insets.EMPTY)));
 		
 		nextRow();
@@ -53,11 +54,11 @@ public class FXPractice extends JFXFrame implements InvalidationListener
 		
 		Pane pane = new Pane();
 		pane.getChildren().add(p.getPath().getFXPath(100, 100));
-		pane.setMaxSize(110, 110);
-		pane.setMinSize(110, 110);
+		pane.setMaxSize(100, 100);
+		pane.setMinSize(100, 100);
 		pane.setBorder(new Border(new BorderStroke(Paint.valueOf("Black"), BorderStrokeStyle.SOLID,
-				CornerRadii.EMPTY, BorderWidths.DEFAULT, Insets.EMPTY)));
-		pane.setPadding(new Insets(5, 5, 5, 5));
+				CornerRadii.EMPTY, BorderWidths.DEFAULT, new Insets(-5, -5, -5, -5))));
+		pane.setPadding(new Insets(500, 5, 5, 5));
 		
 		chain.add(pane, chain.getChildren().size(), 0);
 	}
