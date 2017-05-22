@@ -126,11 +126,11 @@ public class WnWRuneView extends View
 
 		try(BufferedWriter w = new BufferedWriter(new FileWriter(f)))
 		{
-			w.write(path.system.size.x + " " + path.system.size.y);
+			w.write(path.getSystem().size.x + " " + path.getSystem().size.y);
 			w.newLine();
-			w.write(path.system.zero.x + " " + path.system.zero.y);
+			w.write(path.getSystem().zero.x + " " + path.getSystem().zero.y);
 			w.newLine();
-			w.write(path.system.xAxis + " " + path.system.yAxis);
+			w.write(path.getSystem().xAxis + " " + path.getSystem().yAxis);
 			w.newLine();
 
 			for(WnWPoint point : path)

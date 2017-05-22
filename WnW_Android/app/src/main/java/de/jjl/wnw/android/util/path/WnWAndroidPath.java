@@ -8,13 +8,14 @@ import android.graphics.PathEffect;
 
 import de.jjl.wnw.base.util.path.WnWDisplaySystem;
 import de.jjl.wnw.base.util.path.WnWPath;
+import de.jjl.wnw.base.util.path.WnWPathSimple;
 import de.jjl.wnw.base.util.path.WnWPoint;
 
-public class WnWAndroidPath extends WnWPath
+public class WnWAndroidPath extends WnWPathSimple
 {
 	private final Paint paint;
 
-	private Path path;
+	private final Path path;
 
 	public WnWAndroidPath(int width, int height)
 	{
@@ -22,58 +23,38 @@ public class WnWAndroidPath extends WnWPath
 
 		paint.setColor(0xff000000 + (int)(Math.random() * 0xffffff));
 		paint.setStrokeWidth(30f);
+		paint.setStyle(Paint.Style.STROKE);
 	}
 
 	public WnWAndroidPath(int width, int height, Paint paint)
 	{
 		super(WnWDisplaySystem.getFor(width, height, true, false));
 		this.paint = paint;
+		this.path = new Path();
 	}
 
 	@Override
 	public void addPoint(float x, float y)
 	{
-		super.addPoint(x, y);
+		super.getPoints().add(new WnWPoint(x, y));
 
-		path = null;
+		if(path.isEmpty())
+		{
+			path.moveTo(x, y);
+		}
+		else
+		{
+			path.lineTo(x, y);
+		}
 	}
 
 	public void onDraw(Canvas canvas)
 	{
-		if(false)
-		{
-			canvas.drawPath(toPath(), paint);
-			return;
-		}
-		WnWPoint point = null;
-		for(WnWPoint pt : this)
-		{
-			if(point != null)
-			{
-				canvas.drawLine((float)point.x, (float)point.y, (float)pt.x, (float)pt.y, paint);
-			}
-			point = pt;
-		}
+		canvas.drawPath(toPath(), paint);
 	}
 
 	public Path toPath()
 	{
-		if(path == null)
-		{
-			path = new Path();
-			path.setFillType(Path.FillType.WINDING);
-			for(WnWPoint point : this)
-			{
-				if(path.isEmpty())
-				{
-					path.moveTo((float)point.x, (float)point.y);
-				}
-				else
-				{
-					path.lineTo((float)point.x, (float)point.y);
-				}
-			}
-		}
 		return path;
 	}
 }

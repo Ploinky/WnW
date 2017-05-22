@@ -14,7 +14,7 @@ import javafx.scene.shape.*;
  *
  * @author johannes.litger
  */
-public class WnWDesktopPath extends WnWPath
+public class WnWDesktopPath extends WnWPathSimple
 {
 	/** FX-Path that is shown on screen */
 	private Path path;

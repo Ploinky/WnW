@@ -15,4 +15,19 @@ public class WnWPoint
 	{
 		this((int)x, (int)y);
 	}
+
+	@Override
+	public boolean equals(Object o)
+	{
+		return o instanceof  WnWPoint
+				&& x == ((WnWPoint)o).x
+				&& y == ((WnWPoint)o).y;
+	}
+	
+	@Override
+	public int hashCode()
+	{
+		final int PRIME = 101;
+		return (x * PRIME + y) * PRIME;
+	}
 }
