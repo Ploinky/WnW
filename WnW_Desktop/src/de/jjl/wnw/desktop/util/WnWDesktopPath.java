@@ -3,8 +3,6 @@
  */
 package de.jjl.wnw.desktop.util;
 
-import java.util.Iterator;
-
 import de.jjl.wnw.base.util.path.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.*;
@@ -52,39 +50,34 @@ public class WnWDesktopPath extends WnWPathSimple
 	{
 		Path p = new Path();
 		
-		WnWPoint left = null, right = null, top = null, bottom = null;
-
-		// Determine outermost points
-		Iterator<WnWPoint> it = iterator();
-		while(it.hasNext())
-		{
-			WnWPoint point = it.next();
-			
-			left	= left == null		|| point.x < left.x		? point : left;
-			right	= right == null		|| point.x > right.x	? point : right;
-			top		= top == null		|| point.y < top.y		? point : top;
-			bottom	= bottom == null	|| point.y > bottom.y		? point : bottom;
+		int minX = Integer.MAX_VALUE;
+		int maxX = Integer.MIN_VALUE;
+		int minY = Integer.MAX_VALUE;
+		int maxY = Integer.MIN_VALUE;
+		
+		for(WnWPoint point : this)
+		{			
+			minX = Math.min(point.x, minX);
+			maxX = Math.max(point.x, maxX);
+			minY = Math.min(point.y, minY);
+			maxY = Math.max(point.y, maxY);
 		}
 		
 		// Scale path
-		float pathWidth = right.x - left.x;
-		float pathHeight = bottom.y - top.y;
+		float pathWidth = maxX - minX;
+		float pathHeight = maxY- minY;
 		float relWidth = pathWidth / width;
 		float relHeight = pathHeight / height;
 		
 		// Use the largest scale that will fit the defined rectangle
 		float relSize = relWidth < relHeight ? relHeight : relWidth;
 		
-		
 		// Move path left and scale
-		it = iterator();
-		while(it.hasNext())
-		{
-			WnWPoint point = it.next();
-
+		for(WnWPoint point : this)
+		{	
 			p.getElements().add(p.getElements().isEmpty() ?
-						new MoveTo((point.x - left.x) / relSize, (point.y - top.y) / relSize)
-						: new LineTo((point.x - left.x) / relSize, (point.y - top.y) / relSize));
+						new MoveTo((point.x - minX) / relSize, (point.y - minY) / relSize)
+						: new LineTo((point.x - minX) / relSize, (point.y - minY) / relSize));
 		}
 
 		return p;
