@@ -4,12 +4,11 @@ import de.jjl.wnw.base.util.*;
 import de.jjl.wnw.desktop.controls.DrawPanel;
 import de.jjl.wnw.desktop.game.FrameListener;
 import de.jjl.wnw.desktop.gui.JFXFrame;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
+import javafx.geometry.*;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Paint;
+import javafx.scene.paint.*;
 import javafx.scene.shape.Path;
 
 /**
@@ -72,7 +71,7 @@ public class FXPractice extends JFXFrame implements InvalidationListener
 		
 		if(path.getElements().size() < 3)
 		{
-			// Avoiding 1 pixel paths, mostly....
+			// Avoiding 1 pixel paths....
 			return;
 		}
 		
@@ -82,9 +81,8 @@ public class FXPractice extends JFXFrame implements InvalidationListener
 		pane.setMaxSize(100, 100);
 		pane.setMinSize(100, 100);
 		
-		pane.setBorder(new Border(new BorderStroke(Paint.valueOf("Black"), BorderStrokeStyle.SOLID,
+		pane.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID,
 				CornerRadii.EMPTY, BorderWidths.DEFAULT, new Insets(-5, -5, -5, -5))));
-		pane.setPadding(new Insets(500, 5, 5, 5));
 		
 		chain.add(pane, chain.getChildren().size(), 0);
 	}

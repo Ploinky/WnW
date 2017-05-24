@@ -1,8 +1,7 @@
 package de.jjl.wnw.desktop.controls;
 
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import de.jjl.wnw.base.util.InvalidationListener;
 import de.jjl.wnw.base.util.Observable;

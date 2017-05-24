@@ -23,6 +23,7 @@ public class WnWDesktopPath extends WnWPathSimple
 	{
 		super(system);
 		path = new Path();
+		path.setMouseTransparent(true);
 	}
 	
 	public void addPoint(MouseEvent e)
