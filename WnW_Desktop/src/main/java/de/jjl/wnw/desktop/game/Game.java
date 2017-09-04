@@ -1,16 +1,25 @@
 package de.jjl.wnw.desktop.game;
 
 import java.io.IOException;
-import java.util.*;
-import java.util.function.Function;
+import java.util.HashMap;
+import java.util.Map;
 
 import de.jjl.wnw.base.consts.Const;
 import de.jjl.wnw.base.lang.Translator;
 import de.jjl.wnw.base.msg.MsgConst;
-import de.jjl.wnw.desktop.gui.fx.*;
-import de.jjl.wnw.dev.conn.*;
+import de.jjl.wnw.desktop.consts.DesktopConsts.Frames;
+import de.jjl.wnw.desktop.gui.Frame;
+import de.jjl.wnw.desktop.gui.frames.GameFrame;
+import de.jjl.wnw.desktop.gui.frames.MainFrame;
+import de.jjl.wnw.desktop.gui.frames.SettingsFrame;
+import de.jjl.wnw.dev.conn.WnWConnection;
+import de.jjl.wnw.dev.conn.WnWMsg;
+import de.jjl.wnw.dev.conn.WnWMsgListener;
 import javafx.application.Application;
-import javafx.scene.*;
+import javafx.application.Platform;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 /**
@@ -25,40 +34,46 @@ public class Game extends Application implements FrameListener, WnWMsgListener
 	private WnWConnection conn;
 
 	private String name;
-	
-	private Map<String, Function<Game, Parent>> map;
 
-	public static void main(String[] args)
-	{
-		launch(args);
-	}
+	private Map<String, Frame> map;
 
 	@Override
 	public void start(Stage primaryStage) throws Exception
 	{
+		map = new HashMap<>();
 		name = MsgConst.DEFAULT_NAME;
 		stage = primaryStage;
+
+		stage.setScene(new Scene(new Pane()));
+		stage.setFullScreen(true);
+
+		stage.getScene().getStylesheets().add("css/main.css");
+
+		map.put(Frames.MAIN, new MainFrame(this));
+		map.put(Frames.SETTINGS, new SettingsFrame(this));
+		map.put(Frames.GAME, new GameFrame(this));
+
+		requestSceneChange(Frames.MAIN);
+
 		stage.setTitle(Translator.get().translate(Const.TITLE));
-		stage.setScene(new Scene(new FXMainMenu(this)));
 		stage.show();
-		
-		map = new HashMap<>();
-		
-		addFrame(Const.MENU_SETTINGS, FXOptionMenu::new);
-		addFrame(Const.MENU_CONNECT, FXConnectMenu::new);
-		addFrame(Const.MENU_MAIN, FXMainMenu::new);
-		addFrame(Const.MENU_PRACTICE, FXPractice::new);
-	}
-	
-	public void addFrame(String name, Function<Game, Parent> func)
-	{
-		map.put(name, func);
 	}
 
 	@Override
 	public void requestSceneChange(String newFrame)
 	{
-		stage.getScene().setRoot(map.get(newFrame).apply(this));
+		FXMLLoader loader = new FXMLLoader();
+		loader.setController(map.get(newFrame));
+
+		try
+		{
+			stage.getScene().setRoot(loader.load(getClass().getResourceAsStream("/xml/" + newFrame + ".fxml")));
+		}
+		catch (Exception e)
+		{
+			// TODO Handle
+			throw new RuntimeException("Error loading new scene for String <" + newFrame + ">", e);
+		}
 	}
 
 	@Override
@@ -89,5 +104,11 @@ public class Game extends Application implements FrameListener, WnWMsgListener
 				conn.sendMsg(new WnWMsg(MsgConst.TYPE_NAME, info));
 				break;
 		}
+	}
+
+	public void exit()
+	{
+		// TODO Shutdown gracefully
+		Platform.exit();
 	}
 }

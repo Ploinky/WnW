@@ -9,7 +9,6 @@ import de.jjl.wnw.base.log.Log;
 import de.jjl.wnw.base.msg.MsgConst;
 import de.jjl.wnw.base.player.Player;
 import de.jjl.wnw.desktop.gui.ServerGui;
-import de.jjl.wnw.desktop.gui.fx.FxServerGui;
 import de.jjl.wnw.dev.conn.WnWConnection;
 import de.jjl.wnw.dev.conn.WnWConnectionListener;
 import de.jjl.wnw.dev.conn.WnWMsg;
@@ -61,7 +60,6 @@ public class Server extends Application implements WnWConnectionListener, WnWMsg
 	@Override
 	public void start(Stage primaryStage) throws Exception
 	{
-		gui = new FxServerGui(primaryStage);
 
 		gui.setVisible(true);
 
