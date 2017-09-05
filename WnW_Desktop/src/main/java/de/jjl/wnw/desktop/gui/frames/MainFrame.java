@@ -1,14 +1,19 @@
 package de.jjl.wnw.desktop.gui.frames;
 
+import java.io.IOException;
+
 import de.jjl.wnw.desktop.consts.DesktopConsts.Frames;
 import de.jjl.wnw.desktop.game.Game;
 import de.jjl.wnw.desktop.gui.Frame;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
+import javafx.fxml.*;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 
 public class MainFrame extends Frame
 {
+	private Parent root;
+	
 	public MainFrame(Game game)
 	{
 		super(game);
@@ -30,6 +35,29 @@ public class MainFrame extends Frame
 	void btnExitOnAction(ActionEvent event)
 	{
 		game.exit();
+	}
+
+	@Override
+	public Parent getAsNode()
+	{
+		if(root!= null)
+		{
+			return root;
+		}
+		
+		FXMLLoader loader = new FXMLLoader();
+		loader.setController(this);
+		
+		try
+		{
+			root = loader.load(getClass().getResourceAsStream("/xml/MAIN.fxml"));
+		}
+		catch(IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return root;
 	}
 
 }

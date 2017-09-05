@@ -1,23 +1,17 @@
 package de.jjl.wnw.desktop.game;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Supplier;
 
 import de.jjl.wnw.base.consts.Const;
 import de.jjl.wnw.base.lang.Translator;
 import de.jjl.wnw.base.msg.MsgConst;
 import de.jjl.wnw.desktop.consts.DesktopConsts.Frames;
 import de.jjl.wnw.desktop.gui.Frame;
-import de.jjl.wnw.desktop.gui.frames.GameFrame;
-import de.jjl.wnw.desktop.gui.frames.MainFrame;
-import de.jjl.wnw.desktop.gui.frames.SettingsFrame;
-import de.jjl.wnw.dev.conn.WnWConnection;
-import de.jjl.wnw.dev.conn.WnWMsg;
-import de.jjl.wnw.dev.conn.WnWMsgListener;
-import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.fxml.FXMLLoader;
+import de.jjl.wnw.desktop.gui.frames.*;
+import de.jjl.wnw.dev.conn.*;
+import javafx.application.*;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -35,7 +29,7 @@ public class Game extends Application implements FrameListener, WnWMsgListener
 
 	private String name;
 
-	private Map<String, Frame> map;
+	private Map<String, Supplier<Frame>> map;
 
 	@Override
 	public void start(Stage primaryStage) throws Exception
@@ -49,9 +43,9 @@ public class Game extends Application implements FrameListener, WnWMsgListener
 
 		stage.getScene().getStylesheets().add("css/main.css");
 
-		map.put(Frames.MAIN, new MainFrame(this));
-		map.put(Frames.SETTINGS, new SettingsFrame(this));
-		map.put(Frames.GAME, new GameFrame(this));
+		map.put(Frames.MAIN, () -> new MainFrame(this));
+		map.put(Frames.SETTINGS, () -> new SettingsFrame(this));
+		map.put(Frames.GAME, () -> new GameFrame(this));
 
 		requestSceneChange(Frames.MAIN);
 
@@ -62,17 +56,15 @@ public class Game extends Application implements FrameListener, WnWMsgListener
 	@Override
 	public void requestSceneChange(String newFrame)
 	{
-		FXMLLoader loader = new FXMLLoader();
-		loader.setController(map.get(newFrame));
-
 		try
 		{
-			stage.getScene().setRoot(loader.load(getClass().getResourceAsStream("/xml/" + newFrame + ".fxml")));
+			stage.getScene().setRoot(map.get(newFrame).get().getAsNode());
 		}
 		catch (Exception e)
 		{
 			// TODO Handle
-			throw new RuntimeException("Error loading new scene for String <" + newFrame + ">", e);
+			throw new RuntimeException("Error loading new scene for String <" 
+							+ newFrame + ">", e);
 		}
 	}
 
