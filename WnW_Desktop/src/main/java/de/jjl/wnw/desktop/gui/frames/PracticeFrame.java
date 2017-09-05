@@ -1,48 +1,40 @@
+/*
+ * Copyright © 2017 Unitechnik Systems GmbH. All Rights Reserved.
+ */
 package de.jjl.wnw.desktop.gui.frames;
 
 import java.io.IOException;
 
 import de.jjl.wnw.desktop.game.Game;
 import de.jjl.wnw.desktop.gui.Frame;
-import javafx.event.ActionEvent;
-import javafx.fxml.*;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 
-public class GameFrame extends Frame
+public class PracticeFrame extends Frame
 {
-	private Parent root;
-	
-	public GameFrame(Game game)
+	public PracticeFrame(Game game)
 	{
 		super(game);
-	}
-
-	@FXML
-	void btnTestOnAction(ActionEvent event)
-	{
 	}
 
 	@Override
 	public Parent getAsNode()
 	{
-		if(root!= null)
-		{
-			return root;
-		}
-		
 		FXMLLoader loader = new FXMLLoader();
 		loader.setController(this);
-		
+
 		try
 		{
-			root = loader.load(getClass().getResourceAsStream("/xml/GAME.fxml"));
+			return loader
+				.load(getClass().getResourceAsStream("/xml/PRACTICE.fxml"));
 		}
 		catch(IOException e)
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return root;
+		
+		throw new RuntimeException("Error loading practice-frame");
 	}
 
 }

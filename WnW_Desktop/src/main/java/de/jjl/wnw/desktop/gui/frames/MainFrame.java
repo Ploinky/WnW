@@ -24,6 +24,9 @@ public class MainFrame extends Frame
 
 	@FXML
 	private Button btnSettings;
+	
+	@FXML
+	private Button btnPractice;
 
 	@FXML
 	void btnSettingsOnAction(ActionEvent event)
@@ -35,6 +38,12 @@ public class MainFrame extends Frame
 	void btnExitOnAction(ActionEvent event)
 	{
 		game.exit();
+	}
+	
+	@FXML
+	void btnPracticeOnAction(ActionEvent event)
+	{
+		game.requestSceneChange(Frames.PRACTICE);
 	}
 
 	@Override

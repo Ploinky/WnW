@@ -45,7 +45,7 @@ public class Game extends Application implements FrameListener, WnWMsgListener
 
 		map.put(Frames.MAIN, () -> new MainFrame(this));
 		map.put(Frames.SETTINGS, () -> new SettingsFrame(this));
-		map.put(Frames.GAME, () -> new GameFrame(this));
+		map.put(Frames.PRACTICE, () -> new PracticeFrame(this));
 
 		requestSceneChange(Frames.MAIN);
 
