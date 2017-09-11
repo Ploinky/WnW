@@ -1,11 +1,18 @@
 package de.jjl.wnw.desktop.controls;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import de.jjl.wnw.base.util.InvalidationListener;
 import de.jjl.wnw.base.util.path.WnWDisplaySystem;
 import de.jjl.wnw.desktop.util.WnWDesktopPath;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.BorderWidths;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 
 /**
  * This pane can be drawn on by pressing and dragging the mouse. It is used by
@@ -25,8 +32,7 @@ public class DrawPanel extends Pane implements Control
 	{
 		listeners = new ArrayList<>();
 
-		disSys = new WnWDisplaySystem((int) getWidth(), (int) getHeight(), true,
-				false, 0, 0);
+		disSys = new WnWDisplaySystem((int) getWidth(), (int) getHeight(), true, false, 0, 0);
 
 		setOnMousePressed(e ->
 		{
@@ -48,6 +54,9 @@ public class DrawPanel extends Pane implements Control
 			}
 			path.addPoint(e);
 		});
+
+		setBorder(new Border(
+				new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.FULL)));
 
 		setOnMouseReleased(e -> listeners.forEach(l -> l.invalidated(this)));
 	}
