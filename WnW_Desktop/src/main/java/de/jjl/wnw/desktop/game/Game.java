@@ -7,7 +7,7 @@ import java.util.function.Supplier;
 import de.jjl.wnw.base.consts.Const;
 import de.jjl.wnw.base.lang.Translator;
 import de.jjl.wnw.base.msg.MsgConst;
-import de.jjl.wnw.desktop.consts.DesktopConsts.Frames;
+import de.jjl.wnw.desktop.consts.Frames;
 import de.jjl.wnw.desktop.gui.Frame;
 import de.jjl.wnw.desktop.gui.frames.*;
 import de.jjl.wnw.dev.conn.*;

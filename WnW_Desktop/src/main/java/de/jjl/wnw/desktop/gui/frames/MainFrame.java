@@ -2,7 +2,7 @@ package de.jjl.wnw.desktop.gui.frames;
 
 import java.io.IOException;
 
-import de.jjl.wnw.desktop.consts.DesktopConsts.Frames;
+import de.jjl.wnw.desktop.consts.Frames;
 import de.jjl.wnw.desktop.game.Game;
 import de.jjl.wnw.desktop.gui.Frame;
 import javafx.event.ActionEvent;
