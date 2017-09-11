@@ -1,11 +1,9 @@
 package de.jjl.wnw.desktop.controls;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import de.jjl.wnw.base.util.InvalidationListener;
 import de.jjl.wnw.base.util.path.WnWDisplaySystem;
-import de.jjl.wnw.base.util.path.WnWPoint;
 import de.jjl.wnw.desktop.util.WnWDesktopPath;
 import javafx.scene.layout.Pane;
 
@@ -27,8 +25,8 @@ public class DrawPanel extends Pane implements Control
 	{
 		listeners = new ArrayList<>();
 
-		disSys = new WnWDisplaySystem(new WnWPoint(0, 0), new WnWPoint((int) getWidth(), (int) getHeight()), true,
-				false);
+		disSys = new WnWDisplaySystem((int) getWidth(), (int) getHeight(), true,
+				false, 0, 0);
 
 		setOnMousePressed(e ->
 		{

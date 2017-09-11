@@ -21,7 +21,7 @@ interface WnWPath : Iterable<WnWPoint>
 	fun trimmedToSize(width: Int, height: Int): WnWPath
 }
 
-class WnWPathSimple(override val system: WnWDisplaySystem) : WnWPath
+open class WnWPathSimple(override val system: WnWDisplaySystem) : WnWPath
 {
 	val points = arrayListOf<WnWPoint>()
 	
@@ -65,8 +65,8 @@ class WnWPathSimple(override val system: WnWDisplaySystem) : WnWPath
 		return path;
 	}
 	
-	inline fun addPoint(x: Int, y: Int) = addPoint(WnWPoint(x, y))
-	fun addPoint(point: WnWPoint) = points.add(point)
+	open fun addPoint(x: Int, y: Int): Unit = addPoint(WnWPoint(x, y))
+	fun addPoint(point: WnWPoint): Unit { points.add(point) }
 	
 	override fun trimmedToSize(width: Int, height: Int) = trimmed().forSystem(WnWDisplaySystem(width, height, system.xAxis, system.yAxis))
 	

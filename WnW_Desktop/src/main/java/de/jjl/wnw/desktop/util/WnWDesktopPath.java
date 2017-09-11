@@ -26,11 +26,11 @@ public class WnWDesktopPath extends WnWPathSimple
 	
 	public void addPoint(MouseEvent e)
 	{
-		addPoint((float) e.getX(), (float) e.getY());
+		addPoint((int) e.getX(), (int) e.getY());
 	}
 	
 	@Override
-	public void addPoint(float x, float y)
+	public void addPoint(int x, int y)
 	{
 		super.addPoint(x, y);
 		
@@ -57,10 +57,10 @@ public class WnWDesktopPath extends WnWPathSimple
 		
 		for(WnWPoint point : this)
 		{			
-			minX = Math.min(point.x, minX);
-			maxX = Math.max(point.x, maxX);
-			minY = Math.min(point.y, minY);
-			maxY = Math.max(point.y, maxY);
+			minX = Math.min(point.getX(), minX);
+			maxX = Math.max(point.getX(), maxX);
+			minY = Math.min(point.getY(), minY);
+			maxY = Math.max(point.getY(), maxY);
 		}
 		
 		// Scale path
@@ -76,8 +76,8 @@ public class WnWDesktopPath extends WnWPathSimple
 		for(WnWPoint point : this)
 		{	
 			p.getElements().add(p.getElements().isEmpty() ?
-						new MoveTo((point.x - minX) / relSize, (point.y - minY) / relSize)
-						: new LineTo((point.x - minX) / relSize, (point.y - minY) / relSize));
+						new MoveTo((point.getX() - minX) / relSize, (point.getY() - minY) / relSize)
+						: new LineTo((point.getX() - minX) / relSize, (point.getY() - minY) / relSize));
 		}
 
 		return p;
