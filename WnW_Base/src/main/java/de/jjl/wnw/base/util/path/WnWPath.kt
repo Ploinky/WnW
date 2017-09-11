@@ -65,8 +65,8 @@ open class WnWPathSimple(override val system: WnWDisplaySystem) : WnWPath
 		return path;
 	}
 	
-	open fun addPoint(x: Int, y: Int): Unit = addPoint(WnWPoint(x, y))
-	fun addPoint(point: WnWPoint): Unit { points.add(point) }
+	fun addPoint(x: Int, y: Int): Unit = addPoint(WnWPoint(x, y))
+	open fun addPoint(point: WnWPoint): Unit { points.add(point) }
 	
 	override fun trimmedToSize(width: Int, height: Int) = trimmed().forSystem(WnWDisplaySystem(width, height, system.xAxis, system.yAxis))
 	
