@@ -9,11 +9,7 @@ import de.jjl.wnw.base.log.Log;
 import de.jjl.wnw.base.msg.MsgConst;
 import de.jjl.wnw.base.player.Player;
 import de.jjl.wnw.desktop.gui.ServerGui;
-import de.jjl.wnw.dev.conn.WnWConnection;
-import de.jjl.wnw.dev.conn.WnWConnectionListener;
-import de.jjl.wnw.dev.conn.WnWMsg;
-import de.jjl.wnw.dev.conn.WnWMsgListener;
-import de.jjl.wnw.dev.conn.WnWServer;
+import de.jjl.wnw.dev.conn.*;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -48,7 +44,7 @@ public class Server extends Application implements WnWConnectionListener, WnWMsg
 				}
 				catch (InterruptedException e)
 				{
-					// TODO Auto-generated catch block
+					// TODO
 					e.printStackTrace();
 				}
 
@@ -63,7 +59,7 @@ public class Server extends Application implements WnWConnectionListener, WnWMsg
 
 		gui.setVisible(true);
 
-		players = new CopyOnWriteArrayList<Player>();
+		players = new CopyOnWriteArrayList<>();
 
 		server = new WnWServer(Const.DEFAULT_PORT);
 
@@ -73,7 +69,7 @@ public class Server extends Application implements WnWConnectionListener, WnWMsg
 		}
 		catch (IOException e)
 		{
-			// TODO Auto-generated catch block
+			// TODO
 			e.printStackTrace();
 		}
 
