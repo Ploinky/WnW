@@ -14,42 +14,73 @@ class WnWPathInputParser: WnWInputParser
 {
 	class Config
 	{
+		/** the number of fields within one row of the grid */
 		var gridWidth = 3
 			set(value) { field = Math.max(value, 1) }
+		/** the number of fields within on column of the grid */
 		var gridHeight = 3
 			set(value) { field = Math.max(value, 1) }
+		/** the min height of one field of the grid */
 		var minFieldHeight = 10
 			set(value) { field = Math.max(value, 1) }
-		var maxFieldHeight = 10
+		/** the max height of one field of the grid */
+		var maxFieldHeight = 1000
 			set(value) { field = Math.max(value, 1) }
+		/** the min width of one field of the grid */
 		var minFieldWidth = 10
 			set(value) { field = Math.max(value, 1) }
-		var maxFieldWidth = 10
+		/** the max width of one field of the grid */
+		var maxFieldWidth = 1000
 			set(value) { field = Math.max(value, 1) }
+		/**
+		 * the tolerance in which to accept a point (in full percent).<br>
+		 * a value of 0 means the point will only be acceppted if it is exactly on the grid-center,
+		 * a value of 100 means the point must be within an ellipse described by the field
+		 * and a value of > (sqrt(2) * 100) means all points shall be accepted
+		 */
 		var fieldTolerance = 100
 			set(value) { field = Math.max(value, 0) }
+		/** if true a given position in the grid may be more than once in the filtered path */
+		var moveFieldTwice = true
+		/** if true a path of ... -> A -> B -> A -> ... is possible */
+		var moveFieldBack= false
+		/** Describes how the corners of the shall be interpreted in the grid */
+		var corner = GridCorner.Center
 	}
 	
-	class Grid(val fieldWidth: Int, val fieldHeight: Int, val startX: Int, val startY: Int, val tolerance: Int)
+	enum class GridCorner
+	{
+		/** The corners of the path are interpreted as corners of the grid as well */
+		 Corner,
+		/** the corners of the path are interpreted as center-points of the first/last fields of the grid*/
+		 Center
+	}
+	
+	class Grid(val fieldWidth: Int, val fieldHeight: Int, val startX: Int, val startY: Int, val rows: Int, val cols: Int, val tolerance: Int)
 	{
 		private val zero: WnWPoint = WnWPoint(startX, startY)
-		private val size: WnWPoint = WnWPoint(fieldWidth, fieldHeight)
+		private val fieldSize: WnWPoint = WnWPoint(fieldWidth, fieldHeight)
+		private val gridSize: WnWPoint = WnWPoint(cols, rows)
 		
 		fun parse(point: WnWPoint): WnWPoint?
 		{
 			var temp = point - zero
-			temp = WnWPoint(temp.x / fieldWidth, temp.y / fieldHeight)
+			temp = temp / fieldSize
 			
-			val fieldCenter = zero + (temp * size) + (size / 2)
+			if(temp.x < 0 || temp.x >= gridSize.x || temp.y < 0 || temp.y >= gridSize.y)
+			{
+				return null
+			}
+			
+			val fieldCenter = zero + (temp * fieldSize) + (fieldSize / 2)
 			
 			val centerDist = WnWPoint(
 							Math.max(fieldCenter.x, point.x) - Math.min(fieldCenter.x, point.x),
 							Math.max(fieldCenter.y, point.y) - Math.min(fieldCenter.y, point.y))
 			
-			val distSq = centerDist.x * centerDist.x + centerDist.y * centerDist.y
-			
-			val angle = Math.atan(centerDist.y.toDouble() / centerDist.x.toDouble())
-			val percent = (Math.sin(angle) * centerDist.x + Math.cos(angle) * centerDist.y) / (fieldWidth + fieldHeight)
+			var percent = ((Math.pow(centerDist.x.toDouble(), 2.0) / Math.pow(fieldSize.x.toDouble() / 2, 2.0)
+						+ Math.pow(centerDist.y.toDouble(), 2.0) / Math.pow(fieldSize.y.toDouble() / 2, 2.0))
+						* 100).toInt()
 			
 			return if(tolerance >= percent) temp else null
 		}
@@ -66,39 +97,63 @@ class WnWPathInputParser: WnWInputParser
 	
 	fun parsePath(path: WnWPath, config: Config = Config()): WnWRune?
 	{
-		val path = filterRunePath(path, config)
-		return lookupRune(path)
+		val runePath = filterRunePath(path.trimmed(), config)
+		return lookupRune(runePath)
 	}
 	
 	fun filterRunePath(path: WnWPath, config: Config): WnWPath
 	{
+		val grid = buildGrid(path, config)
+		return filterRunePath(path, config, grid)
+	}
+	
+	fun filterRunePath(path: WnWPath, config: Config, grid: Grid): WnWPath
+	{
 		val ret = WnWPathSimple(WnWDisplaySystem(config.gridWidth, config.gridHeight, path.system.xAxis, path.system.yAxis))
-		val pathTrimmed = path.trimmed()
 		
-		val grid = buildGrid(pathTrimmed, config)
-		
-		if(grid == null) TODO()
-		
+		var preLastPoint: WnWPoint? = null
 		var lastPoint: WnWPoint? = null
 		
-		for(point in pathTrimmed)
+		for(point in path)
 		{
 			val nextPoint = grid.parse(point)
 			
-			if(nextPoint != null && nextPoint != lastPoint)
+			if(nextPoint != null
+				 && nextPoint != lastPoint)
 			{
-				ret.addPoint(nextPoint)
-				lastPoint = nextPoint
+				if(config.moveFieldBack || nextPoint != preLastPoint)
+				{
+					if(config.moveFieldTwice || nextPoint !in ret.points)
+					{
+						
+						ret.addPoint(nextPoint)
+						preLastPoint = lastPoint
+						lastPoint = nextPoint
+					}
+				}
 			}
 		}
 		
 		return ret
 	}
 	
-	fun buildGrid(path: WnWPath, config: Config): Grid?
+	fun buildGrid(path: WnWPath, config: Config): Grid
 	{
-		var gridWidth = path.system.width / config.gridWidth
-		var gridHeight = path.system.height / config.gridHeight
+		var gridWidth = 0
+		var gridHeight = 0
+		when(config.corner)
+		{
+			GridCorner.Center ->
+			{
+				gridWidth = path.system.width / (config.gridWidth - 1)
+				gridHeight = path.system.height / (config.gridHeight - 1)
+			}
+			GridCorner.Corner ->
+			{
+				gridWidth = path.system.width / config.gridWidth
+				gridHeight = path.system.height / config.gridHeight
+			}
+		}
 		
 		if(gridWidth * config.gridWidth < path.system.width) gridWidth += 1
 		if(gridHeight * config.gridHeight < path.system.height) gridHeight += 1
@@ -109,22 +164,10 @@ class WnWPathInputParser: WnWInputParser
 		gridHeight = Math.max(gridHeight, config.minFieldHeight)
 		gridHeight = Math.min(gridHeight, config.maxFieldHeight)
 		
-		if(gridWidth * config.gridWidth < path.system.width) TODO()
-		if(gridHeight * config.gridHeight < path.system.height) TODO()
+		var startX = (path.system.width - (gridWidth * config.gridWidth)) / 2
+		var startY = (path.system.height - (gridHeight * config.gridHeight)) / 2
 		
-		var startX = 0
-		var startY = 0
-		
-		if(gridWidth * config.gridWidth > path.system.width)
-		{
-			startX = -(path.system.width - (gridWidth * config.gridWidth)) / 2
-		}
-		if(gridHeight * config.gridHeight > path.system.height)
-		{
-			startY = -(path.system.height - (gridHeight * config.gridHeight)) / 2
-		}
-		
-		return Grid(gridWidth, gridHeight, startX, startY, config.fieldTolerance)
+		return Grid(gridWidth, gridHeight, startX, startY, config.gridWidth, config.gridHeight, config.fieldTolerance)
 	}
 	
 	fun lookupRune(path: WnWPath): WnWRune?
