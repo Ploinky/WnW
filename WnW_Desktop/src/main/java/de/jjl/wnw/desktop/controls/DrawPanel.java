@@ -1,80 +1,120 @@
+/*
+ * Copyright © 2017 Unitechnik Systems GmbH. All Rights Reserved.
+ */
 package de.jjl.wnw.desktop.controls;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import de.jjl.wnw.base.util.InvalidationListener;
 import de.jjl.wnw.base.util.path.WnWDisplaySystem;
 import de.jjl.wnw.desktop.util.WnWDesktopPath;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderStrokeStyle;
-import javafx.scene.layout.BorderWidths;
-import javafx.scene.layout.CornerRadii;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.ReadOnlyBooleanProperty;
+import javafx.beans.property.ReadOnlyBooleanWrapper;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 
-/**
- * This pane can be drawn on by pressing and dragging the mouse. It is used by
- * players to drawn runes.
- *
- * @author johannes.litger
- */
-public class DrawPanel extends Pane implements Control
+public class DrawPanel extends Pane
 {
-	private final List<InvalidationListener> listeners;
-
 	private WnWDesktopPath path;
-
-	private WnWDisplaySystem disSys;
-
+	
+	private BooleanProperty editable;
+	private ReadOnlyBooleanWrapper drawing;
+	private ObjectProperty<EventHandler<DrawPathEvent>> onStartDrawPath;
+	private ObjectProperty<EventHandler<DrawPathEvent>> onDrawPath;
+	private ObjectProperty<EventHandler<DrawPathEvent>> onPathDrawn;
+	
 	public DrawPanel()
 	{
-		listeners = new ArrayList<>();
-
-		disSys = new WnWDisplaySystem((int) getWidth(), (int) getHeight(), true, false, 0, 0);
-
-		setOnMousePressed(e ->
-		{
-			if (path != null)
+		onStartDrawPath = new SimpleObjectProperty<EventHandler<DrawPathEvent>>(this, "onStartDrawPath", null)
 			{
-				getChildren().remove(path.getFXPath());
-			}
-
-			path = new WnWDesktopPath(disSys);
-			getChildren().add(path.getFXPath());
-			path.addPoint(e);
-		});
-
-		setOnMouseDragged(e ->
-		{
-			if (e.getX() < 0 || e.getX() > getWidth() || e.getY() < 0 || e.getY() > getHeight())
+				@Override
+				protected void invalidated()
+				{
+					addEventHandler(DrawPathEvent.START_DRAW_PATH, get());
+				}
+			};
+		onDrawPath = new SimpleObjectProperty<EventHandler<DrawPathEvent>>(this, "onDrawPath", null)
 			{
-				return;
-			}
-			path.addPoint(e);
-		});
-
-		setBorder(new Border(
-				new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.FULL)));
-
-		setOnMouseReleased(e -> listeners.forEach(l -> l.invalidated(this)));
+				@Override
+				protected void invalidated()
+				{
+					addEventHandler(DrawPathEvent.DRAW_PATH, get());
+				}
+			};
+		onPathDrawn = new SimpleObjectProperty<EventHandler<DrawPathEvent>>(this, "onPathDrawn", null)
+			{
+				@Override
+				protected void invalidated()
+				{
+					addEventHandler(DrawPathEvent.PATH_DRAWN, get());
+				}
+			};
+		
+		editable = new SimpleBooleanProperty(this, "editable", true);
+		drawing = new ReadOnlyBooleanWrapper(this, "drawing", false);
+		
+		addEventHandler(MouseEvent.MOUSE_PRESSED, e -> startDraw(e.getX(), e.getY()));
+		addEventHandler(MouseEvent.MOUSE_DRAGGED, e -> draw(e.getX(), e.getY()));
+		addEventHandler(MouseEvent.MOUSE_RELEASED, e -> endDraw());
 	}
-
-	public WnWDesktopPath getPath()
+	
+	protected void startDraw(double x, double y)
 	{
-		return path;
+		if(isDrawing())
+		{
+			endDraw();
+		}
+		drawing.set(true);
+		getChildren().clear();
+		path = new WnWDesktopPath(new WnWDisplaySystem((int)getWidth(), (int)getHeight(), true, false, 0, 0));
+		getChildren().add(path.getFXPath());
+		
+		Event.fireEvent(this, new DrawPathEvent(this, this, DrawPathEvent.START_DRAW_PATH, path));
+		
+		draw(x, y);
 	}
-
-	@Override
-	public void addListener(InvalidationListener listener)
+	
+	protected void draw(double x, double y)
 	{
-		listeners.add(listener);
+		if(!isDrawing())
+		{
+			return;
+		}
+		path.addPoint((int)x, (int)y);
+		Event.fireEvent(this, new DrawPathEvent(this, this, DrawPathEvent.DRAW_PATH, path));
 	}
-
-	@Override
-	public void removeListener(InvalidationListener listener)
+	
+	public void endDraw()
 	{
-		listeners.remove(listener);
+		if(!isDrawing())
+		{
+			return;
+		}
+		
+		drawing.set(false);
+		
+		Event.fireEvent(this, new DrawPathEvent(this, this, DrawPathEvent.PATH_DRAWN, path));
 	}
+	
+	public final BooleanProperty editableProperty() { return editable; }
+	public final boolean isEditable() { return editable.get(); }
+	public final void setEditable(boolean editable) { this.editable.set(editable); }
+	
+	public final ReadOnlyBooleanProperty drawingProperty() { return drawing.getReadOnlyProperty(); }
+	public final boolean isDrawing() { return drawing.get(); }
+	
+	public final ObjectProperty<EventHandler<DrawPathEvent>> onStartDrawPathProperty() { return onStartDrawPath; }
+	public final EventHandler<DrawPathEvent> getOnStartDrawPath() { return onStartDrawPath.get(); }
+	public final void setOnStartDrawPath(EventHandler<DrawPathEvent> value) { onStartDrawPath.set(value); }
+	
+	public final ObjectProperty<EventHandler<DrawPathEvent>> onDrawPathProperty() { return onDrawPath; }
+	public final EventHandler<DrawPathEvent> getOnDrawPath() { return onDrawPath.get(); }
+	public final void setOnSDrawPath(EventHandler<DrawPathEvent> value) { onDrawPath.set(value); }
+	
+	public final ObjectProperty<EventHandler<DrawPathEvent>> onPathDrawnProperty() { return onPathDrawn; }
+	public final EventHandler<DrawPathEvent> getOnPathDrawn() { return onPathDrawn.get(); }
+	public final void setOnPathDrawn(EventHandler<DrawPathEvent> value) { onPathDrawn.set(value); }
 }

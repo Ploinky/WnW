@@ -1,10 +1,72 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import de.jjl.wnw.desktop.gui.DrawPanel?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import de.jjl.wnw.desktop.controls.DrawPanel?>
+<?import de.jjl.wnw.desktop.controls.ResultPanel?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
-      <DrawPanel layoutX="311.0" layoutY="227.0" maxHeight="400.0" maxWidth="400.0" minHeight="400.0" minWidth="400.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" />
-   </children>
-</AnchorPane>
+<BorderPane xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+   <left>
+      <VBox BorderPane.alignment="CENTER">
+         <children>
+            <HBox>
+               <children>
+                  <Label text="GridWidth" />
+                  <Spinner fx:id="spnGridWidth" />
+               </children>
+            </HBox>
+            <HBox>
+               <children>
+                  <Label text="GridHeight" />
+                  <Spinner fx:id="spnGridHeight" />
+               </children>
+            </HBox>
+            <HBox>
+               <children>
+                  <Label text="Min. FieldHeight" />
+                  <Spinner fx:id="spnMinHeight" />
+               </children>
+            </HBox>
+            <HBox>
+               <children>
+                  <Label text="Max. FieldHeight" />
+                  <Spinner fx:id="spnMaxHeight" />
+               </children>
+            </HBox>
+            <HBox>
+               <children>
+                  <Label text="Min. FieldWidth" />
+                  <Spinner fx:id="spnMinWidth" />
+               </children>
+            </HBox>
+            <HBox>
+               <children>
+                  <Label text="Max. FieldWidth" />
+                  <Spinner fx:id="spnMaxWidth" />
+               </children>
+            </HBox>
+            <HBox>
+               <children>
+                  <Label text="Tolerance" />
+                  <Spinner fx:id="spnTolerance" />
+               </children>
+            </HBox>
+            <CheckBox fx:id="chkMoveTwice" mnemonicParsing="false" text="Move Point twice" />
+            <CheckBox fx:id="chkMoveBack" mnemonicParsing="false" text="Move Back" />
+            <ComboBox fx:id="cmbCorner" prefWidth="150.0" />
+         </children>
+      </VBox>
+   </left>
+   <center>
+      <DrawPanel fx:id="pnlDraw" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white; -fx-border-color: black;" BorderPane.alignment="CENTER" />
+   </center>
+   <right>
+      <ResultPanel fx:id="pnlRes" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: grey;" BorderPane.alignment="CENTER" />
+   </right>
+</BorderPane>
