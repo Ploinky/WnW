@@ -30,11 +30,12 @@ public class WnWDesktopPath extends WnWPathSimple
 	}
 	
 	@Override
-	public void addPoint(int x, int y)
+	public void addPoint(WnWPoint point)
 	{
-		super.addPoint(x, y);
+		super.addPoint(point);
 		
-		path.getElements().add(path.getElements().isEmpty() ? new MoveTo(x, y) : new LineTo(x, y));
+		path.getElements().add(path.getElements().isEmpty() ? new MoveTo(point.getX(), point.getY()) 
+						: new LineTo(point.getX(), point.getY()));
 	}
 	
 	public Path getFXPath()
