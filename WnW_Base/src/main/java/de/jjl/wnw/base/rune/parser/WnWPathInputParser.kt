@@ -67,8 +67,7 @@ class WnWPathInputParser: WnWInputParser
 	fun parsePath(path: WnWPath, config: Config = Config()): WnWRune?
 	{
 		val path = filterRunePath(path, config)
-		TODO()
-		return null
+		return lookupRune(path)
 	}
 	
 	fun filterRunePath(path: WnWPath, config: Config): WnWPath
@@ -126,6 +125,11 @@ class WnWPathInputParser: WnWInputParser
 		}
 		
 		return Grid(gridWidth, gridHeight, startX, startY, config.fieldTolerance)
+	}
+	
+	fun lookupRune(path: WnWPath): WnWRune?
+	{
+		TODO()
 	}
 }
 
