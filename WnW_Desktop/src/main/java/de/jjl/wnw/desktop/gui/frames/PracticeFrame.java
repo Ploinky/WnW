@@ -4,24 +4,17 @@
 package de.jjl.wnw.desktop.gui.frames;
 
 import java.io.IOException;
-import java.util.function.IntConsumer;
-import java.util.function.IntSupplier;
+import java.util.function.*;
 
 import de.jjl.wnw.base.rune.parser.WnWPathInputParser;
-import de.jjl.wnw.base.rune.parser.WnWPathInputParser.Config;
-import de.jjl.wnw.base.rune.parser.WnWPathInputParser.GridCorner;
+import de.jjl.wnw.base.rune.parser.WnWPathInputParser.*;
 import de.jjl.wnw.base.util.path.WnWPath;
-import de.jjl.wnw.desktop.controls.DrawPanel;
-import de.jjl.wnw.desktop.controls.ResultPanel;
+import de.jjl.wnw.desktop.controls.*;
 import de.jjl.wnw.desktop.game.Game;
 import de.jjl.wnw.desktop.gui.Frame;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
+import javafx.fxml.*;
 import javafx.scene.Parent;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.SpinnerValueFactory;
+import javafx.scene.control.*;
 
 public class PracticeFrame extends Frame
 {

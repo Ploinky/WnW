@@ -98,7 +98,7 @@ class WnWPathInputParser: WnWInputParser
 	fun parsePath(path: WnWPath, config: Config = Config()): WnWRune?
 	{
 		val runePath = filterRunePath(path.trimmed(), config)
-		return lookupRune(runePath)
+		return lookupRune(runePath, buildGrid(runePath, config))
 	}
 	
 	fun filterRunePath(path: WnWPath, config: Config): WnWPath
@@ -170,9 +170,17 @@ class WnWPathInputParser: WnWInputParser
 		return Grid(gridWidth, gridHeight, startX, startY, config.gridWidth, config.gridHeight, config.fieldTolerance)
 	}
 	
-	fun lookupRune(path: WnWPath): WnWRune?
+	fun lookupRune(path: WnWPath, grid: Grid): WnWRune?
 	{
-		TODO()
+		var runeString = ""
+		
+		
+		for(point in path)
+		{
+			System.out.println(grid.parse(point));
+		}
+		
+		return null;
 	}
 }
 

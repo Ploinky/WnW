@@ -1,36 +1,29 @@
 package de.jjl.wnw.dev.conn.rune;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+
+import de.jjl.wnw.base.rune.WnWRune;
 
 public class Runes
 {
-	private static Runes instance;
-	
-	private List<BaseRune> runes;
+	private static Map<Long, WnWRune> runes = new HashMap<>();
 	
 	private Runes()
 	{
-		runes = new ArrayList<>();
-		
-		runes.add(new TestRune());
 	}
 	
-	public BaseRune getRuneFor(long rune)
+	public static WnWRune getRuneFor(long rune)
 	{
-		if(instance == null)
+		return runes.get(rune);
+	}
+	
+	public static void addRune(long l, WnWRune r)
+	{
+		if(runes.containsKey(l))
 		{
-			instance = new Runes();
+			throw new RuntimeException("Duplicate rune for " + l);
 		}
 		
-		for(BaseRune r : runes)
-		{
-			if(r.getRuneLong() == rune)
-			{
-				return r;
-			}
-		}
-	
-		return null;
+		runes.put(l, r);
 	}
 }
