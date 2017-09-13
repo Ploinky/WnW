@@ -32,6 +32,13 @@ open class WnWPathSimple(override val system: WnWDisplaySystem) : WnWPath
 	override val pathWidth: Int = pathMaxX - pathMinX
 	override val pathHeight: Int = pathMaxY - pathMinY
 	
+	var minX = Integer.MAX_VALUE
+	var maxX = Integer.MIN_VALUE
+	var minY = Integer.MAX_VALUE
+	var maxY = Integer.MIN_VALUE
+	var width = 0
+	var height = 0
+	
 	override fun iterator(): Iterator<WnWPoint> = points.iterator()
 	
 	override fun forSystem(system: WnWDisplaySystem): WnWPath
@@ -66,14 +73,38 @@ open class WnWPathSimple(override val system: WnWDisplaySystem) : WnWPath
 	}
 	
 	fun addPoint(x: Int, y: Int): Unit = addPoint(WnWPoint(x, y))
-	open fun addPoint(point: WnWPoint): Unit { points.add(point) }
+	open fun addPoint(point: WnWPoint): Unit {
+		points.add(point)
+		
+		if(point.x < minX)
+		{
+			minX = point.x
+		}
+		if(point.x > maxX)
+		{
+			maxX = point.x
+		}
+		
+		if(point.y < minY)
+		{
+			minY = point.y
+		}
+		if(point.y > maxY)
+		{
+			maxY = point.y
+		}
+		
+		width = maxX - minX;
+		height = maxY - minY;
+	}
 	
 	override fun trimmedToSize(width: Int, height: Int) = trimmed().forSystem(WnWDisplaySystem(width, height, system.xAxis, system.yAxis))
 	
 	override fun trimmed(): WnWPath
 	{
 		val min = WnWPoint(pathMinX, pathMinY)
-		val path = WnWPathSimple(WnWDisplaySystem(pathWidth, pathHeight, system.xAxis, system.yAxis))
+		val path = WnWPathSimple(WnWDisplaySystem(width, height, system.xAxis, system.yAxis))
+		System.out.println(path.system);
 		
 		var lastPoint: WnWPoint? = null
 		for(point in this)

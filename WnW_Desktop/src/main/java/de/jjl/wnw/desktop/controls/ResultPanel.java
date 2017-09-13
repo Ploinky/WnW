@@ -52,7 +52,6 @@ public class ResultPanel extends Pane
 				@Override
 				protected void invalidated()
 				{
-					
 				}
 			};
 		grid = new SimpleObjectProperty<WnWPathInputParser.Grid>(this, "grid", null)
@@ -65,6 +64,8 @@ public class ResultPanel extends Pane
 						getChildren().removeAll(sGrid);
 					}
 					
+					sGrid.clear();
+									
 					if(get() != null)
 					{
 						for(int col = 0; col < get().getCols() + 1; ++col)

@@ -69,6 +69,7 @@ public class DrawPanel extends Pane
 		}
 		drawing.set(true);
 		getChildren().clear();
+		
 		path = new WnWDesktopPath(new WnWDisplaySystem((int) getWidth(), (int) getHeight(), true, false, 0, 0));
 		getChildren().add(path.getFXPath());
 
