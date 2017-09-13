@@ -13,4 +13,14 @@ public class WnWKeyboardInput implements WnWInput
 	{
 		return input;
 	}
+	
+	public void addString(String s)
+	{
+		input += s;
+	}
+
+	public void reset()
+	{
+		input = "";
+	}
 }

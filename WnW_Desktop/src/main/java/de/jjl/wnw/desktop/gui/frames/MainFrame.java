@@ -6,7 +6,8 @@ import de.jjl.wnw.desktop.consts.Frames;
 import de.jjl.wnw.desktop.game.Game;
 import de.jjl.wnw.desktop.gui.Frame;
 import javafx.event.ActionEvent;
-import javafx.fxml.*;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 
@@ -29,6 +30,9 @@ public class MainFrame extends Frame
 	private Button btnPractice;
 
 	@FXML
+	private Button btnPracticeKey;
+
+	@FXML
 	void btnSettingsOnAction(ActionEvent event)
 	{
 		game.requestSceneChange(Frames.SETTINGS);
@@ -44,6 +48,12 @@ public class MainFrame extends Frame
 	void btnPracticeOnAction(ActionEvent event)
 	{
 		game.requestSceneChange(Frames.PRACTICE);
+	}
+	
+	@FXML
+	void btnPracticeKeyOnAction(ActionEvent event)
+	{
+		game.requestSceneChange(Frames.PRACTICEKEY);
 	}
 
 	@Override

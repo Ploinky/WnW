@@ -12,6 +12,7 @@ import de.jjl.wnw.desktop.consts.Frames;
 import de.jjl.wnw.desktop.gui.Frame;
 import de.jjl.wnw.desktop.gui.frames.MainFrame;
 import de.jjl.wnw.desktop.gui.frames.PracticeFrame;
+import de.jjl.wnw.desktop.gui.frames.PracticeKeyFrame;
 import de.jjl.wnw.desktop.gui.frames.SettingsFrame;
 import de.jjl.wnw.dev.conn.WnWConnection;
 import de.jjl.wnw.dev.conn.WnWMsg;
@@ -57,6 +58,7 @@ public class Game extends Application implements FrameListener, WnWMsgListener
 		map.put(Frames.MAIN, () -> new MainFrame(this));
 		map.put(Frames.SETTINGS, () -> new SettingsFrame(this));
 		map.put(Frames.PRACTICE, () -> new PracticeFrame(this));
+		map.put(Frames.PRACTICEKEY, () -> new PracticeKeyFrame(this));
 
 		requestSceneChange(Frames.MAIN);
 

@@ -7,10 +7,16 @@ import de.jjl.wnw.base.rune.WnWRune;
 
 public class LoadRunes
 {
-	public LoadRunes()
+	private LoadRunes()
+	{
+		
+	}
+	
+	public static void load()
 	{
 		WnWRune testRune = new TestRune();
 		
-		Runes.addRune(1, testRune);
+		Runes.addRuneLong(1, testRune);
+		Runes.addRuneString("A", testRune);
 	}
 }

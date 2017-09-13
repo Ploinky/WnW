@@ -6,24 +6,67 @@ import de.jjl.wnw.base.rune.WnWRune;
 
 public class Runes
 {
-	private static Map<Long, WnWRune> runes = new HashMap<>();
+	private Map<Long, WnWRune> runeLongs = new HashMap<>();
+	
+	private Map<String, WnWRune> runeStrings = new HashMap<>();
+	
+	private static Runes instance;
 	
 	private Runes()
 	{
 	}
 	
-	public static WnWRune getRuneFor(long rune)
+	public static WnWRune getRuneForLong(long rune)
 	{
-		return runes.get(rune);
+		if(instance == null)
+		{
+			instance = new Runes();
+			LoadRunes.load();
+		}
+		
+		return instance.runeLongs.get(rune);
 	}
 	
-	public static void addRune(long l, WnWRune r)
+	public static WnWRune getRuneForString(String input)
 	{
-		if(runes.containsKey(l))
+		if(instance == null)
+		{
+			instance = new Runes();
+			LoadRunes.load();
+		}
+		
+		return instance.runeStrings.get(input);
+	}
+	
+	public static void addRuneString(String input, WnWRune r)
+	{
+		if(instance == null)
+		{
+			instance = new Runes();
+			LoadRunes.load();
+		}
+		
+		if(instance.runeStrings.containsKey(input))
+		{
+			throw new RuntimeException("Duplicate rune for " + input);
+		}
+		
+		instance.runeStrings.put(input, r);
+	}
+	
+	public static void addRuneLong(long l, WnWRune r)
+	{
+		if(instance == null)
+		{
+			instance = new Runes();
+			LoadRunes.load();
+		}
+		
+		if(instance.runeLongs.containsKey(l))
 		{
 			throw new RuntimeException("Duplicate rune for " + l);
 		}
 		
-		runes.put(l, r);
+		instance.runeLongs.put(l, r);
 	}
 }
