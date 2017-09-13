@@ -8,6 +8,8 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
 <?import de.jjl.wnw.desktop.controls.DrawPanel?>
 <?import de.jjl.wnw.desktop.controls.ResultPanel?>
 
@@ -64,9 +66,17 @@
       </VBox>
    </left>
    <center>
-      <DrawPanel fx:id="pnlDraw" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white; -fx-border-color: black;" BorderPane.alignment="CENTER" />
+     <AnchorPane fx:id="drawBox" BorderPane.alignment="CENTER">
+     	<HBox  AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+       		<AnchorPane HBox.Hgrow="ALWAYS" BorderPane.alignment="CENTER">
+       			<DrawPanel AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" fx:id="pnlDraw" style="-fx-background-color: white; -fx-border-color: black;" BorderPane.alignment="CENTER" />
+       		</AnchorPane>
+     		<AnchorPane HBox.Hgrow="ALWAYS" BorderPane.alignment="CENTER">
+       			<ResultPanel AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" fx:id="pnlRes" style="-fx-background-color: pink;" BorderPane.alignment="CENTER" />
+       		</AnchorPane>
+		</HBox>
+     </AnchorPane>
    </center>
    <right>
-      <ResultPanel fx:id="pnlRes" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: pink;" BorderPane.alignment="CENTER" />
    </right>
 </BorderPane>
