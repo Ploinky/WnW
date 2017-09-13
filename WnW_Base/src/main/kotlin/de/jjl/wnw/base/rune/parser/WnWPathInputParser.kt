@@ -174,7 +174,6 @@ class WnWPathInputParser: WnWInputParser
 	{
 		var runeString = ""
 		
-		
 		for(point in path)
 		{
 			System.out.println(grid.parse(point));

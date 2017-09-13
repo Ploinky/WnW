@@ -67,6 +67,6 @@
       <DrawPanel fx:id="pnlDraw" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white; -fx-border-color: black;" BorderPane.alignment="CENTER" />
    </center>
    <right>
-      <ResultPanel fx:id="pnlRes" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: grey;" BorderPane.alignment="CENTER" />
+      <ResultPanel fx:id="pnlRes" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: pink;" BorderPane.alignment="CENTER" />
    </right>
 </BorderPane>

@@ -128,7 +128,7 @@ public class PracticeFrame extends Frame
 	public void recalcPath()
 	{
 		// TODO $ddd 12.09.2017
-//		WnWPath path = pnlRes.getPath().trimmed();
+//		WnWPath path = pnlRes.getPath().trimmed();		
 //		pnlRes.setGrid(new WnWPathInputParser().buildGrid(path, config));
 //		pnlRes.setRunePath(new WnWPathInputParser().filterRunePath(path, config, pnlRes.getGrid()));
 	}
