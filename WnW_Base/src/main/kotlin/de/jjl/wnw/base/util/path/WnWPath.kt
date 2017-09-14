@@ -25,19 +25,18 @@ open class WnWPathSimple(override val system: WnWDisplaySystem) : WnWPath
 {
 	val points = arrayListOf<WnWPoint>()
 	
-	override val pathMinX: Int = if(points.isEmpty()) 0 else points.minBy { it.x }!!.x
-	override val pathMinY: Int = if(points.isEmpty()) 0 else points.minBy { it.y }!!.y
-	override val pathMaxX: Int = if(points.isEmpty()) 0 else points.maxBy { it.x }!!.x
-	override val pathMaxY: Int = if(points.isEmpty()) 0 else points.maxBy { it.y }!!.y
-	override val pathWidth: Int = pathMaxX - pathMinX
-	override val pathHeight: Int = pathMaxY - pathMinY
-	
-	var minX = Integer.MAX_VALUE
-	var maxX = Integer.MIN_VALUE
-	var minY = Integer.MAX_VALUE
-	var maxY = Integer.MIN_VALUE
-	var width = 0
-	var height = 0
+	override val pathMinX
+		get() = if(points.isEmpty()) 0 else points.minBy { it.x }!!.x 
+	override val pathMinY
+		get() = if(points.isEmpty()) 0 else points.minBy { it.y }!!.y
+	override val pathMaxX
+		get() = if(points.isEmpty()) 0 else points.maxBy { it.x }!!.x
+	override val pathMaxY
+		get() = if(points.isEmpty()) 0 else points.maxBy { it.y }!!.y
+	override val pathWidth
+		get() = pathMaxX - pathMinX
+	override val pathHeight
+		get() = pathMaxY - pathMinY
 	
 	override fun iterator(): Iterator<WnWPoint> = points.iterator()
 	
@@ -73,37 +72,14 @@ open class WnWPathSimple(override val system: WnWDisplaySystem) : WnWPath
 	}
 	
 	fun addPoint(x: Int, y: Int): Unit = addPoint(WnWPoint(x, y))
-	open fun addPoint(point: WnWPoint): Unit {
-		points.add(point)
-		
-		if(point.x < minX)
-		{
-			minX = point.x
-		}
-		if(point.x > maxX)
-		{
-			maxX = point.x
-		}
-		
-		if(point.y < minY)
-		{
-			minY = point.y
-		}
-		if(point.y > maxY)
-		{
-			maxY = point.y
-		}
-		
-		width = maxX - minX;
-		height = maxY - minY;
-	}
+	open fun addPoint(point: WnWPoint): Unit { points.add(point) }
 	
 	override fun trimmedToSize(width: Int, height: Int) = trimmed().forSystem(WnWDisplaySystem(width, height, system.xAxis, system.yAxis))
 	
 	override fun trimmed(): WnWPath
 	{
 		val min = WnWPoint(pathMinX, pathMinY)
-		val path = WnWPathSimple(WnWDisplaySystem(width, height, system.xAxis, system.yAxis))
+		val path = WnWPathSimple(WnWDisplaySystem(pathWidth, pathHeight, system.xAxis, system.yAxis))
 		System.out.println(path.system);
 		
 		var lastPoint: WnWPoint? = null
