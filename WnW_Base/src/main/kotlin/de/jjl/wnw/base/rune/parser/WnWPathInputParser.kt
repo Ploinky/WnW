@@ -167,7 +167,7 @@ class WnWPathInputParser: WnWInputParser
 		var startX = (path.system.width - (gridWidth * config.gridWidth)) / 2
 		var startY = (path.system.height - (gridHeight * config.gridHeight)) / 2
 		
-		return Grid(gridWidth, gridHeight, startX, startY, config.gridWidth, config.gridHeight, config.fieldTolerance)
+		return Grid(gridWidth, gridHeight, startX, startY, config.gridHeight, config.gridWidth, config.fieldTolerance)
 	}
 	
 	fun lookupRune(path: WnWPath, grid: Grid): WnWRune?
