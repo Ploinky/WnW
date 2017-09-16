@@ -68,7 +68,9 @@ public class PracticeFrame extends Frame
 
 		try
 		{
-			return loader.load(getClass().getResourceAsStream("/xml/PRACTICE.fxml"));
+			Parent p = loader.load(getClass().getResourceAsStream("/xml/PRACTICE.fxml"));
+			p.getStylesheets().add(getClass().getClassLoader().getResource("css/PRACTICE.css").toExternalForm());
+			return p;
 		}
 		catch (IOException e)
 		{

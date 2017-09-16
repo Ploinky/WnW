@@ -6,9 +6,11 @@ import java.util.List;
 import de.jjl.wnw.base.rune.parser.WnWPathInputParser;
 import de.jjl.wnw.base.rune.parser.WnWPathInputParser.Grid;
 import de.jjl.wnw.base.util.path.WnWPath;
+import de.jjl.wnw.base.util.path.WnWPoint;
 import de.jjl.wnw.desktop.util.WnWDesktopPath;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.css.PseudoClass;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Ellipse;
@@ -17,6 +19,8 @@ import javafx.scene.shape.Shape;
 
 public class ResultPanel extends Pane 
 {
+	public static final PseudoClass rune = PseudoClass.getPseudoClass("rune");
+	
 	private ObjectProperty<WnWPath> path;
 	private ObjectProperty<WnWPath> runePath;
 	private ObjectProperty<Grid> grid;
@@ -43,6 +47,7 @@ public class ResultPanel extends Pane
 						pPath = new WnWDesktopPath(get().getSystem());
 						get().forEach(pPath::addPoint);
 						getChildren().add(0, pPath.getFXPath());
+						pPath.getFXPath().getStyleClass().add("path");
 						pPath.getFXPath().setStroke(new Color(0.5, 0.5, 0.5, 0.5));
 					}
 				}
@@ -52,6 +57,27 @@ public class ResultPanel extends Pane
 				@Override
 				protected void invalidated()
 				{
+					if(pRunePath != null)
+					{
+						getChildren().remove(pRunePath.getFXPath());
+					}
+					
+					if(get() != null && getGrid() != null && getPath() != null)
+					{
+						int pathX = getPath().getPathMinX();
+						int pathY = getPath().getPathMinY();
+						
+						pRunePath = new WnWDesktopPath(get().getSystem());
+						for(WnWPoint p : get())
+						{
+							pRunePath.addPoint(
+									(int)(pathX + getGrid().getStartX() + ((p.getX() + 0.5) * getGrid().getFieldWidth())),
+									(int)(pathY + getGrid().getStartY() + ((p.getY() + 0.5) * getGrid().getFieldHeight())));
+						}
+						getChildren().add(pRunePath.getFXPath());
+						pRunePath.getFXPath().getStyleClass().add("path");
+						pRunePath.getFXPath().pseudoClassStateChanged(rune, true);
+					}
 				}
 			};
 		grid = new SimpleObjectProperty<WnWPathInputParser.Grid>(this, "grid", null)
@@ -66,49 +92,49 @@ public class ResultPanel extends Pane
 					
 					sGrid.clear();
 									
-					if(get() != null)
+					if(get() != null && getPath() != null)
 					{
+						int pathX = getPath().getPathMinX();
+						int pathY = getPath().getPathMinY();
+						
 						for(int col = 0; col < get().getCols() + 1; ++col)
 						{
 							Line line = new Line(
-									get().getStartX() + (col * get().getFieldWidth()),
-									get().getStartY(),
-									get().getStartX() + (col * get().getFieldWidth()),
-									get().getStartY() + (get().getRows() * get().getFieldHeight()));
-							line.setStroke(Color.BLACK);
-							line.setStrokeWidth(2d);
+									pathX + get().getStartX() + (col * get().getFieldWidth()),
+									pathY + get().getStartY(),
+									pathX + get().getStartX() + (col * get().getFieldWidth()),
+									pathY + get().getStartY() + (get().getRows() * get().getFieldHeight()));
+							line.getStyleClass().add("grid-line");
 							sGrid.add(line);
 						}
 						for(int row = 0; row < get().getRows() + 1; ++row)
 						{
 							Line line = new Line(
-									get().getStartX(),
-									get().getStartY() + (row * get().getFieldHeight()),
-									get().getStartX() + (get().getCols() * get().getFieldWidth()),
-									get().getStartY() + (row * get().getFieldHeight()));
-							line.setStroke(Color.BLACK);
-							line.setStrokeWidth(2d);
+									pathX + get().getStartX(),
+									pathY + get().getStartY() + (row * get().getFieldHeight()),
+									pathX + get().getStartX() + (get().getCols() * get().getFieldWidth()),
+									pathY + get().getStartY() + (row * get().getFieldHeight()));
+							line.getStyleClass().add("grid-line");
 							sGrid.add(line);
 						}
 						
-						for(int col = 0; col < get().getCols() + 1; ++col)
+						for(int col = 0; col < get().getCols(); ++col)
 						{
-							for(int row = 0; row < get().getRows() + 1; ++row)
+							for(int row = 0; row < get().getRows(); ++row)
 							{
 								Ellipse center = new Ellipse(
-										get().getStartX() + ((col + 0.5) * get().getFieldWidth()),
-										get().getStartY() + ((row + 0.5) * get().getFieldHeight()),
-										10d,
-										10d);
-								center.setStroke(Color.BLUE);
-								center.setStrokeWidth(1.5);
+										pathX + get().getStartX() + ((col + 0.5) * get().getFieldWidth()),
+										pathY + get().getStartY() + ((row + 0.5) * get().getFieldHeight()),
+										0.05 * get().getFieldWidth(),
+										0.05 * get().getFieldHeight());
+								center.getStyleClass().add("grid-center");
 								
 								Ellipse fieldArea = new Ellipse(
-										get().getStartX() + ((col + 0.5) * get().getFieldWidth()),
-										get().getStartY() + ((row + 0.5) * get().getFieldHeight()),
+										pathX + get().getStartX() + ((col + 0.5) * get().getFieldWidth()),
+										pathY + get().getStartY() + ((row + 0.5) * get().getFieldHeight()),
 										get().getFieldWidth() * 0.5 * get().getTolerance() / 100,
 										get().getFieldHeight() * 0.5 * get().getTolerance() / 100);
-								fieldArea.setFill(new Color(1d, 0d, 0d, 0.25));
+								fieldArea.getStyleClass().add("grid-area");
 								
 								sGrid.add(center);
 								sGrid.add(fieldArea);
