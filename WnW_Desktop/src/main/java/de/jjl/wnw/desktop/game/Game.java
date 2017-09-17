@@ -51,7 +51,6 @@ public class Game extends Application implements FrameListener, WnWMsgListener
 		stage = primaryStage;
 
 		stage.setScene(new Scene(new Pane()));
-		stage.setFullScreen(true);
 
 		stage.getScene().getStylesheets().add("css/main.css");
 
