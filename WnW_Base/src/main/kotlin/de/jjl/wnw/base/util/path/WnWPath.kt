@@ -80,7 +80,6 @@ open class WnWPathSimple(override val system: WnWDisplaySystem) : WnWPath
 	{
 		val min = WnWPoint(pathMinX, pathMinY)
 		val path = WnWPathSimple(WnWDisplaySystem(pathWidth, pathHeight, system.xAxis, system.yAxis))
-		System.out.println(path.system);
 		
 		var lastPoint: WnWPoint? = null
 		for(point in this)

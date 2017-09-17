@@ -9,6 +9,8 @@ import de.jjl.wnw.base.util.path.WnWPathSimple
 import de.jjl.wnw.base.util.path.WnWDisplaySystem
 import de.jjl.wnw.base.util.path.WnWPoint
 import de.jjl.wnw.base.util.path.*
+import de.jjl.wnw.dev.conn.rune.Runes
+import java.lang.Long;
 
 class WnWPathInputParser: WnWInputParser
 {
@@ -98,7 +100,7 @@ class WnWPathInputParser: WnWInputParser
 	fun parsePath(path: WnWPath, config: Config = Config()): WnWRune?
 	{
 		val runePath = filterRunePath(path.trimmed(), config)
-		return lookupRune(runePath, buildGrid(runePath, config))
+		return lookupRune(runePath, config)
 	}
 	
 	fun filterRunePath(path: WnWPath, config: Config): WnWPath
@@ -170,16 +172,28 @@ class WnWPathInputParser: WnWInputParser
 		return Grid(gridWidth, gridHeight, startX, startY, config.gridHeight, config.gridWidth, config.fieldTolerance)
 	}
 	
-	fun lookupRune(path: WnWPath, grid: Grid): WnWRune?
+	fun lookupRune(path: WnWPath, config: Config): WnWRune?
 	{
-		var runeString = ""
+		var runeLong = 0L
+		
+		var i = 1
 		
 		for(point in path)
 		{
-			System.out.println(grid.parse(point));
+			runeLong += ((config.gridHeight * point.y + (point.x + 1)) * i);
+			
+			i *= 10
+		}
+		var reversedNumber = 0L;
+		
+		while(runeLong > 0)
+		{
+			var temp = runeLong % 10;
+			reversedNumber = reversedNumber * 10 + temp;
+			runeLong = runeLong/10;
 		}
 		
-		return null;
+		return Runes.getRuneForLong(reversedNumber)
 	}
 }
 

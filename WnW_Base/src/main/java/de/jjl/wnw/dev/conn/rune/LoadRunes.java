@@ -16,7 +16,7 @@ public class LoadRunes
 	{
 		WnWRune testRune = new TestRune();
 		
-		Runes.addRuneLong(1, testRune);
-		Runes.addRuneString("A", testRune);
+		Runes.addRuneLong(159, testRune);
+		Runes.addRuneString("ABF", testRune);
 	}
 }

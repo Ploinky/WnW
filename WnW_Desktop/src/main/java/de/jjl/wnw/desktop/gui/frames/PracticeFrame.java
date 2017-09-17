@@ -148,6 +148,8 @@ public class PracticeFrame extends Frame
 		 WnWPath path = pnlRes.getPath().trimmed();
 		 pnlRes.setGrid(new WnWPathInputParser().buildGrid(path, config));
 		 pnlRes.setRunePath(new WnWPathInputParser().filterRunePath(path, config, pnlRes.getGrid()));
+		 // TODO Remove if no longer needed
+		System.out.println(new WnWPathInputParser().lookupRune(pnlRes.getRunePath(), config));
 	}
 
 }
