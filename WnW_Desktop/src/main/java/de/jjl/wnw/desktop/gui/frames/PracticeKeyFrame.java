@@ -3,6 +3,7 @@ package de.jjl.wnw.desktop.gui.frames;
 import java.io.IOException;
 
 import de.jjl.wnw.base.input.WnWInput;
+import de.jjl.wnw.base.input.WnWKeyboardInput;
 import de.jjl.wnw.base.rune.parser.WnWKeyboardInputParser;
 import de.jjl.wnw.desktop.controls.KeyboardPanel;
 import de.jjl.wnw.desktop.game.Game;
@@ -34,7 +35,7 @@ public class PracticeKeyFrame extends Frame
 		
 		keyPanel.setOnStringEntered(e ->
 		{
-			getRune(keyPanel.getInput());
+			getRune(new WnWKeyboardInput(e.getInput()));
 		});
 	}
 

@@ -1,18 +1,16 @@
 package de.jjl.wnw.desktop.controls;
 
-import de.jjl.wnw.base.input.WnWKeyboardInput;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 
 public class KeyboardPanel extends Pane
 {
-	WnWKeyboardInput keyboard = new WnWKeyboardInput("");
+	private String input = "";
 	
-	private ObjectProperty<EventHandler<ActionEvent>> onStringEntered;
+	private ObjectProperty<EventHandler<KeyboardInputEvent>> onStringEntered;
 	
 	public KeyboardPanel()
 	{
@@ -32,8 +30,9 @@ public class KeyboardPanel extends Pane
 			{
 				if(e.getCode() == KeyCode.ENTER)
 				{
-					onStringEntered.get().handle(new ActionEvent());
-					keyboard.reset();
+					onStringEntered.get().handle(new KeyboardInputEvent(this, this,
+							KeyboardInputEvent.INPUT_FINISHED, input));
+					input = "";
 					return;
 				}
 				
@@ -64,18 +63,13 @@ public class KeyboardPanel extends Pane
 					}
 				}
 				
-				keyboard.addString(String.valueOf(s));
+				input += String.valueOf(s);
 			});
 		});
 	}
 	
-	public void setOnStringEntered(EventHandler<ActionEvent> value)
+	public void setOnStringEntered(EventHandler<KeyboardInputEvent> value)
 	{
 		onStringEntered.set(value);
-	}
-	
-	public WnWKeyboardInput getInput()
-	{
-		return keyboard;
 	}
 }
