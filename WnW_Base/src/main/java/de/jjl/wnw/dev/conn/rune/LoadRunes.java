@@ -17,6 +17,5 @@ public class LoadRunes
 		WnWRune testRune = new TestRune();
 		
 		Runes.addRuneLong(159, testRune);
-		Runes.addRuneString("ABF", testRune);
 	}
 }
