@@ -1,4 +1,4 @@
-package de.jjl.wnw.dev.conn.rune;
+package de.jjl.wnw.dev.rune;
 
 import java.util.*;
 

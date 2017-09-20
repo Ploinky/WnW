@@ -1,7 +1,7 @@
 /*
  * Copyright © 2017 Unitechnik Systems GmbH. All Rights Reserved.
  */
-package de.jjl.wnw.dev.conn.rune;
+package de.jjl.wnw.dev.rune;
 
 import de.jjl.wnw.base.rune.WnWRune;
 
