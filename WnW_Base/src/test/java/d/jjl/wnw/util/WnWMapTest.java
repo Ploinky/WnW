@@ -1,7 +1,7 @@
 /*
  * Copyright © 2017 Unitechnik Systems GmbH. All Rights Reserved.
  */
-package d.jjl.wnw.test.util;
+package d.jjl.wnw.util;
 
 import org.junit.*;
 
