@@ -6,4 +6,6 @@ package de.jjl.wnw.base.rune;
 
 public interface WnWRune
 {
+
+	public long getLong();
 }

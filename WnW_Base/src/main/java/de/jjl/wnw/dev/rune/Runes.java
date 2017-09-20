@@ -9,17 +9,27 @@ public class Runes
 	private Map<Long, WnWRune> runeLongs = new HashMap<>();
 	
 	private static Runes instance;
-	
+		
 	private Runes()
 	{
 	}
 	
+	public static void init(RuneFactory factory)
+	{
+		if(instance != null)
+		{
+			return;
+		}
+		
+		instance = new Runes();
+		LoadRunes.load(factory);
+	}
+
 	public static WnWRune getRuneForLong(long rune)
 	{
 		if(instance == null)
 		{
-			instance = new Runes();
-			LoadRunes.load();
+			throw new IllegalStateException("Runes not initialised!");
 		}
 		
 		return instance.runeLongs.get(rune);
@@ -29,10 +39,9 @@ public class Runes
 	{
 		if(instance == null)
 		{
-			instance = new Runes();
-			LoadRunes.load();
+			throw new IllegalStateException("Runes not initialised!");
 		}
-
+		
 		return instance.runeLongs.get(Long.valueOf(input));
 	}
 	
@@ -40,13 +49,7 @@ public class Runes
 	{
 		if(instance == null)
 		{
-			instance = new Runes();
-			LoadRunes.load();
-		}
-		
-		if(instance.runeLongs.containsKey(l))
-		{
-			throw new RuntimeException("Duplicate rune for " + l);
+			throw new IllegalStateException("Runes not initialised!");
 		}
 		
 		instance.runeLongs.put(l, r);

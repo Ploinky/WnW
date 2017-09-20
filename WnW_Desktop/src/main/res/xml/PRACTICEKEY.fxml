@@ -22,7 +22,7 @@
        			<KeyboardPanel AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" fx:id="keyPanel" style="-fx-background-color: white; -fx-border-color: black;" BorderPane.alignment="CENTER" />
        		</AnchorPane>
      		<AnchorPane HBox.Hgrow="ALWAYS" BorderPane.alignment="CENTER">
-       			<RunePanel AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" fx:id="pnlRes" style="-fx-background-color: pink;" BorderPane.alignment="CENTER" />
+       			<Pane AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" fx:id="pnlRes" style="-fx-background-color: pink;" BorderPane.alignment="CENTER" />
        		</AnchorPane>
 		</HBox>
      </AnchorPane>

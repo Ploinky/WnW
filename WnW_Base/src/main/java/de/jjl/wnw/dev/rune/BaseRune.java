@@ -2,7 +2,7 @@ package de.jjl.wnw.dev.rune;
 
 import de.jjl.wnw.base.rune.WnWRune;
 
-public class BaseRune implements WnWRune
+public abstract class BaseRune implements WnWRune
 {
 	private long rune;
 	
@@ -20,7 +20,8 @@ public class BaseRune implements WnWRune
 		return damage;
 	}
 	
-	public long getRuneLong()
+	@Override
+	public long getLong()
 	{
 		return rune;
 	}

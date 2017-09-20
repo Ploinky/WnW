@@ -4,12 +4,12 @@
 package de.jjl.wnw.dev.rune;
 
 import java.io.File;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.jjl.wnw.base.rune.WnWRune;
 import de.jjl.wnw.base.util.WnWMap;
 
 public class LoadRunes
@@ -19,7 +19,7 @@ public class LoadRunes
 		
 	}
 	
-	public static void load()
+	public static void load(RuneFactory factory)
 	{
 		List<String> content = new ArrayList<>();
 		try
@@ -39,8 +39,9 @@ public class LoadRunes
 			// TODO $Li 20.09.2017 MAGIC STRINGS
 			int damage = Integer.parseInt(map.get("Damage"));
 			long l = Long.valueOf(map.get("Long"));
-			WnWRune testRune = new BaseRune(map.get("Name"), l, damage);
-			Runes.addRuneLong(l, testRune);
+			
+
+			Runes.addRuneLong(l, factory.cre(map.get("Name"), l, damage));
 		}
 	}
 }
