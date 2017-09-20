@@ -9,7 +9,7 @@ import de.jjl.wnw.base.util.path.WnWPathSimple
 import de.jjl.wnw.base.util.path.WnWDisplaySystem
 import de.jjl.wnw.base.util.path.WnWPoint
 import de.jjl.wnw.base.util.path.*
-import de.jjl.wnw.dev.conn.rune.Runes
+import de.jjl.wnw.dev.rune.Runes
 import java.lang.Long;
 
 class WnWPathInputParser: WnWInputParser
