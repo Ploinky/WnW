@@ -8,7 +8,9 @@ public class BaseRune implements WnWRune
 	
 	private int damage;
 	
-	public BaseRune(long rune, int damage)
+	private String name;
+	
+	public BaseRune(String name, long rune, int damage)
 	{
 		this.rune = rune;
 	}
@@ -21,5 +23,10 @@ public class BaseRune implements WnWRune
 	public long getRuneLong()
 	{
 		return rune;
+	}
+	
+	public String getName()
+	{
+		return name;
 	}
 }
