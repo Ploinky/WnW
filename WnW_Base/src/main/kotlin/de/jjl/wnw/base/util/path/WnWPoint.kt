@@ -1,19 +1,12 @@
 package de.jjl.wnw.base.util.path
 
-interface WnWPoint
+data class WnWPoint(val x: Int, val y: Int)
 {
-	val x: Int
-	val y: Int
-	
 	companion object
 	{
-		val ZERO = WnWPointSimple(0, 0)
+		@JvmStatic val ZERO = WnWPoint(0, 0)
 	}
 }
-
-data class WnWPointSimple(override val x: Int, override val y: Int) : WnWPoint
-
-inline fun WnWPoint(x: Int, y: Int) = WnWPointSimple(x, y)
 
 operator fun WnWPoint.unaryPlus() = this
 
