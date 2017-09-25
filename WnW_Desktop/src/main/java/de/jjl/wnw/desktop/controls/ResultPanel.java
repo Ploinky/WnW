@@ -125,8 +125,8 @@ public class ResultPanel extends Pane
 								Ellipse center = new Ellipse(
 										pathX + get().getStartX() + ((col + 0.5) * get().getFieldWidth()),
 										pathY + get().getStartY() + ((row + 0.5) * get().getFieldHeight()),
-										0.05 * get().getFieldWidth(),
-										0.05 * get().getFieldHeight());
+										0.05 * get().getFieldWidth() * get().getTolerance() / 100,
+										0.05 * get().getFieldHeight() * get().getTolerance() / 100);
 								center.getStyleClass().add("grid-center");
 								
 								Ellipse fieldArea = new Ellipse(
