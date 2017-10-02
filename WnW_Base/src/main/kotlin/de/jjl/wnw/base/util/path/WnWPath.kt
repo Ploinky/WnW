@@ -28,7 +28,7 @@ interface WnWPath : Iterable<WnWPoint>
 	fun trimmedToSize(width: Int, height: Int): WnWPath = trimmed().forSystem(WnWDisplaySystem(width, height, system.xAxis, system.yAxis))
 }
 
-open class WnWPathSimple(override val system: WnWDisplaySystem) : WnWPath
+open class WnWPathSimple(override val system: WnWDisplaySystem = WnWDisplaySystem(0, 0)) : WnWPath
 {
 	val points = arrayListOf<WnWPoint>()
 	
@@ -46,14 +46,23 @@ open class WnWPathSimple(override val system: WnWDisplaySystem) : WnWPath
 		
 		for(point in this)
 		{
-			val distX = point.x - this.system.zeroX
-			val distY = point.y - this.system.zeroY
-			val distXRel = distX / this.system.width
-			val distYRel = distY / this.system.height
+			var distX = point.x - this.system.zeroX
+			var distY = point.y - this.system.zeroY
+			
+			if(this.system.width != 0)
+			{
+				val distXRel = distX.toDouble() / this.system.width
+				distX = (system.width * distXRel).toInt()
+			}
+			if(this.system.height != 0)
+			{
+				val distYRel = distY.toDouble() / this.system.height
+				distY = (system.height * distYRel).toInt()
+			}
 			
 			val nextPoint = WnWPoint(
-								system.zeroX + (system.width * distXRel),
-								system.zeroY + (system.height * distYRel))
+								system.zeroX + distX,
+								system.zeroY + distY)
 			
 			if(nextPoint != lastPoint)
 			{
