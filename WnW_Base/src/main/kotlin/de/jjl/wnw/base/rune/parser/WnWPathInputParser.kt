@@ -323,18 +323,10 @@ open class Grid(
 		// + (point.y - center.y)² / radius.y²
 		// <= 1
 		
-		val normX = centerDist.x / (fieldWidth * 0.5 * tolerance / 100) - 0.5
-		val normY = centerDist.y / (fieldHeight * 0.5 * tolerance / 100) - 0.5
+		val xRel = centerDist.x / (fieldWidth * 0.5 * tolerance / 100)
+		val yRel = centerDist.y / (fieldHeight * 0.5 * tolerance / 100)
 		
-		return if((normX * normX + normY * normY) <= 0.25) temp else null 
-		
-//			val v1 = fieldWidth * 0.5 * tolerance / 100.0;
-//			val v2 = fieldHeight * 0.5 * tolerance / 100.0;
-//			
-//			val v = Math.pow(centerDist.x / v1, 2.0)
-//					+ Math.pow(centerDist.y / v2, 2.0)
-//			
-//			return if(v <= 1) temp else null
+		return if(((xRel * xRel) + (yRel * yRel)) <= 1) temp else null
 	}
 	
 	override fun toString(): String

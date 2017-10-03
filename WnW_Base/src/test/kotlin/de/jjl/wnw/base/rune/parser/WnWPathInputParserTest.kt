@@ -51,7 +51,7 @@ class WnWPathInputParserTest
 	}
 	
 	@Test
-	fun testBuildGrid_gridSize()
+	fun testBuildGrid_gridSize_square()
 	{
 		val config = Config(
 				3, 3,
@@ -69,10 +69,19 @@ class WnWPathInputParserTest
 		
 		grid = parser.buildGrid(0, 0, 0, 0, config)
 		Assert.assertEquals("Grid has wrong number of columns too small field", WnWPoint(3, 3), grid.gridSize);
+	}
+			
+	fun testBuildGrid_gridSize_large()
+	{
+		val config = Config(
+				10, 20,
+				10, 1000,
+				10, 1000,
+				100,
+				true, false,
+				GridCorner.Corner)
 		
-		config.gridWidth = 10
-		config.gridHeight = 20
-		grid = parser.buildGrid(0, 0, 1000, 1000, config)
+		var grid = parser.buildGrid(0, 0, 1000, 1000, config)
 		Assert.assertEquals("Grid has wrong size on normal-sized field with high number of columsn", WnWPoint(10, 20), grid.gridSize);
 		
 		grid = parser.buildGrid(0, 0, 100000, 100000, config)
@@ -80,10 +89,19 @@ class WnWPathInputParserTest
 		
 		grid = parser.buildGrid(0, 0, 0, 0, config)
 		Assert.assertEquals("Grid has wrong size on too small field with high number of columns", WnWPoint(10, 20), grid.gridSize);
+	}
+	
+	fun testBuildGrid_gridSize_small()
+	{
+		val config = Config(
+				1, 2,
+				10, 1000,
+				10, 1000,
+				100,
+				true, false,
+				GridCorner.Corner)
 		
-		config.gridWidth = 1
-		config.gridHeight = 2
-		grid = parser.buildGrid(0, 0, 1000, 1000, config)
+		var grid = parser.buildGrid(0, 0, 1000, 1000, config)
 		Assert.assertEquals("Grid has wrong size on normal-sized field with low number of columns", WnWPoint(1, 2), grid.gridSize);
 		
 		grid = parser.buildGrid(0, 0, 100000, 100000, config)
@@ -94,7 +112,7 @@ class WnWPathInputParserTest
 	}
 	
 	@Test
-	fun testBuildGrid_StartPos()
+	fun testBuildGrid_startPos_GridCorner()
 	{
 		val config = Config(
 				3, 3,
@@ -112,10 +130,19 @@ class WnWPathInputParserTest
 		
 		grid = parser.buildGrid(-38, -1268, 900, 900, config)
 		Assert.assertEquals("wrong start-position when moved in negative", WnWPoint(-38, -1268), grid.start)
-		
-		
-		config.corner = GridCorner.Center
-		grid = parser.buildGrid(0, 0, 1000, 1000, config)
+	}
+	
+	fun testBuildGrid_startPos_GridCenter()
+	{
+		val config = Config(
+				3, 3,
+				10, 1000,
+				10, 1000,
+				100,
+				true, false,
+				GridCorner.Center)
+				
+		var grid = parser.buildGrid(0, 0, 1000, 1000, config)
 		Assert.assertEquals("wrong start-position on normal calculation for GridCorner.Center", WnWPoint(-250, -250), grid.start)
 		
 		grid = parser.buildGrid(1000, 500, 1000, 1000, config)
@@ -123,10 +150,19 @@ class WnWPathInputParserTest
 		
 		grid = parser.buildGrid(-1200, -560, 1000, 1000, config)
 		Assert.assertEquals("wrong start-position when moved in negative on GridCorner.Center", WnWPoint(-1450, -810), grid.start)
+	}
+	
+	fun testBuildGrid_startPos_uncentered()
+	{
+		val config = Config(
+				3, 3,
+				10, 1000,
+				10, 1000,
+				100,
+				true, false,
+				GridCorner.Corner)
 		
-		
-		config.corner = GridCorner.Corner
-		grid = parser.buildGrid(0, 0, 6000, 9000, config)
+		var grid = parser.buildGrid(0, 0, 6000, 9000, config)
 		Assert.assertEquals("wrong start-position on normal calculation when field is too large", WnWPoint(1500, 3000), grid.start)
 		
 		grid = parser.buildGrid(-8000, -7000, 6000, 9000, config)
@@ -159,10 +195,19 @@ class WnWPathInputParserTest
 		
 		grid = parser.buildGrid(0, 0, 100000, 100000, config)
 		Assert.assertEquals("wrong fieldSize on too large field", WnWPoint(1000, 1000), grid.fieldSize)
+	}
+	
+	fun testBuildGrid_fieldSizes_largeGrid()
+	{
+		val config = Config(
+				5, 7,
+				10, 1000,
+				10, 1000,
+				100,
+				true, false,
+				GridCorner.Corner)
 		
-		config.gridWidth = 5
-		config.gridHeight = 7
-		grid = parser.buildGrid(0, 0, 500, 1400, config)
+		var grid = parser.buildGrid(0, 0, 500, 1400, config)
 		Assert.assertEquals("wrong fieldSize on normal calculation", WnWPoint(100, 200), grid.fieldSize)
 		
 		grid = parser.buildGrid(0, 0, 10, 10, config)
@@ -170,10 +215,19 @@ class WnWPathInputParserTest
 		
 		grid = parser.buildGrid(0, 0, 100000, 100000, config)
 		Assert.assertEquals("wrong fieldSize on too large field", WnWPoint(1000, 1000), grid.fieldSize)
+	}
+	
+	fun testBuildGrid_fieldSizes_minSizes()
+	{
+		val config = Config(
+				5, 7,
+				35, 1000,
+				116, 1000,
+				100,
+				true, false,
+				GridCorner.Corner)
 		
-		config.minFieldWidth = 35
-		config.minFieldHeight = 116
-		grid = parser.buildGrid(0, 0, 500, 1400, config)
+		var grid = parser.buildGrid(0, 0, 500, 1400, config)
 		Assert.assertEquals("wrong fieldSize on normal calculation", WnWPoint(100, 200), grid.fieldSize)
 		
 		grid = parser.buildGrid(0, 0, 10, 10, config)
@@ -181,14 +235,23 @@ class WnWPathInputParserTest
 		
 		grid = parser.buildGrid(0, 0, 100000, 100000, config)
 		Assert.assertEquals("wrong fieldSIze on too large field", WnWPoint(1000, 1000), grid.fieldSize)
+	}
+	
+	fun testBuildGrid_fieldSizes_maxSizes()
+	{
+		val config = Config(
+				5, 7,
+				10, 600,
+				10, 820,
+				100,
+				true, false,
+				GridCorner.Corner)
 		
-		config.maxFieldWidth = 600
-		config.maxFieldHeight = 820
-		grid = parser.buildGrid(0, 0, 500, 1400, config)
+		var grid = parser.buildGrid(0, 0, 500, 1400, config)
 		Assert.assertEquals("wrong fieldSize on normal calculation", WnWPoint(100, 200), grid.fieldSize)
 		
 		grid = parser.buildGrid(0, 0, 10, 10, config)
-		Assert.assertEquals("wrong fieldSize on too small field", WnWPoint(35, 116), grid.fieldSize)
+		Assert.assertEquals("wrong fieldSize on too small field", WnWPoint(10, 10), grid.fieldSize)
 		
 		grid = parser.buildGrid(0, 0, 100000, 100000, config)
 		Assert.assertEquals("wrong fieldSize on too large field", WnWPoint(600, 820), grid.fieldSize)
@@ -211,11 +274,5 @@ class WnWPathInputParserTest
 		config.corner = GridCorner.Center
 		grid = parser.buildGrid(0, 0, 1000, 1000, config)
 		Assert.assertEquals("grid has the wrong start-postion of Gridcorner.Center", WnWPoint(-125, -125), grid.start)
-	}
-	
-	@Test
-	fun testGridParse()
-	{
-		TODO()
 	}
 }
