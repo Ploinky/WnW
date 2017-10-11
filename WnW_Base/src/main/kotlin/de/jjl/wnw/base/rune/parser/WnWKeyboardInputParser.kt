@@ -27,5 +27,6 @@ class WnWKeyboardInputParser : WnWInputParser
 	fun lookupRune(input: String): WnWRune?
 	{
 		return Runes.getRuneForString(input)
+		
 	}
 }
