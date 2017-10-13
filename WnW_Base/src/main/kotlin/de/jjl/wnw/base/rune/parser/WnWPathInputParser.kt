@@ -279,6 +279,8 @@ open class Grid(
 			Math.pow(fieldWidth * tolerance / 2 / 100.0, 2.0).toInt(),
 			Math.pow(fieldHeight * tolerance / 2 / 100.0, 2.0).toInt())
 	val gridSize = WnWPoint(cols, rows)
+	val radX = fieldWidth * 0.5 * tolerance / 100
+	val radY = fieldHeight * 0.5 * tolerance / 100
 	
 	/**
 	 * Determine and return the gridposition of the given point.<br>
@@ -323,10 +325,9 @@ open class Grid(
 		// + (point.y - center.y)² / radius.y²
 		// <= 1
 		
-		val xRel = centerDist.x / (fieldWidth * 0.5 * tolerance / 100)
-		val yRel = centerDist.y / (fieldHeight * 0.5 * tolerance / 100)
-		
-		return if(((xRel * xRel) + (yRel * yRel)) <= 1) temp else null
+        val normx = centerDist.x / radX;
+        val normy = centerDist.y / radY;
+        return if((normx * normx + normy * normy) < 1.00000001) temp else null
 	}
 	
 	override fun toString(): String
