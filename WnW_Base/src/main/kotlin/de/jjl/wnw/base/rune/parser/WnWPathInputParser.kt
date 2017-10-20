@@ -109,14 +109,19 @@ open class WnWPathInputParser: WnWInputParser
 						else
 							1
 		
-		return buildGrid(path.system.zeroX, path.system.zeroY, pathWidth, pathHeight, config)
+		return buildGrid(
+				if(path.system.xAxis) path.system.zeroX else path.system.zeroX - path.system.width,
+				if(path.system.yAxis) path.system.zeroY else path.system.zeroY - path.system.height,
+				pathWidth,
+				pathHeight,
+				config)
 	}
 	
 	/**
 	 * build a grid base on the given configuration to parse a path placed in the field
 	 * defined by the given start-position and size
 	 *
-	 * @param pathStartX The start-x of the field that shall be parsedby the grid
+	 * @param pathStartX The start-x of the field that shall be parsed by the grid
 	 * @param pathStartY The start-y of the field that shall be parsed by the grid
 	 * @param pathWidth The width of the field that shall be parsed by the grid
 	 * @param pathHeight The height of the field that shall be parsed by the grid
