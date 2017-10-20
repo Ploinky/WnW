@@ -3,8 +3,7 @@ package de.jjl.wnw.desktop.controls;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.jjl.wnw.base.rune.parser.WnWPathInputParser;
-import de.jjl.wnw.base.rune.parser.WnWPathInputParser.Grid;
+import de.jjl.wnw.base.rune.parser.Grid;
 import de.jjl.wnw.base.util.path.WnWPath;
 import de.jjl.wnw.base.util.path.WnWPoint;
 import de.jjl.wnw.desktop.util.WnWDesktopPath;
@@ -80,7 +79,7 @@ public class ResultPanel extends Pane
 					}
 				}
 			};
-		grid = new SimpleObjectProperty<WnWPathInputParser.Grid>(this, "grid", null)
+		grid = new SimpleObjectProperty<Grid>(this, "grid", null)
 			{
 				@Override
 				protected void invalidated()
