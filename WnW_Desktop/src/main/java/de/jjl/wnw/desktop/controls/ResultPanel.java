@@ -3,8 +3,7 @@ package de.jjl.wnw.desktop.controls;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.jjl.wnw.base.rune.parser.WnWPathInputParser;
-import de.jjl.wnw.base.rune.parser.WnWPathInputParser.Grid;
+import de.jjl.wnw.base.rune.parser.Grid;
 import de.jjl.wnw.base.util.path.WnWPath;
 import de.jjl.wnw.base.util.path.WnWPoint;
 import de.jjl.wnw.desktop.util.WnWDesktopPath;
@@ -80,7 +79,7 @@ public class ResultPanel extends Pane
 					}
 				}
 			};
-		grid = new SimpleObjectProperty<WnWPathInputParser.Grid>(this, "grid", null)
+		grid = new SimpleObjectProperty<Grid>(this, "grid", null)
 			{
 				@Override
 				protected void invalidated()
@@ -125,8 +124,8 @@ public class ResultPanel extends Pane
 								Ellipse center = new Ellipse(
 										pathX + get().getStartX() + ((col + 0.5) * get().getFieldWidth()),
 										pathY + get().getStartY() + ((row + 0.5) * get().getFieldHeight()),
-										0.05 * get().getFieldWidth(),
-										0.05 * get().getFieldHeight());
+										0.05 * get().getFieldWidth() * get().getTolerance() / 100,
+										0.05 * get().getFieldHeight() * get().getTolerance() / 100);
 								center.getStyleClass().add("grid-center");
 								
 								Ellipse fieldArea = new Ellipse(

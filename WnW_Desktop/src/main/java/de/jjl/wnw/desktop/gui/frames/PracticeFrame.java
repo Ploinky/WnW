@@ -7,9 +7,9 @@ import java.io.IOException;
 import java.util.function.IntConsumer;
 import java.util.function.IntSupplier;
 
+import de.jjl.wnw.base.rune.parser.Config;
+import de.jjl.wnw.base.rune.parser.GridCorner;
 import de.jjl.wnw.base.rune.parser.WnWPathInputParser;
-import de.jjl.wnw.base.rune.parser.WnWPathInputParser.Config;
-import de.jjl.wnw.base.rune.parser.WnWPathInputParser.GridCorner;
 import de.jjl.wnw.base.util.path.WnWPath;
 import de.jjl.wnw.desktop.controls.DrawPanel;
 import de.jjl.wnw.desktop.controls.ResultPanel;
@@ -45,7 +45,7 @@ public class PracticeFrame extends Frame
 	@FXML
 	private CheckBox chkMoveBack;
 	@FXML
-	private ComboBox<WnWPathInputParser.GridCorner> cmbCorner;
+	private ComboBox<GridCorner> cmbCorner;
 	@FXML
 	private DrawPanel pnlDraw;
 	@FXML
