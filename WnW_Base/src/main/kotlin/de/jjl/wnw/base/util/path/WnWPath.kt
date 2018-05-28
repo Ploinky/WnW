@@ -10,8 +10,8 @@ interface WnWPath : Iterable<WnWPoint>
 	val system: WnWDisplaySystem
 	
 	val pathMinX: Int
-		get() = map { it.x } .min() ?: 0
-	val pathMaxX: Int
+		get() = map { it.x } .min() ?: 0 
+	val pathMaxX: Int 
 		get() = map { it.x } .max() ?: 0
 	val pathMinY: Int
 		get() = map { it.y } .min() ?: 0

@@ -36,7 +36,7 @@ class WnWPathTest
 		Assert.assertEquals("wrong maxY", path.pathHeight, pathTrimmed.pathMaxY)
 		Assert.assertEquals("wrong pathHeight", path.pathHeight, pathTrimmed.pathHeight)
 		
-		val points = pathTrimmed.toList()
+		val points = pathTrimmed.toList() 
 		
 		Assert.assertEquals("trimmed path has wrong number of points", 2, points.size)
 		Assert.assertEquals("first point is wrong", WnWPoint(0, 0), points[0])

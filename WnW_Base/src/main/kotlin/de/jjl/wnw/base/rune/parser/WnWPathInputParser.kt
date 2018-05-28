@@ -19,7 +19,7 @@ open class WnWPathInputParser: WnWInputParser
 	override fun parseInput(input: WnWInput): WnWRune?
 	{
 		if(input is WnWPathInput)
-		{
+		{ 
 			return parsePath(input.path)
 		}
 		return null
