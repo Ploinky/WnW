@@ -5,7 +5,7 @@ import java.util.ArrayList
 import java.util.LinkedList
 import de.jjl.wnw.base.input.WnWPathInput
 
-interface WnWPath : Iterable<WnWPoint>
+interface WnWPath : Iterable<WnWPoint> 
 {
 	val system: WnWDisplaySystem
 	

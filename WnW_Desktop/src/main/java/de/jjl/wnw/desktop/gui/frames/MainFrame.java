@@ -53,7 +53,7 @@ public class MainFrame extends Frame
 	@FXML
 	void btnPracticeKeyOnAction(ActionEvent event)
 	{
-		game.requestSceneChange(Frames.PRACTICEKEY);
+		game.requestSceneChange(Frames.PRACTICEDUMMY);
 	}
 
 	@Override
