@@ -11,14 +11,12 @@ import de.jjl.wnw.base.msg.MsgConst;
 import de.jjl.wnw.desktop.consts.Frames;
 import de.jjl.wnw.desktop.gui.Frame;
 import de.jjl.wnw.desktop.gui.frames.MainFrame;
-import de.jjl.wnw.desktop.gui.frames.PracticeFrame;
 import de.jjl.wnw.desktop.gui.frames.PracticeDummyFrame;
+import de.jjl.wnw.desktop.gui.frames.PracticeFrame;
 import de.jjl.wnw.desktop.gui.frames.SettingsFrame;
 import de.jjl.wnw.dev.conn.WnWConnection;
 import de.jjl.wnw.dev.conn.WnWMsg;
 import de.jjl.wnw.dev.conn.WnWMsgListener;
-import de.jjl.wnw.dev.rune.DesktopRuneFactory;
-import de.jjl.wnw.dev.rune.Runes;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
@@ -42,9 +40,6 @@ public class Game extends Application implements FrameListener, WnWMsgListener
 
 	public static void main(String[] args)
 	{
-		// TODO $Li 20.09.2017 Where to do this?
-		Runes.init(new DesktopRuneFactory());
-		
 		Application.launch(Game.class, args);
 	}
 
@@ -106,11 +101,11 @@ public class Game extends Application implements FrameListener, WnWMsgListener
 	{
 		switch (msg.getType())
 		{
-			case MsgConst.TYPE_REQ_NAME:
-				Map<String, String> info = new HashMap<>();
-				info.put(MsgConst.PARAM_NAME, name);
-				conn.sendMsg(new WnWMsg(MsgConst.TYPE_NAME, info));
-				break;
+		case MsgConst.TYPE_REQ_NAME:
+			Map<String, String> info = new HashMap<>();
+			info.put(MsgConst.PARAM_NAME, name);
+			conn.sendMsg(new WnWMsg(MsgConst.TYPE_NAME, info));
+			break;
 		}
 	}
 

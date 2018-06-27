@@ -39,7 +39,6 @@ public class LoadRunes
 			// TODO $Li 20.09.2017 MAGIC STRINGS
 			int damage = Integer.parseInt(map.get("Damage"));
 			long l = Long.valueOf(map.get("Long"));
-			
 
 			Runes.addRuneLong(l, factory.cre(map.get("Name"), l, damage));
 		}
