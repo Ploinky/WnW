@@ -20,7 +20,7 @@ open class WnWPathInputParser: WnWInputParser
 	{
 		if(input is WnWPathInput)
 		{ 
-			return parsePath(input.path)
+			return parsePath(input.path) 
 		}
 		return null
 	}

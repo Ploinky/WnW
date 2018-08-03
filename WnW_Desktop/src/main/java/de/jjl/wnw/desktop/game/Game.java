@@ -36,7 +36,7 @@ public class Game extends Application implements FrameListener, WnWMsgListener
 
 	private String name;
 
-	private Map<String, Supplier<Frame>> map;
+	private Map<String, Supplier<Frame>> frames;
 
 	public static void main(String[] args)
 	{
@@ -46,7 +46,7 @@ public class Game extends Application implements FrameListener, WnWMsgListener
 	@Override
 	public void start(Stage primaryStage) throws Exception
 	{
-		map = new HashMap<>();
+		frames = new HashMap<>();
 		name = MsgConst.DEFAULT_NAME;
 		stage = primaryStage;
 
@@ -54,10 +54,10 @@ public class Game extends Application implements FrameListener, WnWMsgListener
 
 		stage.getScene().getStylesheets().add("css/main.css");
 
-		map.put(Frames.MAIN, () -> new MainFrame(this));
-		map.put(Frames.SETTINGS, () -> new SettingsFrame(this));
-		map.put(Frames.PRACTICE, () -> new PracticeFrame(this));
-		map.put(Frames.PRACTICEDUMMY, () -> new PracticeDummyFrame(this));
+		frames.put(Frames.MAIN, () -> new MainFrame(this));
+		frames.put(Frames.SETTINGS, () -> new SettingsFrame(this));
+		frames.put(Frames.PRACTICE, () -> new PracticeFrame(this));
+		frames.put(Frames.PRACTICEDUMMY, () -> new PracticeDummyFrame(this));
 
 		requestSceneChange(Frames.MAIN);
 
@@ -70,7 +70,7 @@ public class Game extends Application implements FrameListener, WnWMsgListener
 	{
 		try
 		{
-			stage.getScene().setRoot(map.get(newFrame).get().getAsNode());
+			stage.getScene().setRoot(frames.get(newFrame).get().getAsNode());
 		}
 		catch (Exception e)
 		{
