@@ -8,6 +8,7 @@ import de.jjl.wnw.dev.game.GameObject;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.text.Font;
 
 public class DesktopPlayer extends GameObject
 {
@@ -22,6 +23,8 @@ public class DesktopPlayer extends GameObject
 	private int height = 100;
 
 	private boolean faceLeft;
+
+	private int lives = 5;
 
 	public DesktopPlayer(double x, double y)
 	{
@@ -43,6 +46,8 @@ public class DesktopPlayer extends GameObject
 	public void drawOn(GraphicsContext graphics)
 	{
 		graphics.drawImage(image, x + (faceLeft ? width : 0), y, faceLeft ? -width : width, height);
+		graphics.setFont(new Font(20));
+		graphics.fillText("" + lives, x + 20, y - 20);
 	}
 
 	public int getWidth()
@@ -73,12 +78,12 @@ public class DesktopPlayer extends GameObject
 		faceLeft = true;
 	}
 
-	public double getX()
+	public int getX()
 	{
 		return x;
 	}
 
-	public double getY()
+	public int getY()
 	{
 		return y;
 	}
@@ -86,6 +91,16 @@ public class DesktopPlayer extends GameObject
 	@Override
 	public void move(float frameTime)
 	{
-		// player cannot move
+		throw new UnsupportedOperationException("Method 'move' not implemented for DesktopPlayer yet");
+	}
+
+	public void damage(int damage)
+	{
+		lives -= damage;
+	}
+
+	public int getLives()
+	{
+		return lives;
 	}
 }

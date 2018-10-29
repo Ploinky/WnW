@@ -11,6 +11,8 @@ import de.jjl.wnw.desktop.util.WnWDesktopPath;
 import de.jjl.wnw.dev.game.GameObject;
 import de.jjl.wnw.dev.rune.*;
 import de.jjl.wnw.dev.spell.*;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.text.Font;
 
 public class GameInstance
 {
@@ -42,6 +44,8 @@ public class GameInstance
 
 	private DesktopPlayer player;
 
+	private boolean running;
+
 	private GameInstance()
 	{
 		objects = new CopyOnWriteArrayList<>();
@@ -49,6 +53,7 @@ public class GameInstance
 		parser = new WnWPathInputParser();
 		player = new DesktopPlayer(0, 0);
 		dummy = new DesktopPlayer(0, 0);
+		running = true;
 
 		dummy.faceLeft();
 		objects.add(player);
@@ -58,6 +63,11 @@ public class GameInstance
 	public void addPathPoint(int x, int y)
 	{
 		path.addPoint(x, y);
+	}
+
+	public boolean isRunning()
+	{
+		return running;
 	}
 
 	public void finishPath()
@@ -77,7 +87,7 @@ public class GameInstance
 			return;
 		}
 
-		DesktopRune dRune = DesktopRuneUtil.getRune(rune.getLong());
+		DesktopRune dRune = DesktopRuneUtil.getRune(player, rune.getLong());
 
 		if (dRune == null)
 		{
@@ -99,24 +109,45 @@ public class GameInstance
 
 		moveObjects(frameTime);
 		collide();
+		refresh();
+	}
 
-		// TODO $Li 05.09.2018 For debugging only
-		System.out.println("GameObjects: " + objects.size());
+	private void refresh()
+	{
+		if (dummy.getLives() <= 0)
+		{
+			running = false;
+		}
 	}
 
 	private void collide()
 	{
 		for (GameObject obj1 : objects.stream().filter(go -> go instanceof DesktopPlayer).collect(Collectors.toList()))
 		{
-			for (GameObject obj2 : objects.stream().filter(go -> go instanceof DesktopRune)
-					.collect(Collectors.toList()))
+			for (GameObject obj2 : objects.stream().filter(go -> go instanceof Spell).collect(Collectors.toList()))
 			{
-				if (obj1 == obj2)
+				DesktopPlayer player = (DesktopPlayer) obj1;
+				Spell spell = (Spell) obj2;
+
+				if (spell.getCaster() != player && chkCollision(player, spell))
 				{
-					continue;
+					player.damage(spell.getDamage());
+					spell.hit();
+					objects.remove(spell);
 				}
 			}
 		}
+	}
+
+	private boolean chkCollision(GameObject obj1, GameObject obj2)
+	{
+		if (obj1.getX() + obj1.getWidth() < obj2.getX() || obj2.getX() + obj2.getWidth() < obj1.getX()
+				|| obj1.getY() + obj1.getHeight() < obj2.getY() || obj2.getY() + obj2.getHeight() < obj2.getHeight())
+		{
+			return false;
+		}
+
+		return true;
 	}
 
 	private WnWRune lookupRune(WnWPath path, Config config)
@@ -145,14 +176,17 @@ public class GameInstance
 			runeLong = runeLong / 10;
 		}
 
-		return DesktopRuneUtil.getRune(reversedNumber);
+		return DesktopRuneUtil.getRune(player, reversedNumber);
 	}
 
 	private void moveObjects(long frameTime)
 	{
 		for (GameObject obj : objects)
 		{
-			obj.move(frameTime);
+			if (!(obj instanceof DesktopPlayer) && !(obj instanceof DesktopRune))
+			{
+				obj.move(frameTime);
+			}
 		}
 	}
 
@@ -165,7 +199,7 @@ public class GameInstance
 			combo[currentRunes.indexOf(rune)] = rune.getLong();
 		}
 
-		Spell spell = SpellUtil.getSpell(combo);
+		Spell spell = SpellUtil.getSpell(player, combo);
 
 		if (spell != null)
 		{
@@ -176,6 +210,7 @@ public class GameInstance
 
 		currentRunes.forEach(dRune -> objects.remove(dRune));
 		path = null;
+		objects.removeAll(currentRunes);
 		currentRunes.clear();
 	}
 
@@ -202,6 +237,12 @@ public class GameInstance
 	{
 		// TODO Auto-generated method stub
 		return path;
+	}
+
+	public void drawDebug(GraphicsContext graphics)
+	{
+		graphics.setFont(new Font(10));
+		graphics.fillText("GameObjects: " + objects.size(), 20, 60);
 	}
 
 }

@@ -7,18 +7,12 @@ public abstract class BaseRune extends GameObject implements WnWRune
 {
 	private long rune;
 	
-	private int damage;
-	
 	private String name;
 	
-	public BaseRune(String name, long rune, int damage)
+	public BaseRune(String name, long rune)
 	{
+		this.name = name;
 		this.rune = rune;
-	}
-	
-	public int getDamage()
-	{
-		return damage;
 	}
 	
 	@Override

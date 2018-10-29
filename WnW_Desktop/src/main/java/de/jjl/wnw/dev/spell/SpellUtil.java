@@ -2,10 +2,12 @@ package de.jjl.wnw.dev.spell;
 
 import java.util.*;
 
+import de.jjl.wnw.desktop.game.DesktopPlayer;
+
 public class SpellUtil
 {
 
-	private List<Spell> spells;
+	private List<SpellFactory> spells;
 
 	private static SpellUtil instance;
 
@@ -28,14 +30,13 @@ public class SpellUtil
 
 	private void load()
 	{
-		Spell spell = new Spell("test_spell", new long[]
-		{ 753, 159, 14789 });
+		SpellFactory spell = new SpellFactory("test_spell", 1, new long[] { 753, 159, 14789 });
 		spells.add(spell);
 	}
 
-	public static Spell getSpell(long[] combo)
+	public static Spell getSpell(DesktopPlayer caster, long[] combo)
 	{
-		for (Spell s : getInstance().spells)
+		for (SpellFactory s : getInstance().spells)
 		{
 			if (s.getSpellCombo().length != combo.length)
 			{
@@ -54,7 +55,7 @@ public class SpellUtil
 
 			if (spell)
 			{
-				return s;
+				return s.apply(caster);
 			}
 		}
 

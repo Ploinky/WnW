@@ -4,24 +4,21 @@ import java.io.*;
 
 import javax.imageio.ImageIO;
 
-import de.jjl.wnw.desktop.game.DesktopPlayer;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
 public class DesktopRune extends BaseRune
 {
-	private DesktopPlayer caster;
-
 	private Image img;
 
 	private int x;
 
 	private int y;
 
-	public DesktopRune(String name, long rune, int damage)
+	public DesktopRune(String name, long rune)
 	{
-		super(name, rune, damage);
+		super(name, rune);
 
 		// TODO $Li 20.09.2017
 		try
@@ -33,11 +30,12 @@ public class DesktopRune extends BaseRune
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
 	}
 
-	public DesktopRune(String name, long rune, int damage, int x, int y)
+	public DesktopRune(String name, long rune, int x, int y)
 	{
-		this(name, rune, damage);
+		this(name, rune);
 
 		this.x = x;
 		this.y = y;
@@ -54,11 +52,13 @@ public class DesktopRune extends BaseRune
 		return img;
 	}
 
+	@Override
 	public int getX()
 	{
 		return x;
 	}
 
+	@Override
 	public int getY()
 	{
 		return y;
@@ -67,7 +67,7 @@ public class DesktopRune extends BaseRune
 	@Override
 	public void move(float frameTime)
 	{
-		// Runes cannot move... yet
+		throw new UnsupportedOperationException("Method 'move' not implemented for DesktopRunes yet");
 	}
 
 	public void setX(int x)
@@ -78,5 +78,17 @@ public class DesktopRune extends BaseRune
 	public void setY(int y)
 	{
 		this.y = y;
+	}
+
+	@Override
+	public int getWidth()
+	{
+		return (int) img.getWidth();
+	}
+
+	@Override
+	public int getHeight()
+	{
+		return (int) img.getHeight();
 	}
 }

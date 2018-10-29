@@ -7,9 +7,12 @@ import de.jjl.wnw.base.util.path.WnWDisplaySystem;
 import de.jjl.wnw.desktop.game.*;
 import de.jjl.wnw.desktop.gui.Frame;
 import javafx.animation.AnimationTimer;
+import javafx.application.Platform;
 import javafx.fxml.*;
 import javafx.scene.Parent;
 import javafx.scene.canvas.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 
@@ -38,7 +41,7 @@ public class PracticeDummyFrame extends Frame
 				super.layoutChildren();
 				final double x = snappedLeftInset();
 				final double y = snappedTopInset();
-				// Java 9 - snapSize is depricated used snapSizeX() and snapSizeY() accordingly
+				// Java 9 - snapSize is deprecated used snapSizeX() and snapSizeY() accordingly
 				final double w = snapSize(getWidth()) - x - snappedRightInset();
 				final double h = snapSize(getHeight()) - y - snappedBottomInset();
 				canvas.setLayoutX(x);
@@ -97,6 +100,17 @@ public class PracticeDummyFrame extends Frame
 			{
 				GameInstance.getInstance().handleFrame(now);
 				paintScene();
+
+				if (!GameInstance.getInstance().isRunning())
+				{
+
+					stop();
+					Alert alert = new Alert(AlertType.INFORMATION);
+					alert.setTitle("Game over");
+					alert.setHeaderText("Player 1 wins!!! Great, you beat a dummy...");
+					alert.setOnCloseRequest(e -> Platform.exit());
+					alert.show();
+				}
 			}
 		};
 
@@ -114,6 +128,8 @@ public class PracticeDummyFrame extends Frame
 		{
 			GameInstance.getInstance().getPath().drawOn(graphics);
 		}
+
+		GameInstance.getInstance().drawDebug(graphics);
 	}
 
 	@Override

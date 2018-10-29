@@ -1,5 +1,6 @@
 package de.jjl.wnw.dev.spell;
 
+import de.jjl.wnw.desktop.game.DesktopPlayer;
 import de.jjl.wnw.dev.game.GameObject;
 import javafx.scene.canvas.GraphicsContext;
 
@@ -7,30 +8,40 @@ public class Spell extends GameObject
 {
 	private long[] spellCombo;
 
+	private DesktopPlayer caster;
+
 	private String name;
 
 	private int width;
 
 	private int height;
 
-	private double x;
+	private int x;
 
-	private double y;
+	private int y;
 
 	private int speed;
 
-	public Spell(String name, long[] spellCombo)
+	private int damage;
+
+	private boolean hit;
+
+	public Spell(DesktopPlayer caster, String name, int damage, long[] spellCombo)
 	{
 		this.name = name;
 		this.spellCombo = spellCombo;
+		this.damage = damage;
 		width = 30;
 		height = 30;
 		x = 0;
 		y = 0;
 		speed = 100;
+		hit = false;
+
+		this.setCaster(caster);
 	}
 
-	public void setPos(double x, double y)
+	public void setPos(int x, int y)
 	{
 		this.x = x;
 		this.y = y;
@@ -39,11 +50,6 @@ public class Spell extends GameObject
 	public long[] getSpellCombo()
 	{
 		return spellCombo;
-	}
-
-	public Spell creNew()
-	{
-		return new Spell(name, spellCombo);
 	}
 
 	@Override
@@ -55,12 +61,65 @@ public class Spell extends GameObject
 	@Override
 	public void drawOn(GraphicsContext graphics)
 	{
-		graphics.fillRect(x, y, width, height);
+		if (!hit)
+		{
+			graphics.fillRect(x, y, width, height);
+		}
+		else
+		{
+			graphics.fillOval(x, y, width, height);
+		}
 	}
 
 	@Override
 	public void move(float frameTime)
 	{
 		x += frameTime * speed / 100000000;
+	}
+
+	@Override
+	public int getX()
+	{
+		return x;
+	}
+
+	@Override
+	public int getY()
+	{
+		return y;
+	}
+
+	@Override
+	public int getWidth()
+	{
+		return width;
+	}
+
+	@Override
+	public int getHeight()
+	{
+		return height;
+	}
+
+	public DesktopPlayer getCaster()
+	{
+		return caster;
+	}
+
+	public void setCaster(DesktopPlayer caster)
+	{
+		this.caster = caster;
+	}
+
+	public int getDamage()
+	{
+		return damage;
+	}
+
+	public void hit()
+	{
+		hit = true;
+		damage = 0;
+		speed = 0;
 	}
 }
