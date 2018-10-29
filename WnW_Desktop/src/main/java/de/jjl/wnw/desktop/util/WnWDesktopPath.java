@@ -105,7 +105,7 @@ public class WnWDesktopPath extends WnWPathSimple implements Drawable
 	{
 		graphics.beginPath();
 
-		for (WnWPoint point : getPoints())
+		for (WnWPoint point : this)
 		{
 			graphics.lineTo(point.getX(), point.getY());
 		}
@@ -129,5 +129,4 @@ public class WnWDesktopPath extends WnWPathSimple implements Drawable
 			graphics.stroke();
 		}
 	}
-
 }
