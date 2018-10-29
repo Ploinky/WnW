@@ -3,16 +3,12 @@
  */
 package de.jjl.wnw.desktop.util;
 
-import de.jjl.wnw.base.util.path.WnWDisplaySystem;
-import de.jjl.wnw.base.util.path.WnWPathSimple;
-import de.jjl.wnw.base.util.path.WnWPoint;
-import de.jjl.wnw.desktop.gui.Drawable;
+import de.jjl.wnw.base.util.path.*;
+import de.jjl.wnw.dev.game.Drawable;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.LineTo;
-import javafx.scene.shape.MoveTo;
-import javafx.scene.shape.Path;
+import javafx.scene.shape.*;
 
 /**
  * Represents a path drawn on the desktop app.
@@ -23,7 +19,7 @@ public class WnWDesktopPath extends WnWPathSimple implements Drawable
 {
 	/** FX-Path that is shown on screen */
 	private Path path;
-	
+
 	private boolean isDrawing;
 
 	public boolean isDrawing()
@@ -105,7 +101,7 @@ public class WnWDesktopPath extends WnWPathSimple implements Drawable
 	}
 
 	@Override
-	public void drawOn(GraphicsContext graphics, long frameTime)
+	public void drawOn(GraphicsContext graphics)
 	{
 		graphics.beginPath();
 

@@ -1,8 +1,9 @@
 package de.jjl.wnw.dev.rune;
 
 import de.jjl.wnw.base.rune.WnWRune;
+import de.jjl.wnw.dev.game.GameObject;
 
-public abstract class BaseRune implements WnWRune
+public abstract class BaseRune extends GameObject implements WnWRune
 {
 	private long rune;
 	

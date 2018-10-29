@@ -1,6 +1,7 @@
 package de.jjl.wnw.base.cfg;
 
 import de.jjl.wnw.base.lang.Language;
+import javafx.scene.input.KeyCode;
 
 public class Settings
 {
@@ -33,5 +34,10 @@ public class Settings
 	public void setLanguage(Language newLang)
 	{
 		lang = newLang;
+	}
+
+	public static KeyCode getCastKey()
+	{
+		return KeyCode.SPACE;
 	}
 }

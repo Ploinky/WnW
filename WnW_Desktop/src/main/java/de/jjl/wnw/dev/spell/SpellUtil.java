@@ -1,7 +1,6 @@
 package de.jjl.wnw.dev.spell;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class SpellUtil
 {
@@ -34,7 +33,7 @@ public class SpellUtil
 		spells.add(spell);
 	}
 
-	public static Spell getRune(long[] combo)
+	public static Spell getSpell(long[] combo)
 	{
 		for (Spell s : getInstance().spells)
 		{
@@ -50,7 +49,6 @@ public class SpellUtil
 				if (s.getSpellCombo()[i] != combo[i])
 				{
 					spell = false;
-					;
 				}
 			}
 

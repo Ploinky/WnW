@@ -1,50 +1,23 @@
 package de.jjl.wnw.dev.rune;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 
 import javax.imageio.ImageIO;
 
-import de.jjl.wnw.desktop.gui.Drawable;
+import de.jjl.wnw.desktop.game.DesktopPlayer;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
-public class DesktopRune extends BaseRune implements Drawable
+public class DesktopRune extends BaseRune
 {
+	private DesktopPlayer caster;
+
 	private Image img;
 
 	private int x;
 
 	private int y;
-
-	public DesktopRune(String name, long rune, int damage, int x, int y)
-	{
-		this(name, rune, damage);
-
-		this.x = x;
-		this.y = y;
-	}
-
-	public int getX()
-	{
-		return x;
-	}
-
-	public void setX(int x)
-	{
-		this.x = x;
-	}
-
-	public int getY()
-	{
-		return y;
-	}
-
-	public void setY(int y)
-	{
-		this.y = y;
-	}
 
 	public DesktopRune(String name, long rune, int damage)
 	{
@@ -62,14 +35,48 @@ public class DesktopRune extends BaseRune implements Drawable
 		}
 	}
 
+	public DesktopRune(String name, long rune, int damage, int x, int y)
+	{
+		this(name, rune, damage);
+
+		this.x = x;
+		this.y = y;
+	}
+
+	@Override
+	public void drawOn(GraphicsContext graphics)
+	{
+		graphics.drawImage(img, x, y, 30, 30);
+	}
+
 	public Image getImage()
 	{
 		return img;
 	}
 
-	@Override
-	public void drawOn(GraphicsContext graphics, long frameTime)
+	public int getX()
 	{
-		graphics.drawImage(img, x, y, 30, 30);
+		return x;
+	}
+
+	public int getY()
+	{
+		return y;
+	}
+
+	@Override
+	public void move(float frameTime)
+	{
+		// Runes cannot move... yet
+	}
+
+	public void setX(int x)
+	{
+		this.x = x;
+	}
+
+	public void setY(int y)
+	{
+		this.y = y;
 	}
 }
