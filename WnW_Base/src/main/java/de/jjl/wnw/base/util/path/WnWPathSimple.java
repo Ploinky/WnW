@@ -4,18 +4,16 @@ import java.util.*;
 
 public class WnWPathSimple extends WnWPath
 {
-	private WnWDisplaySystem system = new WnWDisplaySystem(0, 0);
-	
-	public WnWPathSimple()
-	{
-		this(new WnWDisplaySystem(0, 0));
-	}
-	
 	public WnWPathSimple(WnWDisplaySystem system)
 	{
 		super(system);
 	}
-	
+
+	public WnWPathSimple()
+	{
+		this(new WnWDisplaySystem(0, 0));
+	}
+
 	private List<WnWPoint> points = new ArrayList<WnWPoint>();
 	
 	@Override
@@ -23,11 +21,11 @@ public class WnWPathSimple extends WnWPath
 	{
 		return points.iterator();
 	}
-
-	@Override 
+	
+	@Override
 	public WnWPath forSystem(WnWDisplaySystem system)
 	{
-		if(system == this.system)
+		if(system == this.getSystem())
 		{
 			return this;
 		}
@@ -37,23 +35,26 @@ public class WnWPathSimple extends WnWPath
 		
 		for(WnWPoint point : this)
 		{
-			int distX = point.getX() - this.system.getZeroX();
-			int distY = point.getY() - this.system.getZeroY();
+			int distX = point.getX() - this.getSystem().getZeroX();
+			int distY = point.getY() - this.getSystem().getZeroY();
 			
-			if(this.system.getWidth() != 0)
+			if(this.getSystem().getWidth() != 0)
 			{
-				double distXRel = (double) distX / this.system.getWidth();
+				double distXRel = (double) distX / this.getSystem().getWidth();
 				distX = (int) (system.getWidth() * distXRel);
 			}
-			if(this.system.getHeight() != 0)
+			
+			if(this.getSystem().getHeight() != 0)
 			{
-				double distYRel = (double) distY / this.system.getHeight();
+				double distYRel = (double) distY / this.getSystem().getHeight();
 				distY = (int) (system.getHeight() * distYRel);
 			}
 			
-			WnWPoint nextPoint = new WnWPoint(system.getZeroX() + distX, system.getZeroY() + distY);
+			WnWPoint nextPoint = new WnWPoint(
+								system.getZeroX() + distX,
+								system.getZeroY() + distY);
 			
-			if(nextPoint != lastPoint)
+			if(!nextPoint.equals(lastPoint))
 			{
 				path.addPoint(nextPoint);
 				
@@ -68,22 +69,14 @@ public class WnWPathSimple extends WnWPath
 	{
 		addPoint(new WnWPoint(x, y));
 	}
-	
+
 	public void addPoint(WnWPoint point)
 	{
 		points.add(point);
-}
+	}
 
-	public boolean contains(WnWPoint nextPoint)
+	public boolean contains(WnWPoint p)
 	{
-		for(WnWPoint p : points)
-		{
-			if(p == nextPoint)
-			{
-				return true;
-			}
-		}
-		
-		return false;
+		return points.contains(p);
 	}
 }

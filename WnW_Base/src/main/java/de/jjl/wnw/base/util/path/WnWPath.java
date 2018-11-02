@@ -3,8 +3,6 @@ package de.jjl.wnw.base.util.path;
 import java.util.*;
 import java.util.stream.*;
 
-import de.jjl.wnw.base.input.WnWPathInput;
-
 public abstract class WnWPath implements Iterable<WnWPoint> 
 {
 	private WnWDisplaySystem system;

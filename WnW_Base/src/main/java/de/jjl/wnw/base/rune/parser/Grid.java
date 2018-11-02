@@ -44,7 +44,7 @@ public class Grid
 	public Grid(int fieldWidth, int fieldHeight, int startX, int startY, int gridHeight, int gridWidth,
 			int fieldTolerance)
 	{
-		this.fieldHeight = fieldWidth;
+		this.fieldWidth = fieldWidth;
 		this.fieldHeight = fieldHeight;
 		this.startX = startX;
 		this.startY = startY;
@@ -161,7 +161,7 @@ public class Grid
 
 	public double getRows()
 	{
-		return radX;
+		return rows;
 	}
 
 	public int getCols()

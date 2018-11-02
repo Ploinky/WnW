@@ -9,7 +9,6 @@ import de.jjl.wnw.base.util.path.WnWPath;
 import de.jjl.wnw.base.util.path.WnWPathSimple;
 import de.jjl.wnw.base.util.path.WnWPoint;
 import de.jjl.wnw.dev.rune.Runes;
-import java.awt.geom.Ellipse2D;
 
 public class WnWPathInputParser implements WnWInputParser
 {

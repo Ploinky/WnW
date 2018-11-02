@@ -1,16 +1,24 @@
 package de.jjl.wnw.desktop.game;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
 import de.jjl.wnw.base.rune.WnWRune;
-import de.jjl.wnw.base.rune.parser.*;
-import de.jjl.wnw.base.util.path.*;
+import de.jjl.wnw.base.rune.parser.Config;
+import de.jjl.wnw.base.rune.parser.Grid;
+import de.jjl.wnw.base.rune.parser.WnWPathInputParser;
+import de.jjl.wnw.base.util.path.WnWDisplaySystem;
+import de.jjl.wnw.base.util.path.WnWPath;
+import de.jjl.wnw.base.util.path.WnWPoint;
 import de.jjl.wnw.desktop.util.WnWDesktopPath;
 import de.jjl.wnw.dev.game.GameObject;
-import de.jjl.wnw.dev.rune.*;
-import de.jjl.wnw.dev.spell.*;
+import de.jjl.wnw.dev.rune.DesktopRune;
+import de.jjl.wnw.dev.rune.DesktopRuneUtil;
+import de.jjl.wnw.dev.spell.Spell;
+import de.jjl.wnw.dev.spell.SpellUtil;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.text.Font;
 
@@ -78,10 +86,12 @@ public class GameInstance
 		}
 
 		WnWPath wnwPath = path.trimmed();
+		
 		Grid grid = parser.buildGrid(wnwPath, new Config());
+		
 		WnWPath filteredPath = new WnWPathInputParser().filterRunePath(wnwPath, new Config(), grid);
 		WnWRune rune = lookupRune(filteredPath, new Config());
-
+		
 		if (rune == null)
 		{
 			return;
