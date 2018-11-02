@@ -6,6 +6,11 @@ public class WnWPathSimple extends WnWPath
 {
 	private WnWDisplaySystem system = new WnWDisplaySystem(0, 0);
 	
+	public WnWPathSimple()
+	{
+		this(new WnWDisplaySystem(0, 0));
+	}
+	
 	public WnWPathSimple(WnWDisplaySystem system)
 	{
 		super(system);
@@ -18,7 +23,7 @@ public class WnWPathSimple extends WnWPath
 	{
 		return points.iterator();
 	}
-	
+
 	@Override 
 	public WnWPath forSystem(WnWDisplaySystem system)
 	{
@@ -35,15 +40,14 @@ public class WnWPathSimple extends WnWPath
 			int distX = point.getX() - this.system.getZeroX();
 			int distY = point.getY() - this.system.getZeroY();
 			
-			if(system.getWidth() != 0)
+			if(this.system.getWidth() != 0)
 			{
-				int distXRel = (int) ((double) distX / system.getWidth());
-				distX = (int)(system.getWidth() * distXRel);
+				double distXRel = (double) distX / this.system.getWidth();
+				distX = (int) (system.getWidth() * distXRel);
 			}
-			
-			if(system.getHeight() != 0)
+			if(this.system.getHeight() != 0)
 			{
-				double distYRel = (double) distY / system.getHeight();
+				double distYRel = (double) distY / this.system.getHeight();
 				distY = (int) (system.getHeight() * distYRel);
 			}
 			

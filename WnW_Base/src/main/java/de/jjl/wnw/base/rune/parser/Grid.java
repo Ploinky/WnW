@@ -4,19 +4,13 @@ import de.jjl.wnw.base.util.path.WnWPoint;
 
 /**
  * Helper class to define a Grid within a field.<br>
- * The grid itself starts at a given position (startX, startY) and has cols * rows fields.
- * each field has a size of (fieldWidth, fieldHeight), so the full size of the grid is
- * (cols * fieldWidth, rows * fieldHeight).<br>
- * Using these information together with the tolerance the grid can determin the {override fun equals(other: Any?): Boolean{
-return super.equals(other)
-}
-override fun hashCode(): Int{
-return super.hashCode()
-}
-override fun toString(): String{
-return super.toString()
-}
-#parse(WnWPoint) gridPosition}
+ * The grid itself starts at a given position (startX, startY) and has cols *
+ * rows fields. each field has a size of (fieldWidth, fieldHeight), so the full
+ * size of the grid is (cols * fieldWidth, rows * fieldHeight).<br>
+ * Using these information together with the tolerance the grid can determin the
+ * {override fun equals(other: Any?): Boolean{ return super.equals(other) }
+ * override fun hashCode(): Int{ return super.hashCode() } override fun
+ * toString(): String{ return super.toString() } #parse(WnWPoint) gridPosition}
  * any point given.
  * 
  * @Property fieldWidth the width of a single field of the grid
@@ -25,9 +19,11 @@ return super.toString()
  * @Property startY The lowest y-coordinate of the grid - the zero-Y
  * @Property rows number of rows of the grid
  * @Property cols number of columns of the grid
- * @Property tolerance the tolerance to detect if point should be considered to agiven field in full %.<br>
- *                     a value of 0% means the point must lie directly in the center of the field while 141 (sqrt(2))
- *                     means, any point within the field will be considered.
+ * @Property tolerance the tolerance to detect if point should be considered to
+ *           agiven field in full %.<br>
+ *           a value of 0% means the point must lie directly in the center of
+ *           the field while 141 (sqrt(2)) means, any point within the field
+ *           will be considered.
  */
 public class Grid
 {
@@ -38,16 +34,14 @@ public class Grid
 	private int rows;
 	private int cols;
 	private int tolerance;
-	private WnWPoint start = new WnWPoint(startX, startY);
-	private WnWPoint fieldSize = new WnWPoint(fieldWidth, fieldHeight);
-	private WnWPoint fieldSizePerSqu = new WnWPoint(
-		(int) Math.pow(fieldWidth * tolerance / 2 / 100.0, 2.0),
-		(int)Math.pow(fieldHeight * tolerance / 2 / 100.0, 2.0));
-	private WnWPoint gridSize = new WnWPoint(cols, rows);
-	double radX = fieldWidth * 0.5 * tolerance / 100;
-	double radY = fieldHeight * 0.5 * tolerance / 100;
-	
-	public Grid(int fieldWidth, int fieldHeight, int startX, int startY, int gridHeight, int gridWidth, 
+	private WnWPoint start;
+	private WnWPoint fieldSize;
+	private WnWPoint fieldSizePerSqu;
+	private WnWPoint gridSize;
+	double radX;
+	double radY;
+
+	public Grid(int fieldWidth, int fieldHeight, int startX, int startY, int gridHeight, int gridWidth,
 			int fieldTolerance)
 	{
 		this.fieldHeight = fieldWidth;
@@ -57,8 +51,16 @@ public class Grid
 		this.rows = gridHeight;
 		this.cols = gridWidth;
 		this.tolerance = fieldTolerance;
+
+		start = new WnWPoint(startX, startY);
+		fieldSize = new WnWPoint(fieldWidth, fieldHeight);
+		fieldSizePerSqu = new WnWPoint((int) Math.pow(fieldWidth * tolerance / 2 / 100.0, 2.0),
+				(int) Math.pow(fieldHeight * tolerance / 2 / 100.0, 2.0));
+		gridSize = new WnWPoint(cols, rows);
+		radX = fieldWidth * 0.5 * tolerance / 100;
+		radY = fieldHeight * 0.5 * tolerance / 100;
 	}
-	
+
 	/**
 	 * Determine and return the gridposition of the given point.<br>
 	 * The gridposition is the (x, y) position of the field of this grid, in which the point lies.
@@ -78,16 +80,16 @@ public class Grid
 	public WnWPoint parse(WnWPoint point)
 	{
 		WnWPoint temp = point.minus(start);
-		temp = temp.div(fieldSize.length());
+		temp = temp.div(fieldSize);
 		
 		if(temp.getX() < 0 || temp.getX() >= gridSize.getX() || temp.getY() < 0 || temp.getY() >= gridSize.getY())
 		{
 			return null;
 		}
 		
-		WnWPoint fieldCenter = start.plus((temp.times(fieldSize.length())).plus((fieldSize.div(2))));
+		WnWPoint fieldCenter = start.plus(temp.times(fieldSize)).plus(fieldSize.div(2));
 		
-		if(point == fieldCenter)
+		if(point.equals(fieldCenter))
 		{
 			return temp;
 		}
@@ -104,44 +106,31 @@ public class Grid
 		
         double normx = centerDist.getX() / radX;
         double normy = centerDist.getY() / radY;
-        if((normx * normx + normy * normy) < 1.00000001)
-        	{
-        	return temp;
-        	}
-        else
-        	{
-        	return null;
-        	}
+        return (normx * normx + normy * normy) < 1.00000001 ? temp : null;
 	}
-	
+
 	@Override
 	public String toString()
 	{
-		return "Grid [" +
-			"zero($startX,$startY)" +
-			", fieldSize($fieldWidth,$fieldHeight)" +
-			", gridSize($cols,$rows)" +
-			", tolerance($tolerance)" +
-			"]";
+		return "Grid [" + "zero(" + startX + "," + startY + ")" + ", fieldSize(" + fieldWidth + "," + fieldHeight + ")"
+				+ ", gridSize(" + cols + "," + rows + ")" + ", tolerance(" + tolerance + ")" + "]";
 	}
-	
+
 	@Override
 	public int hashCode()
 	{
 		int PRIME = 131;
-		
+
 		return ((start.hashCode() * PRIME + fieldSize.hashCode()) * PRIME + gridSize.hashCode()) * PRIME;
 	}
-	
+
 	@Override
 	public boolean equals(Object other)
 	{
-		if(other instanceof Grid)
+		if (other instanceof Grid)
 		{
-			if(start == ((Grid) other).start
-				&& fieldSize == ((Grid) other).fieldSize
-				&& gridSize == ((Grid) other).gridSize
-				&& tolerance == ((Grid) other).tolerance)
+			if (start.equals(((Grid) other).start) && fieldSize.equals(((Grid) other).fieldSize)
+					&& gridSize.equals(((Grid) other).gridSize) && tolerance == ((Grid) other).tolerance)
 			{
 				return true;
 			}
@@ -164,17 +153,17 @@ public class Grid
 	{
 		return fieldWidth;
 	}
-	
+
 	public int getFieldHeight()
 	{
 		return fieldHeight;
 	}
-	
+
 	public double getRows()
 	{
 		return radX;
 	}
-	
+
 	public int getCols()
 	{
 		return cols;
@@ -182,7 +171,21 @@ public class Grid
 
 	public double getTolerance()
 	{
-		// TODO Auto-generated method stub
 		return tolerance;
+	}
+
+	public WnWPoint getStart()
+	{
+		return start;
+	}
+
+	public WnWPoint getGridSize()
+	{
+		return gridSize;
+	}
+
+	public WnWPoint getFieldSize()
+	{
+		return fieldSize;
 	}
 }

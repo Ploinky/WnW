@@ -15,6 +15,28 @@ public class WnWPoint
 		this.y = y;
 	}
 	
+	@Override
+	public boolean equals(Object obj)
+	{
+		if(obj == this)
+		{
+			return true;
+		}
+		
+		if(!(obj instanceof WnWPoint))
+		{
+			return false;
+		}
+		
+		return x == ((WnWPoint) obj).x && y == ((WnWPoint) obj).y;
+	}
+	
+	@Override
+	public String toString()
+	{
+		return "WnWPoint [" + x + "," + y + "]";
+	}
+	
 	public WnWPoint negatePoint()
 	{
 		return new WnWPoint(-x, -y);
@@ -63,5 +85,15 @@ public class WnWPoint
 	public int length()
 	{
 		return this.x + this.y;
+	}
+
+	public WnWPoint div(WnWPoint b)
+	{
+		return new WnWPoint(x / b.x, y / b.y);
+	}
+
+	public WnWPoint times(WnWPoint b)
+	{
+		return new WnWPoint(x * b.x, y * b.y);
 	}
 }

@@ -13,6 +13,25 @@ public class Config
 		public boolean moveFieldBack = false;
 		public GridCorner corner = GridCorner.Center;
 
+		public Config(int gridWidth, int gridHeight, int minFieldHeight, int maxFieldHeight, int minFieldWidth,
+				int maxFieldWidth, int fieldTolerance, boolean moveFieldTwice, boolean moveFieldBack, GridCorner corner)
+		{
+			this.gridWidth = gridWidth;
+			this.gridHeight = gridHeight;
+			this.minFieldHeight = minFieldHeight;
+			this.maxFieldHeight = maxFieldHeight;
+			this.minFieldWidth = minFieldWidth;
+			this.maxFieldWidth = maxFieldWidth;
+			this.fieldTolerance = fieldTolerance;
+			this.moveFieldTwice = moveFieldTwice;
+			this.moveFieldBack = moveFieldBack;
+			this.corner = corner;
+		}
+
+		public Config()
+		{
+		}
+
 		public int getGridHeight()
 		{
 			return gridHeight;

@@ -1,15 +1,18 @@
 package de.jjl.wnw.base.util.path;
 
-import java.util.Deque;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.stream.StreamSupport;
+import java.util.*;
+import java.util.stream.*;
 
 import de.jjl.wnw.base.input.WnWPathInput;
 
 public abstract class WnWPath implements Iterable<WnWPoint> 
 {
 	private WnWDisplaySystem system;
+	
+	public List<WnWPoint> toList()
+	{
+		return StreamSupport.stream(spliterator(), false).collect(Collectors.toList());
+	}
 	
 	public WnWPath(WnWDisplaySystem system)
 	{
