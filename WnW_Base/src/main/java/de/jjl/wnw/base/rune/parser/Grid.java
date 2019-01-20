@@ -87,9 +87,9 @@ public class Grid
 			return null;
 		}
 		
-		WnWPoint fieldCenter = start.plus(temp.times(fieldSize)).plus(fieldSize.div(2));
+		WnWPoint fieldCenter = start.plus((temp.times(fieldSize))).plus((fieldSize.div(2)));
 		
-		if(point.equals(fieldCenter))
+		if(point == fieldCenter)
 		{
 			return temp;
 		}
@@ -104,9 +104,9 @@ public class Grid
 		// + (point.y - center.y)² / radius.y²
 		// <= 1
 		
-        double normx = centerDist.getX() / radX;
-        double normy = centerDist.getY() / radY;
-        return (normx * normx + normy * normy) < 1.00000001 ? temp : null;
+		double normx = centerDist.getX() / radX;
+		double normy = centerDist.getY() / radY;
+		return ((normx * normx + normy * normy) < 1.00000001) ? temp : null;
 	}
 
 	@Override

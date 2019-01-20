@@ -72,7 +72,7 @@ public class WnWPathInputParser implements WnWInputParser
 			WnWPoint nextPoint = grid.parse(point);
 			
 			if(nextPoint != null
-				 && nextPoint != lastPoint)
+				 && !nextPoint.equals(lastPoint))
 			{
 				if(config.moveFieldBack || nextPoint != preLastPoint)
 				{
