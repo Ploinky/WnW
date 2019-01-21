@@ -306,9 +306,6 @@ public class GameInstance
 		s1.weaken(s2.getDamage());
 		s2.weaken(s1Temp);
 
-		System.out.println(
-				"new damage after collision: " + s1 + "->" + s1.getDamage() + ", " + s2 + "->" + s2.getDamage());
-
 		if (s1.getDamage() < 1)
 		{
 			removeObjects.add(s1);
