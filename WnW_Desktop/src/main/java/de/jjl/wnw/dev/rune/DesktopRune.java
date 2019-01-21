@@ -6,7 +6,7 @@ import javax.imageio.ImageIO;
 
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
+import javafx.scene.image.*;
 
 public class DesktopRune extends BaseRune
 {
@@ -23,7 +23,7 @@ public class DesktopRune extends BaseRune
 		// TODO $Li 20.09.2017
 		try
 		{
-			img = SwingFXUtils.toFXImage(ImageIO.read(new File("res/" + rune + ".png")), null);
+			img = SwingFXUtils.toFXImage(ImageIO.read(new File("res/" + rune + ".png")), new WritableImage(40, 40));
 		}
 		catch (IOException e)
 		{
@@ -83,12 +83,12 @@ public class DesktopRune extends BaseRune
 	@Override
 	public int getWidth()
 	{
-		return (int) img.getWidth();
+		return 30;
 	}
 
 	@Override
 	public int getHeight()
 	{
-		return (int) img.getHeight();
+		return 30;
 	}
 }

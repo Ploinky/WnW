@@ -6,56 +6,42 @@ import javafx.scene.canvas.GraphicsContext;
 
 public class Spell extends GameObject
 {
-	private long[] spellCombo;
-
 	private DesktopPlayer caster;
+
+	private int damage;
+
+	private int height;
+
+	private boolean hit;
 
 	private String name;
 
-	private int width;
+	private boolean shield;
 
-	private int height;
+	private int speed;
+
+	private long[] spellCombo;
+
+	private int width;
 
 	private int x;
 
 	private int y;
 
-	private int speed;
-
-	private int damage;
-
-	private boolean hit;
-
-	public Spell(DesktopPlayer caster, String name, int damage, long[] spellCombo)
+	public Spell(DesktopPlayer caster, String name, int damage, long[] spellCombo, boolean shield)
 	{
 		this.name = name;
 		this.spellCombo = spellCombo;
 		this.damage = damage;
+		this.setShield(shield);
 		width = 30;
-		height = 30;
+		height = shield ? 100 : 30;
 		x = 0;
 		y = 0;
 		speed = 100;
 		hit = false;
 
 		this.setCaster(caster);
-	}
-
-	public void setPos(int x, int y)
-	{
-		this.x = x;
-		this.y = y;
-	}
-
-	public long[] getSpellCombo()
-	{
-		return spellCombo;
-	}
-
-	@Override
-	public String toString()
-	{
-		return name;
 	}
 
 	@Override
@@ -71,10 +57,31 @@ public class Spell extends GameObject
 		}
 	}
 
-	@Override
-	public void move(float frameTime)
+	public DesktopPlayer getCaster()
 	{
-		x += frameTime * speed / 100000000;
+		return caster;
+	}
+
+	public int getDamage()
+	{
+		return damage;
+	}
+
+	@Override
+	public int getHeight()
+	{
+		return height;
+	}
+
+	public long[] getSpellCombo()
+	{
+		return spellCombo;
+	}
+
+	@Override
+	public int getWidth()
+	{
+		return width;
 	}
 
 	@Override
@@ -89,21 +96,25 @@ public class Spell extends GameObject
 		return y;
 	}
 
-	@Override
-	public int getWidth()
+	public void hit()
 	{
-		return width;
+		hit = true;
+		damage = 0;
+		speed = 0;
+	}
+
+	public boolean isShield()
+	{
+		return shield;
 	}
 
 	@Override
-	public int getHeight()
+	public void move(float frameTime)
 	{
-		return height;
-	}
-
-	public DesktopPlayer getCaster()
-	{
-		return caster;
+		if (!shield)
+		{
+			x += frameTime * speed / 100000000;
+		}
 	}
 
 	public void setCaster(DesktopPlayer caster)
@@ -111,15 +122,25 @@ public class Spell extends GameObject
 		this.caster = caster;
 	}
 
-	public int getDamage()
+	public void setPos(int x, int y)
 	{
-		return damage;
+		this.x = x + (shield ? (caster.isFaceLeft() ? -30 : 60) : 0);
+		this.y = y;
 	}
 
-	public void hit()
+	public void setShield(boolean shield)
 	{
-		hit = true;
-		damage = 0;
-		speed = 0;
+		this.shield = shield;
+	}
+
+	@Override
+	public String toString()
+	{
+		return name;
+	}
+
+	public void weaken(int dmg)
+	{
+		damage -= dmg;
 	}
 }

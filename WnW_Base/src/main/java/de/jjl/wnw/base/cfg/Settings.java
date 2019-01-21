@@ -40,4 +40,9 @@ public class Settings
 	{
 		return KeyCode.SPACE;
 	}
+
+	public static KeyCode getShieldKey()
+	{
+		return KeyCode.CONTROL;
+	}
 }

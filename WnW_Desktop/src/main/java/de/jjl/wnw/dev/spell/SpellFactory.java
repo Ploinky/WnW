@@ -1,10 +1,8 @@
 package de.jjl.wnw.dev.spell;
 
-import java.util.function.Function;
-
 import de.jjl.wnw.desktop.game.DesktopPlayer;
 
-public class SpellFactory implements Function<DesktopPlayer, Spell>
+public class SpellFactory
 {
 	private String name;
 
@@ -19,10 +17,9 @@ public class SpellFactory implements Function<DesktopPlayer, Spell>
 		this.combo = combo;
 	}
 
-	@Override
-	public Spell apply(DesktopPlayer caster)
+	public Spell cre(DesktopPlayer caster, boolean shield)
 	{
-		return new Spell(caster, name, damage, combo);
+		return new Spell(caster, name, damage, combo, shield);
 	}
 
 	public long[] getSpellCombo()

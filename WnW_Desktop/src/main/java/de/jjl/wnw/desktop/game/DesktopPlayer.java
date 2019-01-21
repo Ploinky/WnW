@@ -103,4 +103,9 @@ public class DesktopPlayer extends GameObject
 	{
 		return lives;
 	}
+
+	public boolean isFaceLeft()
+	{
+		return faceLeft;
+	}
 }

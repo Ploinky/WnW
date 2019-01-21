@@ -34,7 +34,7 @@ public class SpellUtil
 		spells.add(spell);
 	}
 
-	public static Spell getSpell(DesktopPlayer caster, long[] combo)
+	public static Spell getSpell(DesktopPlayer caster, long[] combo, boolean shield)
 	{
 		for (SpellFactory s : getInstance().spells)
 		{
@@ -55,7 +55,7 @@ public class SpellUtil
 
 			if (spell)
 			{
-				return s.apply(caster);
+				return s.cre(caster, shield);
 			}
 		}
 

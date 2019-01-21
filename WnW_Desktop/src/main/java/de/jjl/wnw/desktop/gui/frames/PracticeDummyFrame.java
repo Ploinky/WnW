@@ -74,6 +74,11 @@ public class PracticeDummyFrame extends Frame
 				{
 					GameInstance.getInstance().playerCast();
 				}
+
+				if (e.getCode() == Settings.getShieldKey())
+				{
+					GameInstance.getInstance().playerShield();
+				}
 			});
 		});
 
