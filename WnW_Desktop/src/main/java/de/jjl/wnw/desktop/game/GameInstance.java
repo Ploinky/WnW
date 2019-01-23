@@ -6,7 +6,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import de.jjl.wnw.base.rune.WnWRune;
 import de.jjl.wnw.base.rune.parser.*;
 import de.jjl.wnw.base.util.path.*;
-import de.jjl.wnw.desktop.util.WnWDesktopPath;
 import de.jjl.wnw.dev.game.GameObject;
 import de.jjl.wnw.dev.rune.*;
 import de.jjl.wnw.dev.spell.*;
@@ -27,9 +26,7 @@ public class GameInstance
 		return instance;
 	}
 
-	private List<DesktopRune> currentRunes;
-
-	private DesktopPlayer dummy;
+	private List<BaseRune> currentRunes;
 
 	private long frameTime = 0;
 
@@ -37,13 +34,11 @@ public class GameInstance
 
 	private Collection<GameObject> objects;
 
+	private Player player1;
+
+	private Player player2;
+
 	private Collection<GameObject> removeObjects;
-
-	private WnWPathInputParser parser;
-
-	private WnWDesktopPath path;
-
-	private DesktopPlayer player;
 
 	private boolean running;
 
@@ -52,19 +47,15 @@ public class GameInstance
 		objects = new CopyOnWriteArrayList<>();
 		removeObjects = new CopyOnWriteArrayList<>();
 		currentRunes = new CopyOnWriteArrayList<>();
-		parser = new WnWPathInputParser();
-		player = new DesktopPlayer(0, 0);
-		dummy = new DesktopPlayer(0, 0);
+
+		player1 = new DesktopPlayer(0, 0);
+		player2 = new DesktopPlayer(0, 0);
+		player2.faceLeft();
+
 		running = true;
 
-		dummy.faceLeft();
-		objects.add(player);
-		objects.add(dummy);
-	}
-
-	public void addPathPoint(int x, int y)
-	{
-		path.addPoint(x, y);
+		objects.add(player1);
+		objects.add(player2);
 	}
 
 	public void drawDebug(GraphicsContext graphics)
@@ -73,8 +64,57 @@ public class GameInstance
 		graphics.fillText("GameObjects: " + objects.size(), 20, 60);
 	}
 
-	public void finishPath()
+	public Collection<GameObject> getObjects()
 	{
+		return objects;
+	}
+
+	public void handleFrame(long now)
+	{
+		frameTime = now - lastFrame;
+		lastFrame = now;
+
+		moveObjects(frameTime);
+		collide();
+		checkRunes();
+		refresh();
+	}
+
+	private void checkRunes()
+	{
+		String[] p1Input = player1.getInputString().split("\\|");
+
+		List<Long> p1Combo = new ArrayList<>();
+
+		for (String s : p1Input)
+		{
+			if (s == "A")
+			{
+				cast(player1, p1Combo, false);
+				p1Combo.clear();
+			}
+			else if (s == "S")
+			{
+				cast(player1, p1Combo, false);
+				p1Combo.clear();
+			}
+			else
+			{
+				if (!s.matches("[0-9]+"))
+				{
+					continue;
+				}
+
+				addRunePlayer1(s);
+
+				p1Combo.add(Long.valueOf(s));
+			}
+		}
+	}
+
+	private void addRunePlayer1(String s)
+	{
+
 		if (path == null)
 		{
 			return;
@@ -92,56 +132,12 @@ public class GameInstance
 			return;
 		}
 
-		DesktopRune dRune = DesktopRuneUtil.getRune(player, rune.getLong());
-
-		if (dRune == null)
-		{
-			return;
-		}
-
-		dRune.setX(10 + currentRunes.size() * 40);
-		dRune.setY(10);
-
+		DesktopRune dRune = DesktopRuneUtil.getRune(player1, rune.getLong());
 		objects.add(dRune);
-
-		currentRunes.add(dRune);
 	}
 
-	public Collection<GameObject> getObjects()
+	private void cast(Player player, List<Long> combo, boolean shield)
 	{
-		return objects;
-	}
-
-	public WnWDesktopPath getPath()
-	{
-		// TODO Auto-generated method stub
-		return path;
-	}
-
-	public void handleFrame(long now)
-	{
-		frameTime = now - lastFrame;
-		lastFrame = now;
-
-		moveObjects(frameTime);
-		collide();
-		refresh();
-	}
-
-	public boolean isRunning()
-	{
-		return running;
-	}
-
-	public void playerCast()
-	{
-		long[] combo = new long[currentRunes.size()];
-
-		for (DesktopRune rune : currentRunes)
-		{
-			combo[currentRunes.indexOf(rune)] = rune.getLong();
-		}
-
 		Spell spell = SpellUtil.getSpell(player, combo, false);
 
 		if (spell != null)
@@ -152,52 +148,22 @@ public class GameInstance
 		}
 
 		currentRunes.forEach(dRune -> objects.remove(dRune));
-		path = null;
 		objects.removeAll(currentRunes);
 		currentRunes.clear();
 	}
 
-	public void playerShield()
+	public boolean isRunning()
 	{
-		long[] combo = new long[currentRunes.size()];
-
-		for (DesktopRune rune : currentRunes)
-		{
-			combo[currentRunes.indexOf(rune)] = rune.getLong();
-		}
-
-		Spell spell = SpellUtil.getSpell(player, combo, true);
-		Spell dummySpell = SpellUtil.getSpell(dummy, combo, true);
-
-		if (spell != null)
-		{
-			spell.setPos(player.getX(), player.getY());
-			objects.add(spell);
-			objects.add(spell);
-
-			dummySpell.setPos(dummy.getX(), dummy.getY());
-			objects.add(dummySpell);
-			objects.add(dummySpell);
-		}
-
-		currentRunes.forEach(dRune -> objects.remove(dRune));
-		path = null;
-		objects.removeAll(currentRunes);
-		currentRunes.clear();
+		return running;
 	}
 
 	public void setDrawSize(double width, double height)
 	{
-		player.setX((int) (width / 100 * 10));
-		player.setY((int) (height / 100 * 70));
+		player1.setX((int) (width / 100 * 10));
+		player1.setY((int) (height / 100 * 70));
 
-		dummy.setX((int) (width / 100 * 90));
-		dummy.setY((int) (height / 100 * 70));
-	}
-
-	public void startPath(WnWDisplaySystem display)
-	{
-		path = new WnWDesktopPath(display);
+		player2.setX((int) (width / 100 * 90));
+		player2.setY((int) (height / 100 * 70));
 	}
 
 	private boolean chkCollision(GameObject obj1, GameObject obj2)
@@ -343,14 +309,14 @@ public class GameInstance
 			runeLong = runeLong / 10;
 		}
 
-		return DesktopRuneUtil.getRune(player, reversedNumber);
+		return DesktopRuneUtil.getRune(player1, reversedNumber);
 	}
 
 	private void moveObjects(long frameTime)
 	{
 		for (GameObject obj : objects)
 		{
-			if (!(obj instanceof DesktopPlayer) && !(obj instanceof DesktopRune))
+			if (!(obj instanceof Player) && !(obj instanceof DesktopRune))
 			{
 				obj.move(frameTime);
 			}
@@ -359,7 +325,7 @@ public class GameInstance
 
 	private void refresh()
 	{
-		if (dummy.getLives() <= 0)
+		if (player1.getLives() <= 0 || player2.getLives() <= 0)
 		{
 			running = false;
 		}

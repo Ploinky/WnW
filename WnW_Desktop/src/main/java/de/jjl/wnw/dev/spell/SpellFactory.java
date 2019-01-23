@@ -1,6 +1,6 @@
 package de.jjl.wnw.dev.spell;
 
-import de.jjl.wnw.desktop.game.DesktopPlayer;
+import de.jjl.wnw.desktop.game.Player;
 
 public class SpellFactory
 {
@@ -17,9 +17,9 @@ public class SpellFactory
 		this.combo = combo;
 	}
 
-	public Spell cre(DesktopPlayer caster, boolean shield)
+	public Spell cre(Player player1, boolean shield)
 	{
-		return new Spell(caster, name, damage, combo, shield);
+		return new Spell(player1, name, damage, combo, shield);
 	}
 
 	public long[] getSpellCombo()

@@ -1,12 +1,12 @@
 package de.jjl.wnw.dev.spell;
 
-import de.jjl.wnw.desktop.game.DesktopPlayer;
+import de.jjl.wnw.desktop.game.Player;
 import de.jjl.wnw.dev.game.GameObject;
 import javafx.scene.canvas.GraphicsContext;
 
-public class Spell extends GameObject
+public class Spell implements GameObject
 {
-	private DesktopPlayer caster;
+	private Player caster;
 
 	private int damage;
 
@@ -28,7 +28,7 @@ public class Spell extends GameObject
 
 	private int y;
 
-	public Spell(DesktopPlayer caster, String name, int damage, long[] spellCombo, boolean shield)
+	public Spell(Player player1, String name, int damage, long[] spellCombo, boolean shield)
 	{
 		this.name = name;
 		this.spellCombo = spellCombo;
@@ -41,7 +41,7 @@ public class Spell extends GameObject
 		speed = 100;
 		hit = false;
 
-		this.setCaster(caster);
+		this.setCaster(player1);
 	}
 
 	@Override
@@ -57,7 +57,7 @@ public class Spell extends GameObject
 		}
 	}
 
-	public DesktopPlayer getCaster()
+	public Player getCaster()
 	{
 		return caster;
 	}
@@ -117,7 +117,7 @@ public class Spell extends GameObject
 		}
 	}
 
-	public void setCaster(DesktopPlayer caster)
+	public void setCaster(Player caster)
 	{
 		this.caster = caster;
 	}
@@ -142,5 +142,17 @@ public class Spell extends GameObject
 	public void weaken(int dmg)
 	{
 		damage -= dmg;
+	}
+
+	@Override
+	public void setX(int x)
+	{
+		this.x = x;
+	}
+
+	@Override
+	public void setY(int y)
+	{
+		this.y = y;
 	}
 }

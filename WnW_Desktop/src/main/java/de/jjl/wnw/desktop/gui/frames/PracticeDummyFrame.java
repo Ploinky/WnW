@@ -3,9 +3,13 @@ package de.jjl.wnw.desktop.gui.frames;
 import java.io.IOException;
 
 import de.jjl.wnw.base.cfg.Settings;
-import de.jjl.wnw.base.util.path.WnWDisplaySystem;
+import de.jjl.wnw.base.rune.WnWRune;
+import de.jjl.wnw.base.rune.parser.*;
+import de.jjl.wnw.base.util.path.*;
 import de.jjl.wnw.desktop.game.*;
 import de.jjl.wnw.desktop.gui.Frame;
+import de.jjl.wnw.desktop.util.WnWDesktopPath;
+import de.jjl.wnw.dev.rune.*;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.fxml.*;
@@ -18,15 +22,91 @@ import javafx.scene.layout.*;
 
 public class PracticeDummyFrame extends Frame
 {
-	public PracticeDummyFrame(Game game)
+	private Canvas canvas;
+
+	private String currentInput;
+
+	private WnWPathInputParser parser;
+
+	private WnWDesktopPath path;
+
+	public WnWDesktopPath getPath()
 	{
-		super(game);
+		// TODO Auto-generated method stub
+		return path;
 	}
 
 	@FXML
 	private BorderPane root;
 
-	private Canvas canvas;
+	public PracticeDummyFrame(Game game)
+	{
+		super(game);
+		currentInput = "";
+		parser = new WnWPathInputParser();
+	}
+
+	public void addPathPoint(int x, int y)
+	{
+		path.addPoint(x, y);
+	}
+
+	public void finishPath()
+	{
+		if (path == null)
+		{
+			return;
+		}
+
+		WnWPath wnwPath = path.trimmed();
+
+		Grid grid = parser.buildGrid(wnwPath, new Config());
+
+		WnWPath filteredPath = new WnWPathInputParser().filterRunePath(wnwPath, new Config(), grid);
+		WnWRune rune = lookupRune(filteredPath, new Config());
+
+		if (rune == null)
+		{
+			return;
+		}
+
+		DesktopRune dRune = DesktopRuneUtil.getRune(player1, rune.getLong());
+
+		if (dRune == null)
+		{
+			return;
+		}
+
+		dRune.setX(10 + (currentInput.split("\\|").length + 1) * 40);
+		dRune.setY(10);
+
+		currentInput += currentInput.isEmpty() ? dRune.getLong() : "\\|" + dRune.getLong();
+	}
+
+	public void startPath(WnWDisplaySystem display)
+	{
+		path = new WnWDesktopPath(display);
+	}
+
+	@Override
+	public Parent getAsNode()
+	{
+		FXMLLoader loader = new FXMLLoader();
+		loader.setController(this);
+
+		try
+		{
+			return loader.load(getClass().getResourceAsStream("/xml/PRACTICEDUMMY.fxml"));
+		}
+		catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return null;
+
+	}
 
 	@FXML
 	private void initialize()
@@ -72,12 +152,12 @@ public class PracticeDummyFrame extends Frame
 			{
 				if (e.getCode() == Settings.getCastKey())
 				{
-					GameInstance.getInstance().playerCast();
+					currentInput += currentInput.isEmpty() ? "A" : "\\|A";
 				}
 
 				if (e.getCode() == Settings.getShieldKey())
 				{
-					GameInstance.getInstance().playerShield();
+					currentInput += currentInput.isEmpty() ? "S" : "\\|S";
 				}
 			});
 		});
@@ -90,12 +170,12 @@ public class PracticeDummyFrame extends Frame
 
 		root.addEventFilter(MouseEvent.MOUSE_DRAGGED, e ->
 		{
-			GameInstance.getInstance().addPathPoint((int) e.getX(), (int) e.getY());
+			addPathPoint((int) e.getX(), (int) e.getY());
 		});
 
 		root.addEventFilter(MouseEvent.MOUSE_RELEASED, e ->
 		{
-			GameInstance.getInstance().finishPath();
+			finishPath();
 		});
 
 		AnimationTimer timer = new AnimationTimer()
@@ -135,25 +215,5 @@ public class PracticeDummyFrame extends Frame
 		}
 
 		GameInstance.getInstance().drawDebug(graphics);
-	}
-
-	@Override
-	public Parent getAsNode()
-	{
-		FXMLLoader loader = new FXMLLoader();
-		loader.setController(this);
-
-		try
-		{
-			return loader.load(getClass().getResourceAsStream("/xml/PRACTICEDUMMY.fxml"));
-		}
-		catch (IOException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		return null;
-
 	}
 }

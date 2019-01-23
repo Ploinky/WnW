@@ -3,7 +3,7 @@ package de.jjl.wnw.dev.rune;
 import java.util.*;
 import java.util.function.Supplier;
 
-import de.jjl.wnw.desktop.game.DesktopPlayer;
+import de.jjl.wnw.desktop.game.Player;
 
 public class DesktopRuneUtil
 {
@@ -35,7 +35,7 @@ public class DesktopRuneUtil
 		runes.put(14789l, new DesktopRuneFactory("14789", 14789));
 	}
 
-	public static DesktopRune getRune(DesktopPlayer player, long rune)
+	public static DesktopRune getRune(Player player1, long rune)
 	{
 		return getInstance().runes.get(rune) != null ? getInstance().runes.get(rune).get() : null;
 	}

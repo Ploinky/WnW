@@ -4,13 +4,12 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import de.jjl.wnw.dev.game.GameObject;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.text.Font;
 
-public class DesktopPlayer extends GameObject
+public class DesktopPlayer implements Player
 {
 	private Image image;
 
@@ -107,5 +106,11 @@ public class DesktopPlayer extends GameObject
 	public boolean isFaceLeft()
 	{
 		return faceLeft;
+	}
+
+	@Override
+	public String getInputString()
+	{
+		return "";
 	}
 }

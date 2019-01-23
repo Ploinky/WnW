@@ -2,7 +2,7 @@ package de.jjl.wnw.dev.spell;
 
 import java.util.*;
 
-import de.jjl.wnw.desktop.game.DesktopPlayer;
+import de.jjl.wnw.desktop.game.Player;
 
 public class SpellUtil
 {
@@ -34,11 +34,11 @@ public class SpellUtil
 		spells.add(spell);
 	}
 
-	public static Spell getSpell(DesktopPlayer caster, long[] combo, boolean shield)
+	public static Spell getSpell(Player player1, List<Long> combo, boolean shield)
 	{
 		for (SpellFactory s : getInstance().spells)
 		{
-			if (s.getSpellCombo().length != combo.length)
+			if (s.getSpellCombo().length != combo.size())
 			{
 				continue;
 			}
@@ -47,7 +47,7 @@ public class SpellUtil
 
 			for (int i = 0; i < s.getSpellCombo().length; i++)
 			{
-				if (s.getSpellCombo()[i] != combo[i])
+				if (s.getSpellCombo()[i] != combo.get(i))
 				{
 					spell = false;
 				}
@@ -55,7 +55,7 @@ public class SpellUtil
 
 			if (spell)
 			{
-				return s.cre(caster, shield);
+				return s.cre(player1, shield);
 			}
 		}
 
