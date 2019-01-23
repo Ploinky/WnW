@@ -49,21 +49,25 @@ public class DesktopPlayer implements Player
 		graphics.fillText("" + lives, x + 20, y - 20);
 	}
 
+	@Override
 	public int getWidth()
 	{
 		return width;
 	}
 
+	@Override
 	public int getHeight()
 	{
 		return height;
 	}
 
+	@Override
 	public void setX(int x)
 	{
 		this.x = x;
 	}
 
+	@Override
 	public void setY(int y)
 	{
 		this.y = y;
@@ -72,16 +76,19 @@ public class DesktopPlayer implements Player
 	/**
 	 * This is just a hack until I think of something better...
 	 */
+	@Override
 	public void faceLeft()
 	{
 		faceLeft = true;
 	}
 
+	@Override
 	public int getX()
 	{
 		return x;
 	}
 
+	@Override
 	public int getY()
 	{
 		return y;
@@ -98,19 +105,15 @@ public class DesktopPlayer implements Player
 		lives -= damage;
 	}
 
+	@Override
 	public int getLives()
 	{
 		return lives;
 	}
 
+	@Override
 	public boolean isFaceLeft()
 	{
 		return faceLeft;
-	}
-
-	@Override
-	public String getInputString()
-	{
-		return "";
 	}
 }

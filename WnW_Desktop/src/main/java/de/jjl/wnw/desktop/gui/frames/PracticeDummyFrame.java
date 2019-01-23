@@ -1,15 +1,15 @@
 package de.jjl.wnw.desktop.gui.frames;
 
 import java.io.IOException;
+import java.util.Iterator;
 
 import de.jjl.wnw.base.cfg.Settings;
-import de.jjl.wnw.base.rune.WnWRune;
 import de.jjl.wnw.base.rune.parser.*;
 import de.jjl.wnw.base.util.path.*;
+import de.jjl.wnw.desktop.controls.PlayerController;
 import de.jjl.wnw.desktop.game.*;
 import de.jjl.wnw.desktop.gui.Frame;
 import de.jjl.wnw.desktop.util.WnWDesktopPath;
-import de.jjl.wnw.dev.rune.*;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.fxml.*;
@@ -20,7 +20,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 
-public class PracticeDummyFrame extends Frame
+public class PracticeDummyFrame extends Frame implements PlayerController
 {
 	private Canvas canvas;
 
@@ -32,7 +32,6 @@ public class PracticeDummyFrame extends Frame
 
 	public WnWDesktopPath getPath()
 	{
-		// TODO Auto-generated method stub
 		return path;
 	}
 
@@ -57,30 +56,48 @@ public class PracticeDummyFrame extends Frame
 		{
 			return;
 		}
+		
+		System.out.println("path finished: " + path);
 
 		WnWPath wnwPath = path.trimmed();
 
 		Grid grid = parser.buildGrid(wnwPath, new Config());
-
 		WnWPath filteredPath = new WnWPathInputParser().filterRunePath(wnwPath, new Config(), grid);
-		WnWRune rune = lookupRune(filteredPath, new Config());
+		
+		long rune = lookupRuneLong(filteredPath, new Config());
 
-		if (rune == null)
+		currentInput += currentInput.isEmpty() ? rune : "\\|" + rune;
+		
+		System.out.println("currentInput: " + currentInput + " += " + rune);
+	}
+
+	private long lookupRuneLong(WnWPath path, Config config)
+	{
+		long runeLong = 0;
+
+		long i = 1;
+
+		Iterator<WnWPoint> it = path.iterator();
+
+		while (it.hasNext())
 		{
-			return;
+			WnWPoint point = it.next();
+
+			runeLong += ((config.getGridHeight() * point.getY() + (point.getX() + 1)) * i);
+
+			i *= 10;
 		}
 
-		DesktopRune dRune = DesktopRuneUtil.getRune(player1, rune.getLong());
+		long reversedNumber = 0;
 
-		if (dRune == null)
+		while (runeLong > 0)
 		{
-			return;
+			long temp = runeLong % 10;
+			reversedNumber = reversedNumber * 10 + temp;
+			runeLong = runeLong / 10;
 		}
-
-		dRune.setX(10 + (currentInput.split("\\|").length + 1) * 40);
-		dRune.setY(10);
-
-		currentInput += currentInput.isEmpty() ? dRune.getLong() : "\\|" + dRune.getLong();
+		
+		return reversedNumber;
 	}
 
 	public void startPath(WnWDisplaySystem display)
@@ -130,6 +147,8 @@ public class PracticeDummyFrame extends Frame
 				canvas.setHeight(h);
 			}
 		};
+		
+		GameInstance.getInstance().setControllerPlayer1(this);
 
 		canvas.widthProperty().addListener(
 				(p, o, n) -> GameInstance.getInstance().setDrawSize(canvas.getWidth(), canvas.getHeight()));
@@ -152,11 +171,13 @@ public class PracticeDummyFrame extends Frame
 			{
 				if (e.getCode() == Settings.getCastKey())
 				{
+					finishPath();
 					currentInput += currentInput.isEmpty() ? "A" : "\\|A";
 				}
 
 				if (e.getCode() == Settings.getShieldKey())
 				{
+					finishPath();
 					currentInput += currentInput.isEmpty() ? "S" : "\\|S";
 				}
 			});
@@ -164,8 +185,7 @@ public class PracticeDummyFrame extends Frame
 
 		root.addEventFilter(MouseEvent.MOUSE_PRESSED, e ->
 		{
-			GameInstance.getInstance()
-					.startPath(new WnWDisplaySystem((int) root.getWidth(), (int) root.getHeight(), false, false, 0, 0));
+			startPath(new WnWDisplaySystem((int) root.getWidth(), (int) root.getHeight(), false, false, 0, 0));
 		});
 
 		root.addEventFilter(MouseEvent.MOUSE_DRAGGED, e ->
@@ -209,11 +229,21 @@ public class PracticeDummyFrame extends Frame
 
 		GameInstance.getInstance().getObjects().forEach(e -> e.drawOn(graphics));
 
-		if (GameInstance.getInstance().getPath() != null)
+		if (getPath() != null)
 		{
-			GameInstance.getInstance().getPath().drawOn(graphics);
+			getPath().drawOn(graphics);
 		}
 
 		GameInstance.getInstance().drawDebug(graphics);
+	}
+
+	@Override
+	public String getInputString()
+	{
+		String input = currentInput;
+		
+		currentInput = "";
+		
+		return input;
 	}
 }

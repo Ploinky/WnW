@@ -9,6 +9,4 @@ public interface Player extends GameObject
 	public int getLives();
 
 	public boolean isFaceLeft();
-
-	public String getInputString();
 }

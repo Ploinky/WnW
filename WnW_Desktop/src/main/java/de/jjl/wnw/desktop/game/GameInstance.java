@@ -3,9 +3,7 @@ package de.jjl.wnw.desktop.game;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import de.jjl.wnw.base.rune.WnWRune;
-import de.jjl.wnw.base.rune.parser.*;
-import de.jjl.wnw.base.util.path.*;
+import de.jjl.wnw.desktop.controls.PlayerController;
 import de.jjl.wnw.dev.game.GameObject;
 import de.jjl.wnw.dev.rune.*;
 import de.jjl.wnw.dev.spell.*;
@@ -36,7 +34,11 @@ public class GameInstance
 
 	private Player player1;
 
+	private PlayerController player1Controller;
+	
 	private Player player2;
+
+	private PlayerController player2Controller;
 
 	private Collection<GameObject> removeObjects;
 
@@ -82,8 +84,14 @@ public class GameInstance
 
 	private void checkRunes()
 	{
-		String[] p1Input = player1.getInputString().split("\\|");
+		String inputString = player1Controller.getInputString();
+		String[] p1Input = inputString.split("\\|");
 
+		if(!inputString.isEmpty())
+		{
+			System.out.println(inputString);
+		}
+		
 		List<Long> p1Combo = new ArrayList<>();
 
 		for (String s : p1Input)
@@ -105,35 +113,21 @@ public class GameInstance
 					continue;
 				}
 
-				addRunePlayer1(s);
+				addRunePlayer1(Long.valueOf(s));
 
 				p1Combo.add(Long.valueOf(s));
 			}
 		}
 	}
 
-	private void addRunePlayer1(String s)
+	private void addRunePlayer1(Long rune)
 	{
-
-		if (path == null)
+		DesktopRune dRune = DesktopRuneUtil.getRune(player1, rune);
+		
+		if(dRune != null)
 		{
-			return;
+			objects.add(dRune);
 		}
-
-		WnWPath wnwPath = path.trimmed();
-
-		Grid grid = parser.buildGrid(wnwPath, new Config());
-
-		WnWPath filteredPath = new WnWPathInputParser().filterRunePath(wnwPath, new Config(), grid);
-		WnWRune rune = lookupRune(filteredPath, new Config());
-
-		if (rune == null)
-		{
-			return;
-		}
-
-		DesktopRune dRune = DesktopRuneUtil.getRune(player1, rune.getLong());
-		objects.add(dRune);
 	}
 
 	private void cast(Player player, List<Long> combo, boolean shield)
@@ -166,6 +160,17 @@ public class GameInstance
 		player2.setY((int) (height / 100 * 70));
 	}
 
+	public void setControllerPlayer1(PlayerController controller)
+	{
+		player1Controller = controller;
+	}
+
+	public void setControllerPlayer2(PlayerController controller)
+	{
+		player2Controller = controller;
+	}
+	
+	
 	private boolean chkCollision(GameObject obj1, GameObject obj2)
 	{
 		if (obj1.getX() + obj1.getWidth() < obj2.getX() || obj2.getX() + obj2.getWidth() < obj1.getX()
@@ -281,35 +286,6 @@ public class GameInstance
 		{
 			removeObjects.add(s2);
 		}
-	}
-
-	private WnWRune lookupRune(WnWPath path, Config config)
-	{
-		long runeLong = 0;
-
-		long i = 1;
-
-		Iterator<WnWPoint> it = path.iterator();
-
-		while (it.hasNext())
-		{
-			WnWPoint point = it.next();
-
-			runeLong += ((config.getGridHeight() * point.getY() + (point.getX() + 1)) * i);
-
-			i *= 10;
-		}
-
-		long reversedNumber = 0;
-
-		while (runeLong > 0)
-		{
-			long temp = runeLong % 10;
-			reversedNumber = reversedNumber * 10 + temp;
-			runeLong = runeLong / 10;
-		}
-
-		return DesktopRuneUtil.getRune(player1, reversedNumber);
 	}
 
 	private void moveObjects(long frameTime)
