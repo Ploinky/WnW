@@ -35,12 +35,14 @@ public class GameInstance
 	private Player player1;
 
 	private PlayerController player1Controller;
-	
+
 	private Player player2;
 
 	private PlayerController player2Controller;
 
 	private Collection<GameObject> removeObjects;
+
+	private List<Long> p1Combo;
 
 	private boolean running;
 
@@ -49,6 +51,7 @@ public class GameInstance
 		objects = new CopyOnWriteArrayList<>();
 		removeObjects = new CopyOnWriteArrayList<>();
 		currentRunes = new CopyOnWriteArrayList<>();
+		p1Combo = new ArrayList<>();
 
 		player1 = new DesktopPlayer(0, 0);
 		player2 = new DesktopPlayer(0, 0);
@@ -82,50 +85,39 @@ public class GameInstance
 		refresh();
 	}
 
-	private void checkRunes()
+	public boolean isRunning()
 	{
-		String inputString = player1Controller.getInputString();
-		String[] p1Input = inputString.split("\\|");
+		return running;
+	}
 
-		if(!inputString.isEmpty())
-		{
-			System.out.println(inputString);
-		}
-		
-		List<Long> p1Combo = new ArrayList<>();
+	public void setControllerPlayer1(PlayerController controller)
+	{
+		player1Controller = controller;
+	}
 
-		for (String s : p1Input)
-		{
-			if (s == "A")
-			{
-				cast(player1, p1Combo, false);
-				p1Combo.clear();
-			}
-			else if (s == "S")
-			{
-				cast(player1, p1Combo, false);
-				p1Combo.clear();
-			}
-			else
-			{
-				if (!s.matches("[0-9]+"))
-				{
-					continue;
-				}
+	public void setControllerPlayer2(PlayerController controller)
+	{
+		player2Controller = controller;
+	}
 
-				addRunePlayer1(Long.valueOf(s));
+	public void setDrawSize(double width, double height)
+	{
+		player1.setX((int) (width / 100 * 10));
+		player1.setY((int) (height / 100 * 70));
 
-				p1Combo.add(Long.valueOf(s));
-			}
-		}
+		player2.setX((int) (width / 100 * 90));
+		player2.setY((int) (height / 100 * 70));
 	}
 
 	private void addRunePlayer1(Long rune)
 	{
 		DesktopRune dRune = DesktopRuneUtil.getRune(player1, rune);
-		
-		if(dRune != null)
+
+		if (dRune != null)
 		{
+			dRune.setX(10 + currentRunes.size() * 40);
+			dRune.setY(10);
+			currentRunes.add(dRune);
 			objects.add(dRune);
 		}
 	}
@@ -133,6 +125,8 @@ public class GameInstance
 	private void cast(Player player, List<Long> combo, boolean shield)
 	{
 		Spell spell = SpellUtil.getSpell(player, combo, false);
+
+		System.out.println(combo);
 
 		if (spell != null)
 		{
@@ -146,31 +140,43 @@ public class GameInstance
 		currentRunes.clear();
 	}
 
-	public boolean isRunning()
+	private void checkRunes()
 	{
-		return running;
+		String inputString = player1Controller.getInputString();
+		String[] p1Input = inputString.split("\\|");
+
+		for (String s : p1Input)
+		{
+			if (s == null || s.isEmpty())
+			{
+				continue;
+			}
+
+			if (s.equals("A"))
+			{
+				cast(player1, p1Combo, false);
+				p1Combo.clear();
+			}
+			else if (s.equals("S"))
+			{
+				cast(player1, p1Combo, false);
+				p1Combo.clear();
+			}
+			else
+			{
+				if (!s.matches("[0-9]+"))
+				{
+					System.err.println("UNKNOWN INPUT PLAYER 1: <" + s + ">");
+					continue;
+				}
+
+				addRunePlayer1(Long.valueOf(s));
+
+				p1Combo.add(Long.valueOf(s));
+			}
+		}
 	}
 
-	public void setDrawSize(double width, double height)
-	{
-		player1.setX((int) (width / 100 * 10));
-		player1.setY((int) (height / 100 * 70));
-
-		player2.setX((int) (width / 100 * 90));
-		player2.setY((int) (height / 100 * 70));
-	}
-
-	public void setControllerPlayer1(PlayerController controller)
-	{
-		player1Controller = controller;
-	}
-
-	public void setControllerPlayer2(PlayerController controller)
-	{
-		player2Controller = controller;
-	}
-	
-	
 	private boolean chkCollision(GameObject obj1, GameObject obj2)
 	{
 		if (obj1.getX() + obj1.getWidth() < obj2.getX() || obj2.getX() + obj2.getWidth() < obj1.getX()

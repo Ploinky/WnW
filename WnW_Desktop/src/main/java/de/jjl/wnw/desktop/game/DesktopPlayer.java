@@ -11,19 +11,19 @@ import javafx.scene.text.Font;
 
 public class DesktopPlayer implements Player
 {
+	private boolean faceLeft;
+
+	private int height = 100;
+
 	private Image image;
+
+	private int lives = 5;
+
+	private int width = 61;
 
 	private int x;
 
 	private int y;
-
-	private int width = 61;
-
-	private int height = 100;
-
-	private boolean faceLeft;
-
-	private int lives = 5;
 
 	public DesktopPlayer(double x, double y)
 	{
@@ -41,36 +41,17 @@ public class DesktopPlayer implements Player
 		faceLeft = false;
 	}
 
+	public void damage(int damage)
+	{
+		lives -= damage;
+	}
+
 	@Override
 	public void drawOn(GraphicsContext graphics)
 	{
 		graphics.drawImage(image, x + (faceLeft ? width : 0), y, faceLeft ? -width : width, height);
 		graphics.setFont(new Font(20));
 		graphics.fillText("" + lives, x + 20, y - 20);
-	}
-
-	@Override
-	public int getWidth()
-	{
-		return width;
-	}
-
-	@Override
-	public int getHeight()
-	{
-		return height;
-	}
-
-	@Override
-	public void setX(int x)
-	{
-		this.x = x;
-	}
-
-	@Override
-	public void setY(int y)
-	{
-		this.y = y;
 	}
 
 	/**
@@ -80,6 +61,24 @@ public class DesktopPlayer implements Player
 	public void faceLeft()
 	{
 		faceLeft = true;
+	}
+
+	@Override
+	public int getHeight()
+	{
+		return height;
+	}
+
+	@Override
+	public int getLives()
+	{
+		return lives;
+	}
+
+	@Override
+	public int getWidth()
+	{
+		return width;
 	}
 
 	@Override
@@ -95,25 +94,26 @@ public class DesktopPlayer implements Player
 	}
 
 	@Override
+	public boolean isFaceLeft()
+	{
+		return faceLeft;
+	}
+
+	@Override
 	public void move(float frameTime)
 	{
 		throw new UnsupportedOperationException("Method 'move' not implemented for DesktopPlayer yet");
 	}
 
-	public void damage(int damage)
+	@Override
+	public void setX(int x)
 	{
-		lives -= damage;
+		this.x = x;
 	}
 
 	@Override
-	public int getLives()
+	public void setY(int y)
 	{
-		return lives;
-	}
-
-	@Override
-	public boolean isFaceLeft()
-	{
-		return faceLeft;
+		this.y = y;
 	}
 }
