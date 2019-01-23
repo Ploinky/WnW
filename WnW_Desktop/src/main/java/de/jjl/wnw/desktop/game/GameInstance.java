@@ -124,7 +124,7 @@ public class GameInstance
 
 	private void cast(Player player, List<Long> combo, boolean shield)
 	{
-		Spell spell = SpellUtil.getSpell(player, combo, false);
+		Spell spell = SpellUtil.getSpell(player, combo, shield);
 
 		System.out.println(combo);
 
@@ -159,7 +159,7 @@ public class GameInstance
 			}
 			else if (s.equals("S"))
 			{
-				cast(player1, p1Combo, false);
+				cast(player1, p1Combo, true);
 				p1Combo.clear();
 			}
 			else
