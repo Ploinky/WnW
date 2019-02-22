@@ -1,6 +1,4 @@
-package de.jjl.wnw.desktop.game;
-
-import de.jjl.wnw.dev.game.GameObject;
+package de.jjl.wnw.dev.game;
 
 public interface Player extends GameObject
 {

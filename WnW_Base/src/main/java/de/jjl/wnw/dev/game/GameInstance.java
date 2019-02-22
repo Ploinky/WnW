@@ -1,10 +1,9 @@
-package de.jjl.wnw.desktop.game;
+package de.jjl.wnw.dev.game;
 
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import de.jjl.wnw.desktop.controls.PlayerController;
-import de.jjl.wnw.dev.game.GameObject;
+import de.jjl.wnw.dev.PlayerController;
 import de.jjl.wnw.dev.rune.*;
 import de.jjl.wnw.dev.spell.*;
 import javafx.scene.canvas.GraphicsContext;
@@ -53,8 +52,8 @@ public class GameInstance
 		currentRunes = new CopyOnWriteArrayList<>();
 		p1Combo = new ArrayList<>();
 
-		player1 = new DesktopPlayer(0, 0);
-		player2 = new DesktopPlayer(0, 0);
+		player1 = new GamePlayer(0, 0);
+		player2 = new GamePlayer(0, 0);
 		player2.faceLeft();
 
 		running = true;
@@ -111,7 +110,7 @@ public class GameInstance
 
 	private void addRunePlayer1(Long rune)
 	{
-		DesktopRune dRune = DesktopRuneUtil.getRune(player1, rune);
+		BaseRune dRune = RuneUtil.getRune(player1, rune);
 
 		if (dRune != null)
 		{
@@ -244,18 +243,18 @@ public class GameInstance
 			collideSpells((Spell) obj1, (Spell) obj2);
 		}
 
-		if (obj1 instanceof Spell && obj2 instanceof DesktopPlayer)
+		if (obj1 instanceof Spell && obj2 instanceof GamePlayer)
 		{
-			collidePlayer((DesktopPlayer) obj2, (Spell) obj1);
+			collidePlayer((GamePlayer) obj2, (Spell) obj1);
 		}
 
-		if (obj2 instanceof Spell && obj1 instanceof DesktopPlayer)
+		if (obj2 instanceof Spell && obj1 instanceof GamePlayer)
 		{
-			collidePlayer((DesktopPlayer) obj1, (Spell) obj2);
+			collidePlayer((GamePlayer) obj1, (Spell) obj2);
 		}
 	}
 
-	private void collidePlayer(DesktopPlayer player, Spell spell)
+	private void collidePlayer(GamePlayer player, Spell spell)
 	{
 		if (player == spell.getCaster())
 		{

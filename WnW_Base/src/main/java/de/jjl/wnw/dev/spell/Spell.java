@@ -1,7 +1,6 @@
 package de.jjl.wnw.dev.spell;
 
-import de.jjl.wnw.desktop.game.Player;
-import de.jjl.wnw.dev.game.GameObject;
+import de.jjl.wnw.dev.game.*;
 import javafx.scene.canvas.GraphicsContext;
 
 public class Spell implements GameObject
@@ -42,19 +41,6 @@ public class Spell implements GameObject
 		hit = false;
 
 		this.setCaster(player1);
-	}
-
-	@Override
-	public void drawOn(GraphicsContext graphics)
-	{
-		if (!hit)
-		{
-			graphics.fillRect(x, y, width, height);
-		}
-		else
-		{
-			graphics.fillOval(x, y, width, height);
-		}
 	}
 
 	public Player getCaster()

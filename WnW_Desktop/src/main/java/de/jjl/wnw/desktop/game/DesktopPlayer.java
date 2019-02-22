@@ -4,10 +4,9 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import de.jjl.wnw.dev.game.Player;
 import javafx.embed.swing.SwingFXUtils;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.text.Font;
 
 public class DesktopPlayer implements Player
 {
@@ -44,14 +43,6 @@ public class DesktopPlayer implements Player
 	public void damage(int damage)
 	{
 		lives -= damage;
-	}
-
-	@Override
-	public void drawOn(GraphicsContext graphics)
-	{
-		graphics.drawImage(image, x + (faceLeft ? width : 0), y, faceLeft ? -width : width, height);
-		graphics.setFont(new Font(20));
-		graphics.fillText("" + lives, x + 20, y - 20);
 	}
 
 	/**

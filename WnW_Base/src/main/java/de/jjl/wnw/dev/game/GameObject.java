@@ -1,6 +1,6 @@
 package de.jjl.wnw.dev.game;
 
 
-public interface GameObject extends Drawable, PhysicsObject
+public interface GameObject extends PhysicsObject
 {
 }

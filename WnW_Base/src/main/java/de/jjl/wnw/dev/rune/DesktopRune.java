@@ -5,7 +5,6 @@ import java.io.*;
 import javax.imageio.ImageIO;
 
 import javafx.embed.swing.SwingFXUtils;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.*;
 
 public class DesktopRune extends BaseRune
@@ -39,12 +38,6 @@ public class DesktopRune extends BaseRune
 
 		this.x = x;
 		this.y = y;
-	}
-
-	@Override
-	public void drawOn(GraphicsContext graphics)
-	{
-		graphics.drawImage(img, x, y, 30, 30);
 	}
 
 	public Image getImage()

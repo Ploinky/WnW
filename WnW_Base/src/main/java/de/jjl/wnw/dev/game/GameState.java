@@ -1,13 +1,11 @@
-package de.jjl.wnw.desktop.game;
+package de.jjl.wnw.dev.game;
 
 import java.util.List;
 
 import de.jjl.wnw.base.player.Player;
-import javafx.beans.property.SimpleListProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import javafx.collections.*;
 
 public class GameState
 {
@@ -91,9 +89,10 @@ public class GameState
 			return;
 		this.connectedPlayers.removeListener(listener);
 	}
-	
-	public List<Player> getConnectedPlayers(){
-		if(this.connectedPlayers == null || this.connectedPlayers.get() == null)
+
+	public List<Player> getConnectedPlayers()
+	{
+		if (this.connectedPlayers == null || this.connectedPlayers.get() == null)
 			return null;
 		return this.connectedPlayers.get();
 	}

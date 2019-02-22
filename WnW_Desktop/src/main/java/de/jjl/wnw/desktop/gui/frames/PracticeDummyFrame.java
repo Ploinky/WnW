@@ -6,10 +6,11 @@ import java.util.Iterator;
 import de.jjl.wnw.base.cfg.Settings;
 import de.jjl.wnw.base.rune.parser.*;
 import de.jjl.wnw.base.util.path.*;
-import de.jjl.wnw.desktop.controls.PlayerController;
-import de.jjl.wnw.desktop.game.*;
+import de.jjl.wnw.desktop.game.Game;
 import de.jjl.wnw.desktop.gui.Frame;
 import de.jjl.wnw.desktop.util.WnWDesktopPath;
+import de.jjl.wnw.dev.PlayerController;
+import de.jjl.wnw.dev.game.GameInstance;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -242,7 +243,7 @@ public class PracticeDummyFrame extends Frame implements PlayerController, Event
 		GraphicsContext graphics = canvas.getGraphicsContext2D();
 		graphics.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
-		GameInstance.getInstance().getObjects().forEach(e -> e.drawOn(graphics));
+		// GameInstance.getInstance().getObjects().forEach(e -> e.drawOn(graphics));
 
 		if (getPath() != null)
 		{
@@ -250,5 +251,11 @@ public class PracticeDummyFrame extends Frame implements PlayerController, Event
 		}
 
 		GameInstance.getInstance().drawDebug(graphics);
+	}
+
+	@Override
+	public void updateGameState(String state)
+	{
+		// We don't need to update state of the game since we control it...
 	}
 }

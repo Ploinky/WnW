@@ -2,7 +2,7 @@ package de.jjl.wnw.dev.spell;
 
 import java.util.*;
 
-import de.jjl.wnw.desktop.game.Player;
+import de.jjl.wnw.dev.game.Player;
 
 public class SpellUtil
 {

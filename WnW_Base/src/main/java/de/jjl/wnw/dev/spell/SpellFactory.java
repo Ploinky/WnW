@@ -1,6 +1,6 @@
 package de.jjl.wnw.dev.spell;
 
-import de.jjl.wnw.desktop.game.Player;
+import de.jjl.wnw.dev.game.Player;
 
 public class SpellFactory
 {
