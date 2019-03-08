@@ -26,6 +26,8 @@ public class Spell implements GameObject
 	private int x;
 
 	private int y;
+	
+	private long castTime;
 
 	public Spell(Player player1, String name, int damage, long[] spellCombo, boolean shield)
 	{
@@ -33,6 +35,7 @@ public class Spell implements GameObject
 		this.spellCombo = spellCombo;
 		this.damage = damage;
 		this.setShield(shield);
+		setCastTime(System.currentTimeMillis());
 		width = 30;
 		height = shield ? 100 : 30;
 		x = 0;
@@ -140,5 +143,15 @@ public class Spell implements GameObject
 	public void setY(int y)
 	{
 		this.y = y;
+	}
+	
+	public void setCastTime(long castTime)
+	{
+		this.castTime = castTime;
+	}
+	
+	public long getCastTime()
+	{
+		return castTime;
 	}
 }

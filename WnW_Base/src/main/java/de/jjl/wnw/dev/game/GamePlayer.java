@@ -10,10 +10,22 @@ public class GamePlayer implements Player
 	
 	private int height;
 	
+	private int lives;
+	
+	private boolean faceLeft;
+	
 	public GamePlayer(int x, int y)
 	{
 		this.x = x;
 		this.y = y;
+		
+		// TODO $Li 23.02.2019 This should be desktop and android specific?
+		// Or should it be relative to game field size?
+		this.width = 61;
+		this.height = 100;
+		
+		lives = 5;
+		faceLeft = false;
 	}
 
 	@Override
@@ -55,35 +67,36 @@ public class GamePlayer implements Player
 	@Override
 	public void move(float frameTime)
 	{
-		// TODO Auto-generated method stub
-		
+		throw new RuntimeException("Move is not implemented for player <" + this + ">!");
 	}
 
 	@Override
 	public void faceLeft()
 	{
-		// TODO Auto-generated method stub
-		
+		faceLeft = true;
 	}
 
 	@Override
 	public int getLives()
 	{
-		// TODO Auto-generated method stub
-		return 0;
+		return lives;
 	}
 
 	@Override
 	public boolean isFaceLeft()
 	{
-		// TODO Auto-generated method stub
-		return false;
+		return faceLeft;
 	}
 
 	public void damage(int damage)
 	{
-		// TODO Auto-generated method stub
+		if(damage > lives)
+		{
+			lives = 0;
+			return;
+		}
 		
+		lives -= damage;
 	}
 
 }

@@ -2,6 +2,8 @@ package de.jjl.wnw.dev.net;
 
 import java.io.*;
 import java.net.Socket;
+import java.net.SocketException;
+import java.net.SocketTimeoutException;
 
 import de.jjl.wnw.base.player.Player;
 import de.jjl.wnw.dev.PlayerController;
@@ -21,9 +23,14 @@ public class NetPlayerController implements PlayerController
 		{
 			return reader.readLine();
 		}
+		catch(SocketTimeoutException e)
+		{
+			// TODO $Li 26.02.2019 This is expected to happen, unfortunately
+			return null;
+		}
 		catch (IOException e)
 		{
-			e.printStackTrace();
+			// TODO $Li 26.02.2019 Close connection to controller
 			return null;
 		}
 	}
@@ -31,6 +38,15 @@ public class NetPlayerController implements PlayerController
 	public NetPlayerController(Socket socket)
 	{
 		this.socket = socket;
+		try
+		{
+			socket.setSoTimeout(5);
+		}
+		catch (SocketException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		init();
 	}
 
@@ -39,6 +55,7 @@ public class NetPlayerController implements PlayerController
 		try
 		{
 			reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 		}
 		catch (IOException e)
 		{
@@ -49,7 +66,14 @@ public class NetPlayerController implements PlayerController
 	@Override
 	public void updateGameState(String state)
 	{
-		// TODO Auto-generated method stub
-		
+		try
+		{
+			writer.write(state);
+		}
+		catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

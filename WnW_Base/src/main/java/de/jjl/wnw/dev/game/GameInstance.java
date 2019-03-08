@@ -12,7 +12,7 @@ import javafx.scene.text.Font;
 public class GameInstance
 {
 	private static GameInstance instance;
-
+	
 	public static GameInstance getInstance()
 	{
 		if (instance == null)
@@ -25,6 +25,9 @@ public class GameInstance
 
 	private List<BaseRune> currentRunes;
 
+	// TODO $Li 25.02.2019 this does not seem like a good idea tbh...
+	private long maxShieldLength = 500;
+	
 	private long frameTime = 0;
 
 	private long lastFrame = System.currentTimeMillis();
@@ -45,6 +48,16 @@ public class GameInstance
 
 	private boolean running;
 
+	public PlayerController getPlayer1Controller()
+	{
+		return player1Controller;
+	}
+	
+	public PlayerController getPlayer2Controller()
+	{
+		return player2Controller;
+	}
+	
 	private GameInstance()
 	{
 		objects = new CopyOnWriteArrayList<>();
@@ -82,6 +95,24 @@ public class GameInstance
 		collide();
 		checkRunes();
 		refresh();
+		sendGameState();
+	}
+
+	private void sendGameState()
+	{
+		String gameState = "Gamestate," + System.currentTimeMillis();
+		
+		gameState += "|\n";
+		
+		if(player1Controller != null)
+		{
+			player1Controller.updateGameState(gameState);
+		}
+		
+		if(player2Controller != null)
+		{
+			player2Controller.updateGameState(gameState);
+		}
 	}
 
 	public boolean isRunning()
@@ -141,7 +172,18 @@ public class GameInstance
 
 	private void checkRunes()
 	{
+		if(player1Controller == null)
+		{
+			return;
+		}
+		
 		String inputString = player1Controller.getInputString();
+		
+		if(inputString == null)
+		{
+			return;
+		}
+		
 		String[] p1Input = inputString.split("\\|");
 
 		for (String s : p1Input)
@@ -310,6 +352,16 @@ public class GameInstance
 		{
 			running = false;
 		}
+		
+		objects.stream().filter(o -> o instanceof Spell).forEach(o ->
+		{
+			Spell s = (Spell) o;
+			
+			if(System.currentTimeMillis() - s.getCastTime() > maxShieldLength)
+			{
+				removeObjects.add(s);
+			}
+		});
 	}
 
 }

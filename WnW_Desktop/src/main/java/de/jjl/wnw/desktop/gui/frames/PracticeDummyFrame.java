@@ -1,26 +1,39 @@
 package de.jjl.wnw.desktop.gui.frames;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.Socket;
 import java.util.Iterator;
 
 import de.jjl.wnw.base.cfg.Settings;
-import de.jjl.wnw.base.rune.parser.*;
-import de.jjl.wnw.base.util.path.*;
+import de.jjl.wnw.base.rune.parser.Config;
+import de.jjl.wnw.base.rune.parser.Grid;
+import de.jjl.wnw.base.rune.parser.WnWPathInputParser;
+import de.jjl.wnw.base.util.path.WnWDisplaySystem;
+import de.jjl.wnw.base.util.path.WnWPath;
+import de.jjl.wnw.base.util.path.WnWPoint;
 import de.jjl.wnw.desktop.game.Game;
 import de.jjl.wnw.desktop.gui.Frame;
 import de.jjl.wnw.desktop.util.WnWDesktopPath;
 import de.jjl.wnw.dev.PlayerController;
-import de.jjl.wnw.dev.game.GameInstance;
+import de.jjl.wnw.dev.game.ClientGameInstance;
+import de.jjl.wnw.dev.log.Debug;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
-import javafx.fxml.*;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.canvas.*;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 
 public class PracticeDummyFrame extends Frame implements PlayerController, EventHandler<MouseEvent>
 {
@@ -31,10 +44,18 @@ public class PracticeDummyFrame extends Frame implements PlayerController, Event
 	private WnWPathInputParser parser;
 
 	private WnWDesktopPath path;
+	
+	private DesktopObjectPainter painter;
 
 	@FXML
 	private BorderPane root;
+	
+	private BufferedReader reader;
+	
+	private BufferedWriter writer;
 
+	private Socket server;
+	
 	public PracticeDummyFrame(Game game)
 	{
 		super(game);
@@ -126,6 +147,23 @@ public class PracticeDummyFrame extends Frame implements PlayerController, Event
 	@FXML
 	private void initialize()
 	{
+		try
+		{
+			Debug.log("Attempting to connect to server at localhost.");
+			// TODO $Li 26.02.2019 close this
+			server = new Socket("127.0.0.1", 50002);
+			
+			Debug.log("Connected to server at localhost.");
+			
+			reader = new BufferedReader(new InputStreamReader(server.getInputStream()));
+			writer = new BufferedWriter(new OutputStreamWriter(server.getOutputStream()));
+		}
+		catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		canvas = new Canvas();
 
 		Pane pane = new Pane()
@@ -146,13 +184,7 @@ public class PracticeDummyFrame extends Frame implements PlayerController, Event
 			}
 		};
 
-		GameInstance.getInstance().setControllerPlayer1(this);
-
-		canvas.widthProperty().addListener(
-				(p, o, n) -> GameInstance.getInstance().setDrawSize(canvas.getWidth(), canvas.getHeight()));
-
-		canvas.heightProperty().addListener(
-				(p, o, n) -> GameInstance.getInstance().setDrawSize(canvas.getWidth(), canvas.getHeight()));
+		painter = new DesktopObjectPainter(canvas.getGraphicsContext2D());
 
 		pane.getChildren().add(canvas);
 
@@ -184,16 +216,17 @@ public class PracticeDummyFrame extends Frame implements PlayerController, Event
 		});
 
 		root.addEventFilter(MouseEvent.ANY, this);
+		
+		startUpdateThread();
 
 		AnimationTimer timer = new AnimationTimer()
 		{
 			@Override
 			public void handle(long now)
 			{
-				GameInstance.getInstance().handleFrame(now);
 				paintScene();
 
-				if (!GameInstance.getInstance().isRunning())
+				if (!ClientGameInstance.getInstance().isRunning())
 				{
 
 					stop();
@@ -207,6 +240,38 @@ public class PracticeDummyFrame extends Frame implements PlayerController, Event
 		};
 
 		timer.start();
+	}
+
+	private void startUpdateThread()
+	{
+		new Thread(() ->
+		{
+			while(ClientGameInstance.getInstance().isRunning())
+			{
+				try
+				{
+					String s = reader.readLine();
+					
+					if(s == null || s.isEmpty())
+					{
+						continue;
+					}
+					
+					if(s.startsWith("Gamestate"))
+					{
+						updateGameState(s);
+					}
+				}
+				catch (IOException e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					break;
+				}
+			}
+			
+			Debug.log("Connection to server was closed.");
+		}).start();
 	}
 
 	private long lookupRuneLong(WnWPath path, Config config)
@@ -243,19 +308,19 @@ public class PracticeDummyFrame extends Frame implements PlayerController, Event
 		GraphicsContext graphics = canvas.getGraphicsContext2D();
 		graphics.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
-		// GameInstance.getInstance().getObjects().forEach(e -> e.drawOn(graphics));
+		ClientGameInstance.getInstance().getObjects().forEach(e -> painter.draw(e));
 
 		if (getPath() != null)
 		{
 			getPath().drawOn(graphics);
 		}
 
-		GameInstance.getInstance().drawDebug(graphics);
+//		ClientGameInstance.getInstance().drawDebug(graphics);
 	}
 
 	@Override
 	public void updateGameState(String state)
 	{
-		// We don't need to update state of the game since we control it...
+		ClientGameInstance.getInstance().updateState(state);
 	}
 }

@@ -9,7 +9,11 @@ import de.jjl.wnw.base.log.Log;
 import de.jjl.wnw.base.msg.MsgConst;
 import de.jjl.wnw.base.player.Player;
 import de.jjl.wnw.desktop.gui.ServerGui;
-import de.jjl.wnw.dev.conn.*;
+import de.jjl.wnw.dev.conn.WnWConnection;
+import de.jjl.wnw.dev.conn.WnWConnectionListener;
+import de.jjl.wnw.dev.conn.WnWMsg;
+import de.jjl.wnw.dev.conn.WnWMsgListener;
+import de.jjl.wnw.dev.conn.WnWServer;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
