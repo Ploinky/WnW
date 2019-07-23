@@ -3,6 +3,8 @@ package de.jjl.wnw.dev.game;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import de.jjl.wnw.base.msg.MsgGameState;
+import de.jjl.wnw.base.util.WnWMap;
 import de.jjl.wnw.dev.PlayerController;
 import de.jjl.wnw.dev.rune.*;
 import de.jjl.wnw.dev.spell.*;
@@ -25,14 +27,16 @@ public class GameInstance
 
 	private List<BaseRune> currentRunes;
 
-	// TODO $Li 25.02.2019 this does not seem like a good idea tbh...
-	private long maxShieldLength = 500;
-	
 	private long frameTime = 0;
-
+	
 	private long lastFrame = System.currentTimeMillis();
 
+	// TODO $Li 25.02.2019 this does not seem like a good idea tbh...
+	private long maxShieldLength = 500;
+
 	private Collection<GameObject> objects;
+
+	private List<Long> p1Combo;
 
 	private Player player1;
 
@@ -44,20 +48,8 @@ public class GameInstance
 
 	private Collection<GameObject> removeObjects;
 
-	private List<Long> p1Combo;
-
 	private boolean running;
 
-	public PlayerController getPlayer1Controller()
-	{
-		return player1Controller;
-	}
-	
-	public PlayerController getPlayer2Controller()
-	{
-		return player2Controller;
-	}
-	
 	private GameInstance()
 	{
 		objects = new CopyOnWriteArrayList<>();
@@ -74,16 +66,26 @@ public class GameInstance
 		objects.add(player1);
 		objects.add(player2);
 	}
-
+	
 	public void drawDebug(GraphicsContext graphics)
 	{
 		graphics.setFont(new Font(10));
 		graphics.fillText("GameObjects: " + objects.size(), 20, 60);
 	}
-
+	
 	public Collection<GameObject> getObjects()
 	{
 		return objects;
+	}
+
+	public PlayerController getPlayer1Controller()
+	{
+		return player1Controller;
+	}
+
+	public PlayerController getPlayer2Controller()
+	{
+		return player2Controller;
 	}
 
 	public void handleFrame(long now)
@@ -96,23 +98,6 @@ public class GameInstance
 		checkRunes();
 		refresh();
 		sendGameState();
-	}
-
-	private void sendGameState()
-	{
-		String gameState = "Gamestate," + System.currentTimeMillis();
-		
-		gameState += "|\n";
-		
-		if(player1Controller != null)
-		{
-			player1Controller.updateGameState(gameState);
-		}
-		
-		if(player2Controller != null)
-		{
-			player2Controller.updateGameState(gameState);
-		}
 	}
 
 	public boolean isRunning()
@@ -362,6 +347,24 @@ public class GameInstance
 				removeObjects.add(s);
 			}
 		});
+	}
+
+	private void sendGameState()
+	{
+		MsgGameState msg = new MsgGameState();
+		msg.setGameTime(System.currentTimeMillis());
+		
+		WnWMap msgMap = msg.getMsgMap();
+
+		if(player1Controller != null && player1Controller.isConnected())
+		{
+			player1Controller.updateGameState(msgMap.toString());
+		}
+		
+		if(player2Controller != null && player2Controller.isConnected())
+		{
+			player2Controller.updateGameState(msgMap.toString());
+		}
 	}
 
 }

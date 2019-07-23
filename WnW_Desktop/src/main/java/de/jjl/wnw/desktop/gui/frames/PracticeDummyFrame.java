@@ -251,7 +251,8 @@ public class PracticeDummyFrame extends Frame implements PlayerController, Event
 				try
 				{
 					String s = reader.readLine();
-					
+
+					System.out.println(s);
 					if(s == null || s.isEmpty())
 					{
 						continue;
@@ -322,5 +323,12 @@ public class PracticeDummyFrame extends Frame implements PlayerController, Event
 	public void updateGameState(String state)
 	{
 		ClientGameInstance.getInstance().updateState(state);
+	}
+
+	@Override
+	public boolean isConnected()
+	{
+		// TODO Auto-generated method stub
+		return true;
 	}
 }

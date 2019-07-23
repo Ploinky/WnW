@@ -8,4 +8,6 @@ public interface PlayerController
 	public String getInputString();
 	
 	public void updateGameState(String state);
+
+	public boolean isConnected();
 }

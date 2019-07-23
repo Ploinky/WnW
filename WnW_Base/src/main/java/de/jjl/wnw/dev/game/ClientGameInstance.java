@@ -3,6 +3,8 @@ package de.jjl.wnw.dev.game;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import de.jjl.wnw.base.util.WnWMap;
+
 public class ClientGameInstance
 {
 	private Collection<GameObject> objects;
@@ -20,7 +22,10 @@ public class ClientGameInstance
 	
 	public void updateState(String gameState)
 	{
-		System.out.println(gameState);
+		WnWMap map = new WnWMap();
+		map.fromString(gameState);
+		
+		System.out.println(map);
 	}
 	
 	public Collection<GameObject> getObjects()

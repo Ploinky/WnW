@@ -10,11 +10,30 @@ import de.jjl.wnw.dev.PlayerController;
 
 public class NetPlayerController implements PlayerController
 {
-	private Socket socket;
+	private boolean connected;
 	
 	private BufferedReader reader;
 	
+	private Socket socket;
+	
 	private BufferedWriter writer;
+	
+	public NetPlayerController(Socket socket)
+	{	
+		connected = true;
+		this.socket = socket;
+		try
+		{
+			socket.setSoTimeout(5);
+		}
+		catch (SocketException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			connected = false;
+		}
+		init();
+	}
 	
 	@Override
 	public String getInputString()
@@ -31,36 +50,15 @@ public class NetPlayerController implements PlayerController
 		catch (IOException e)
 		{
 			// TODO $Li 26.02.2019 Close connection to controller
+			e.printStackTrace();
+			connected = false;
 			return null;
 		}
 	}
 	
-	public NetPlayerController(Socket socket)
+	public boolean isConnected()
 	{
-		this.socket = socket;
-		try
-		{
-			socket.setSoTimeout(5);
-		}
-		catch (SocketException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		init();
-	}
-
-	private void init()
-	{
-		try
-		{
-			reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
+		return connected;
 	}
 
 	@Override
@@ -74,6 +72,22 @@ public class NetPlayerController implements PlayerController
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			connected = false;
+		}
+	}
+
+	private void init()
+	{
+		try
+		{
+			reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+			connected = true;
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+			connected = false;
 		}
 	}
 }

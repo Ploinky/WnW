@@ -38,11 +38,6 @@ public class Game extends Application implements FrameListener, WnWMsgListener
 
 	private Map<String, Supplier<Frame>> frames;
 
-	public static void main(String[] args)
-	{
-		Application.launch(Game.class, args);
-	}
-
 	@Override
 	public void start(Stage primaryStage) throws Exception
 	{
