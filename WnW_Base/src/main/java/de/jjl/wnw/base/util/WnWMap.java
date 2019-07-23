@@ -30,7 +30,7 @@ public class WnWMap extends HashMap<String, String>
 		
 		for(String pair : pairs)
 		{
-			if(!pair.contains("="))
+			if(!pair.matches(".+=.+"))
 			{
 				put(pair, null);
 				continue;

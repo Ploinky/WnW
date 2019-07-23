@@ -3,6 +3,8 @@ package de.jjl.wnw.dev.game;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import de.jjl.wnw.base.msg.MsgChatMessage;
+import de.jjl.wnw.base.msg.MsgConst;
 import de.jjl.wnw.base.msg.MsgGameState;
 import de.jjl.wnw.base.util.WnWMap;
 import de.jjl.wnw.dev.PlayerController;
@@ -14,7 +16,7 @@ import javafx.scene.text.Font;
 public class GameInstance
 {
 	private static GameInstance instance;
-	
+
 	public static GameInstance getInstance()
 	{
 		if (instance == null)
@@ -28,7 +30,7 @@ public class GameInstance
 	private List<BaseRune> currentRunes;
 
 	private long frameTime = 0;
-	
+
 	private long lastFrame = System.currentTimeMillis();
 
 	// TODO $Li 25.02.2019 this does not seem like a good idea tbh...
@@ -66,13 +68,13 @@ public class GameInstance
 		objects.add(player1);
 		objects.add(player2);
 	}
-	
+
 	public void drawDebug(GraphicsContext graphics)
 	{
 		graphics.setFont(new Font(10));
 		graphics.fillText("GameObjects: " + objects.size(), 20, 60);
 	}
-	
+
 	public Collection<GameObject> getObjects()
 	{
 		return objects;
@@ -95,7 +97,7 @@ public class GameInstance
 
 		moveObjects(frameTime);
 		collide();
-		checkRunes();
+		checkPlayerInput();
 		refresh();
 		sendGameState();
 	}
@@ -155,20 +157,91 @@ public class GameInstance
 		currentRunes.clear();
 	}
 
-	private void checkRunes()
+	private void checkPlayerInput()
 	{
-		if(player1Controller == null)
+		checkPlayer1Input();
+		checkPlayer2Input();
+	}
+	private void checkPlayer2Input()
+	{
+		if (player2Controller == null)
 		{
 			return;
 		}
-		
+
+		String inputString = player2Controller.getInputString();
+
+		if (inputString == null || inputString.isEmpty())
+		{
+			return;
+		}
+
+		WnWMap msgMap = new WnWMap();
+		msgMap.fromString(inputString);
+
+		if (msgMap.containsKey(MsgConst.TYPE))
+		{
+			handleMessage(msgMap);
+			return;
+		}
+
+		String[] p2Input = inputString.split("\\|");
+
+		for (String s : p2Input)
+		{
+			if (s == null || s.isEmpty())
+			{
+				continue;
+			}
+
+			if (s.equals("A"))
+			{
+				cast(player2, p1Combo, false);
+				p1Combo.clear();
+			}
+			else if (s.equals("S"))
+			{
+				cast(player2, p1Combo, true);
+				p1Combo.clear();
+			}
+			else
+			{
+				if (!s.matches("[0-9]+"))
+				{
+					System.err.println("UNKNOWN INPUT PLAYER 1: <" + s + ">");
+					continue;
+				}
+
+				addRunePlayer1(Long.valueOf(s));
+
+				p1Combo.add(Long.valueOf(s));
+			}
+		}
+	}
+	
+	private void checkPlayer1Input()
+	{
+		if (player1Controller == null)
+		{
+			return;
+		}
+
 		String inputString = player1Controller.getInputString();
-		
-		if(inputString == null)
+
+		if (inputString == null || inputString.isEmpty())
 		{
 			return;
 		}
-		
+
+		WnWMap msgMap = new WnWMap();
+		msgMap.fromString(inputString);
+
+		if (msgMap.containsKey(MsgConst.TYPE))
+		{
+			handleMessage(msgMap);
+			return;
+		}
+
 		String[] p1Input = inputString.split("\\|");
 
 		for (String s : p1Input)
@@ -320,6 +393,18 @@ public class GameInstance
 		}
 	}
 
+	private void handleMessage(WnWMap msgMap)
+	{
+		switch (msgMap.get(MsgConst.TYPE))
+		{
+		case MsgChatMessage.TYPE:
+			MsgChatMessage msg = new MsgChatMessage();
+			msg.fromMap(msgMap);
+			sendChatMessage(msg);
+			break;
+		}
+	}
+
 	private void moveObjects(long frameTime)
 	{
 		for (GameObject obj : objects)
@@ -337,33 +422,48 @@ public class GameInstance
 		{
 			running = false;
 		}
-		
+
 		objects.stream().filter(o -> o instanceof Spell).forEach(o ->
 		{
 			Spell s = (Spell) o;
-			
-			if(System.currentTimeMillis() - s.getCastTime() > maxShieldLength)
+
+			if (System.currentTimeMillis() - s.getCastTime() > maxShieldLength)
 			{
 				removeObjects.add(s);
 			}
 		});
 	}
 
+	private void sendChatMessage(MsgChatMessage msg)
+	{
+		if (player1Controller != null && player1Controller.isConnected())
+		{
+			player1Controller.sendMsg(msg);
+		}
+
+		if (player2Controller != null && player2Controller.isConnected())
+		{
+			player2Controller.sendMsg(msg);
+		}
+	}
+
 	private void sendGameState()
 	{
 		MsgGameState msg = new MsgGameState();
 		msg.setGameTime(System.currentTimeMillis());
-		
+		msg.setP1Character("");
+		msg.setP2Character("");
+
 		WnWMap msgMap = msg.getMsgMap();
 
-		if(player1Controller != null && player1Controller.isConnected())
+		if (player1Controller != null && player1Controller.isConnected())
 		{
-			player1Controller.updateGameState(msgMap.toString());
+			player1Controller.updateGameState(msgMap.toString() + "\n");
 		}
-		
-		if(player2Controller != null && player2Controller.isConnected())
+
+		if (player2Controller != null && player2Controller.isConnected())
 		{
-			player2Controller.updateGameState(msgMap.toString());
+			player2Controller.updateGameState(msgMap.toString() + "\n");
 		}
 	}
 

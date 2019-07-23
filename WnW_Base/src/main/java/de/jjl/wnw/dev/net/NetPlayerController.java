@@ -5,6 +5,7 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 
+import de.jjl.wnw.base.msg.MsgChatMessage;
 import de.jjl.wnw.base.player.Player;
 import de.jjl.wnw.dev.PlayerController;
 
@@ -40,7 +41,13 @@ public class NetPlayerController implements PlayerController
 	{
 		try
 		{
-			return reader.readLine();
+			if(reader.ready())
+			{
+				return reader.readLine();
+			}
+			
+			return null;
+			
 		}
 		catch(SocketTimeoutException e)
 		{
@@ -88,6 +95,21 @@ public class NetPlayerController implements PlayerController
 		{
 			e.printStackTrace();
 			connected = false;
+		}
+	}
+
+	@Override
+	public void sendMsg(MsgChatMessage msg)
+	{
+		try
+		{
+			writer.write(msg.getMsgMap().toString() + "\n");
+			writer.flush();
+		}
+		catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 }
