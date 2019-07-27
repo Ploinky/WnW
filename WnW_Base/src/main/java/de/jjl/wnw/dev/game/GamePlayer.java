@@ -65,9 +65,8 @@ public class GamePlayer implements Player
 	}
 
 	@Override
-	public void move(float frameTime)
+	public void update(float frameTime)
 	{
-		throw new RuntimeException("Move is not implemented for player <" + this + ">!");
 	}
 
 	@Override

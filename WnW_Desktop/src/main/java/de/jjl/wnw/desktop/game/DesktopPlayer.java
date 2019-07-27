@@ -91,9 +91,8 @@ public class DesktopPlayer implements Player
 	}
 
 	@Override
-	public void move(float frameTime)
+	public void update(float frameTime)
 	{
-		throw new UnsupportedOperationException("Method 'move' not implemented for DesktopPlayer yet");
 	}
 
 	@Override

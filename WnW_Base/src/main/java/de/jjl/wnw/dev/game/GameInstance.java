@@ -95,7 +95,7 @@ public class GameInstance
 		frameTime = now - lastFrame;
 		lastFrame = now;
 
-		moveObjects(frameTime);
+		updateObjects(frameTime);
 		collide();
 		checkPlayerInput();
 		refresh();
@@ -241,7 +241,7 @@ public class GameInstance
 			handleMessage(msgMap);
 			return;
 		}
-
+		
 		String[] p1Input = inputString.split("\\|");
 
 		for (String s : p1Input)
@@ -401,17 +401,18 @@ public class GameInstance
 			MsgChatMessage msg = new MsgChatMessage();
 			msg.fromMap(msgMap);
 			sendChatMessage(msg);
+			System.out.println("Received message <" + msg + ">");
 			break;
 		}
 	}
 
-	private void moveObjects(long frameTime)
+	private void updateObjects(long frameTime)
 	{
 		for (GameObject obj : objects)
 		{
 			if (!(obj instanceof Player) && !(obj instanceof DesktopRune))
 			{
-				obj.move(frameTime);
+				obj.update(frameTime);
 			}
 		}
 	}
@@ -458,12 +459,26 @@ public class GameInstance
 
 		if (player1Controller != null && player1Controller.isConnected())
 		{
-			player1Controller.updateGameState(msgMap.toString() + "\n");
+			try
+			{
+				player1Controller.updateGameState(msgMap.toString() + "\n");
+			}
+			catch(RuntimeException e)
+			{
+				player1Controller = null;
+			}
 		}
 
 		if (player2Controller != null && player2Controller.isConnected())
 		{
-			player2Controller.updateGameState(msgMap.toString() + "\n");
+			try
+			{
+				player2Controller.updateGameState(msgMap.toString() + "\n");
+			}
+			catch(RuntimeException e)
+			{
+				player2Controller = null;
+			}
 		}
 	}
 

@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.imageio.ImageIO;
 
+import de.jjl.wnw.dev.game.Drawable;
 import de.jjl.wnw.dev.game.GameObject;
 import de.jjl.wnw.dev.game.GamePlayer;
 import de.jjl.wnw.dev.rune.BaseRune;
@@ -15,6 +16,7 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 public class DesktopObjectPainter 
@@ -58,6 +60,7 @@ public class DesktopObjectPainter
 		graphics.drawImage(playerSprite, player.getX() + (player.isFaceLeft() ? player.getWidth() : 0),
 				player.getY(), player.isFaceLeft() ? -player.getWidth() : player.getWidth(), player.getHeight());
 		graphics.setFont(new Font(20));
+		graphics.setFill(Color.BLACK);
 		graphics.fillText("" + player.getLives(), player.getX() + 20, player.getY() - 20);	
 	}
 	
@@ -74,6 +77,10 @@ public class DesktopObjectPainter
 		else if(obj instanceof BaseRune)
 		{
 			drawRune((BaseRune) obj);
+		}
+		else if(obj instanceof Drawable)
+		{
+			((Drawable) obj).drawOn(graphics);
 		}
 	}
 	

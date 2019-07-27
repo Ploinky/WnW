@@ -66,4 +66,10 @@ public class MsgChatMessage
 	{
 		this.timeStamp = timeStamp;
 	}
+	
+	public String toChatString()
+	{
+		// TODO Auto-generated method stub
+		return timeStamp + " " + player + ": " + msg;
+	}
 }

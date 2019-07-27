@@ -14,5 +14,5 @@ public interface PhysicsObject
 
 	public int getHeight();
 	
-	public void move(float frameTime);
+	public void update(float frameTime);
 }

@@ -58,7 +58,7 @@ public class DesktopRune extends BaseRune
 	}
 
 	@Override
-	public void move(float frameTime)
+	public void update(float frameTime)
 	{
 		throw new UnsupportedOperationException("Method 'move' not implemented for DesktopRunes yet");
 	}

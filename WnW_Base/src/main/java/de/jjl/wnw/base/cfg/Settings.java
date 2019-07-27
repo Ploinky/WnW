@@ -45,4 +45,9 @@ public class Settings
 	{
 		return KeyCode.CONTROL;
 	}
+
+	public static long getChatShowDuration()
+	{
+		return 3;
+	}
 }

@@ -78,8 +78,9 @@ public class NetPlayerController implements PlayerController
 		catch (IOException e)
 		{
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.err.println("Lost connection to <" + socket.getInetAddress() + ">");
 			connected = false;
+			throw new RuntimeException("Player connection lost");
 		}
 	}
 

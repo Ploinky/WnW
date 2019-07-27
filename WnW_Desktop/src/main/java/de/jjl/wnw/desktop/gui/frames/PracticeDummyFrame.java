@@ -13,6 +13,7 @@ import de.jjl.wnw.base.cfg.Settings;
 import de.jjl.wnw.base.msg.MsgChatMessage;
 import de.jjl.wnw.base.msg.MsgConst;
 import de.jjl.wnw.base.msg.MsgGameState;
+import de.jjl.wnw.base.msg.MsgPlayerInput;
 import de.jjl.wnw.base.rune.parser.Config;
 import de.jjl.wnw.base.rune.parser.Grid;
 import de.jjl.wnw.base.rune.parser.WnWPathInputParser;
@@ -20,6 +21,7 @@ import de.jjl.wnw.base.util.WnWMap;
 import de.jjl.wnw.base.util.path.WnWDisplaySystem;
 import de.jjl.wnw.base.util.path.WnWPath;
 import de.jjl.wnw.base.util.path.WnWPoint;
+import de.jjl.wnw.desktop.game.Chat;
 import de.jjl.wnw.desktop.game.Game;
 import de.jjl.wnw.desktop.gui.Frame;
 import de.jjl.wnw.desktop.util.WnWDesktopPath;
@@ -36,8 +38,8 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
@@ -48,20 +50,20 @@ public class PracticeDummyFrame extends Frame implements PlayerController, Event
 
 	private String currentInput;
 
-	private WnWPathInputParser parser;
-
-	private WnWDesktopPath path;
-	
 	private DesktopObjectPainter painter;
 
+	private WnWPathInputParser parser;
+	
+	private WnWDesktopPath path;
+
+	private BufferedReader reader;
+	
 	@FXML
 	private BorderPane root;
 	
-	private BufferedReader reader;
-	
-	private BufferedWriter writer;
-
 	private Socket server;
+
+	private BufferedWriter writer;
 	
 	public PracticeDummyFrame(Game game)
 	{
@@ -90,6 +92,7 @@ public class PracticeDummyFrame extends Frame implements PlayerController, Event
 		long rune = lookupRuneLong(filteredPath, new Config());
 
 		currentInput += currentInput.isEmpty() ? rune : "\\|" + rune;
+		System.out.println(currentInput);
 	}
 
 	@Override
@@ -146,9 +149,60 @@ public class PracticeDummyFrame extends Frame implements PlayerController, Event
 		}
 	}
 
+	@Override
+	public boolean isConnected()
+	{
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
+	public void sendMsg(MsgChatMessage msg)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
 	public void startPath(WnWDisplaySystem display)
 	{
 		path = new WnWDesktopPath(display);
+	}
+
+	@Override
+	public void updateGameState(String state)
+	{
+		ClientGameInstance.getInstance().updateState(state);
+	}
+
+	private void handleChatMessage(WnWMap msgMap)
+	{
+		MsgChatMessage msg = new MsgChatMessage();
+		msg.fromMap(msgMap);
+		
+		ClientGameInstance.getInstance().getObjects().stream()
+			.filter(Chat.class::isInstance)
+			.map(Chat.class::cast)
+			.forEach(chat ->
+			{
+				chat.addChatMessage(msg);
+				chat.show();
+			});
+	}
+
+	private void handleGameMessage(WnWMap msgMap)
+	{
+		switch(msgMap.get(MsgConst.TYPE))
+		{
+			case MsgGameState.TYPE:
+				updateGameState(msgMap.toString());
+				break;
+			case MsgChatMessage.TYPE:
+				handleChatMessage(msgMap);
+				break;
+				default:
+					System.out.println("Unknown message type <" + msgMap.get(MsgConst.TYPE) + ">");
+		}
+		
 	}
 
 	@FXML
@@ -195,18 +249,8 @@ public class PracticeDummyFrame extends Frame implements PlayerController, Event
 
 		pane.getChildren().add(canvas);
 		
-		TextField txtChat = new TextField();
-		
-		txtChat.setOnKeyPressed(e ->
-		{
-			if (e.getCode().equals(KeyCode.ENTER) && !txtChat.getText().isBlank())
-			{
-				sendChatMessage(txtChat.getText());
-				txtChat.clear();
-			}
-		});
-		
-		pane.getChildren().add(txtChat);
+		Chat chat = new Chat();
+		ClientGameInstance.getInstance().getObjects().add(chat);
 
 		root.setCenter(pane);
 
@@ -219,19 +263,6 @@ public class PracticeDummyFrame extends Frame implements PlayerController, Event
 
 			n.setOnKeyPressed(e ->
 			{
-				if (e.getCode() == Settings.getCastKey())
-				{
-					path = null;
-					finishPath();
-					currentInput += currentInput.isEmpty() ? "A" : "|A";
-				}
-
-				if (e.getCode() == Settings.getShieldKey())
-				{
-					path = null;
-					finishPath();
-					currentInput += currentInput.isEmpty() ? "S" : "|S";
-				}
 			});
 		});
 
@@ -244,6 +275,7 @@ public class PracticeDummyFrame extends Frame implements PlayerController, Event
 			@Override
 			public void handle(long now)
 			{
+				ClientGameInstance.getInstance().getObjects().forEach(o -> o.update(now));
 				paintScene();
 
 				if (!ClientGameInstance.getInstance().isRunning())
@@ -260,83 +292,62 @@ public class PracticeDummyFrame extends Frame implements PlayerController, Event
 		};
 
 		timer.start();
-	}
-
-	private void sendChatMessage(String text)
-	{
-		MsgChatMessage msg = new MsgChatMessage();
-		msg.setPlayer("" + Thread.currentThread().getId());
-		msg.setTimeStamp("[" + LocalDateTime.now().getHour() + ":" + LocalDateTime.now().getMinute() + ":" + LocalDateTime.now().getSecond() + "]");
-		msg.setMsg(text);
 		
-		try
+		pane.sceneProperty().addListener((p, o, n) ->
 		{
-			writer.write(msg.getMsgMap().toString() + "\n");
-			writer.flush();
-		}
-		catch (IOException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
-	private void startUpdateThread()
-	{
-		new Thread(() ->
-		{
-			while(ClientGameInstance.getInstance().isRunning())
+			if(n == null)
 			{
-				try
-				{
-					String s = reader.readLine();
-
-					if(s == null || s.isEmpty())
-					{
-						continue;
-					}
-					
-					WnWMap msgMap = new WnWMap(s);
-					
-					if(msgMap.containsKey(MsgConst.TYPE) && msgMap.get(MsgConst.TYPE) != null)
-					{
-						handleGameMessage(msgMap);
-					}
-				}
-				catch (IOException e)
-				{
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					break;
-				}
+				return;
 			}
 			
-			Debug.log("Connection to server was closed.");
-		}).start();
-	}
+			n.addEventFilter(KeyEvent.KEY_PRESSED, e ->
+			{
+				if (e.getCode().equals(KeyCode.ENTER))
+				{
+					if(!chat.isEnabled())
+					{
+						chat.setEnabled(true);
+					}
+					else
+					{
+						chat.setEnabled(false);
+						sendChatMessage(chat.getInput());
+						chat.clear();
+					}
+					return;
+				}
+				
+				if (e.getCode().equals(KeyCode.BACK_SPACE))
+				{
+					if(chat.isEnabled())
+					{
+						chat.delChar();
+					}
+					return;
+				}
+				
+				if(chat.isEnabled())
+				{
+					chat.addInput(e.getText());
+					return;
+				}
+				
+				if (e.getCode().equals(Settings.getCastKey()))
+				{
+					path = null;
+					finishPath();
+					currentInput += currentInput.isEmpty() ? "A" : "|A";
+				}
 
-	private void handleGameMessage(WnWMap msgMap)
-	{
-		switch(msgMap.get(MsgConst.TYPE))
-		{
-			case MsgGameState.TYPE:
-				updateGameState(msgMap.toString());
-				break;
-			case MsgChatMessage.TYPE:
-				handleChatMessage(msgMap);
-				break;
-				default:
-					System.out.println("Unknown message type <" + msgMap.get(MsgConst.TYPE) + ">");
-		}
-		
-	}
-
-	private void handleChatMessage(WnWMap msgMap)
-	{
-		MsgChatMessage msg = new MsgChatMessage();
-		msg.fromMap(msgMap);
-		
-		ClientGameInstance.getInstance().addChatMessage(msg);
+				if (e.getCode().equals(Settings.getShieldKey()))
+				{
+					path = null;
+					finishPath();
+					currentInput += currentInput.isEmpty() ? "S" : "|S";
+				}
+				
+			});
+		});
 	}
 
 	private long lookupRuneLong(WnWPath path, Config config)
@@ -379,36 +390,83 @@ public class PracticeDummyFrame extends Frame implements PlayerController, Event
 		{
 			getPath().drawOn(graphics);
 		}
-		
-		ClientGameInstance.getInstance().getChatMessages().stream()
-		.skip(Math.max(0, ClientGameInstance.getInstance().getChatMessages().size() - 5))
-		.forEach(msg ->
-		{
-			int i = ClientGameInstance.getInstance().getChatMessages().size() - ClientGameInstance.getInstance().getChatMessages().indexOf(msg);
-			if (i < 5)
-			{
-				graphics.fillText(msg.getTimeStamp() + " " + msg.getPlayer() + ": " + msg.getMsg(), 80, 80 + 20 * i);
-			}
-		});
 	}
 	
-	@Override
-	public void updateGameState(String state)
+	private void sendChatMessage(String text)
 	{
-		ClientGameInstance.getInstance().updateState(state);
-	}
-
-	@Override
-	public boolean isConnected()
-	{
-		// TODO Auto-generated method stub
-		return true;
-	}
-
-	@Override
-	public void sendMsg(MsgChatMessage msg)
-	{
-		// TODO Auto-generated method stub
+		MsgChatMessage msg = new MsgChatMessage();
+		msg.setPlayer("" + Thread.currentThread().getId());
+		msg.setTimeStamp("[" + LocalDateTime.now().getHour() + ":" + LocalDateTime.now().getMinute() + ":" + LocalDateTime.now().getSecond() + "]");
+		msg.setMsg(text);
 		
+		try
+		{
+			writer.write(msg.getMsgMap().toString() + "\n");
+			writer.flush();
+		}
+		catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	private void sendInput()
+	{
+		if(currentInput == null || currentInput.isBlank())
+		{
+			return;
+		}
+		
+		MsgPlayerInput msg = new MsgPlayerInput();
+		msg.setInput(currentInput);
+		currentInput = "";
+		
+		try
+		{
+			writer.write(msg.getMsgMap().toString() + "\n");
+			writer.flush();
+		}
+		catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	private void startUpdateThread()
+	{
+		new Thread(() ->
+		{
+			while(ClientGameInstance.getInstance().isRunning())
+			{
+				try
+				{
+					sendInput();
+					
+					String s = reader.readLine();
+
+					if(s == null || s.isEmpty())
+					{
+						continue;
+					}
+					
+					WnWMap msgMap = new WnWMap(s);
+					
+					if(msgMap.containsKey(MsgConst.TYPE) && msgMap.get(MsgConst.TYPE) != null)
+					{
+						handleGameMessage(msgMap);
+					}
+				}
+				catch (IOException e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					break;
+				}
+			}
+			
+			Debug.log("Connection to server was closed.");
+		}).start();
 	}
 }

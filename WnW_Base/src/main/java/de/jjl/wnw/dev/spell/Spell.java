@@ -98,7 +98,7 @@ public class Spell implements GameObject
 	}
 
 	@Override
-	public void move(float frameTime)
+	public void update(float frameTime)
 	{
 		if (!shield)
 		{

@@ -57,6 +57,7 @@ public class Game extends Application implements FrameListener, WnWMsgListener
 		requestSceneChange(Frames.MAIN);
 
 		stage.setTitle(Translator.get().translate(Const.TITLE));
+		stage.setOnCloseRequest(e -> System.exit(0));
 		stage.show();
 	}
 
