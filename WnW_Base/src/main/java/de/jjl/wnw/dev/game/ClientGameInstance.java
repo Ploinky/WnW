@@ -5,21 +5,23 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Collectors;
+
+import org.junit.experimental.theories.FromDataPoints;
 
 import de.jjl.wnw.base.msg.ChatMessage;
 import de.jjl.wnw.base.msg.MsgChatMessage;
 import de.jjl.wnw.base.msg.MsgGameState;
+import de.jjl.wnw.base.msg.MsgGameState.SpellParams;
 import de.jjl.wnw.base.util.WnWMap;
+import de.jjl.wnw.dev.spell.Spell;
+import de.jjl.wnw.dev.spell.SpellUtil;
 
-public class ClientGameInstance
+public class ClientGameInstance extends GameInstance
 {
-	private Collection<GameObject> objects;
-	
 	private static ClientGameInstance instance;
-	
-	private Player player1;
-	
-	private Player player2;
 	
 	private List<MsgChatMessage> chat;
 	
@@ -29,8 +31,8 @@ public class ClientGameInstance
 	{
 		isRunning = true;
 		
-		chat = new ArrayList<>();
-		objects = new ArrayList<>();
+		chat = new CopyOnWriteArrayList<>();
+		objects = new CopyOnWriteArrayList<>();
 	}
 	
 	public void updateState(String gameState)
@@ -55,6 +57,70 @@ public class ClientGameInstance
 			player2.faceLeft();
 			objects.add(player2);
 		}
+		
+		List<WnWMap> spellMap = msg.getSpells().stream()
+				.filter(s -> !s.isEmpty())
+				.map(s ->
+				{
+					WnWMap tempMap = new WnWMap();
+					tempMap.fromMapString(s);
+					return tempMap;
+				})
+				.collect(Collectors.toList());
+		
+		objects.stream()
+			.filter(Spell.class::isInstance)
+			.map(Spell.class::cast)
+			.filter(m -> spellMap.stream()
+					.noneMatch(sMap -> m.getId() == Long.valueOf(sMap.get(SpellParams.PARAM_ID))))
+			.forEach(s ->
+			{
+				objects.remove(s);
+				int removeIndex = spellMap.indexOf(spellMap.stream()
+						.filter(sMap -> s.getId() == Long.valueOf(sMap.get(SpellParams.PARAM_ID)))
+						.findFirst()
+						.orElse(null));
+				
+				if(removeIndex != -1)
+				{
+					spellMap.remove(removeIndex);
+				}
+			});
+
+		List<WnWMap> updateSpells = spellMap.stream()
+			.filter(m -> objects.stream()
+				.filter(Spell.class::isInstance)
+				.map(Spell.class::cast)
+				.anyMatch(spell -> spell.getId() == Long.valueOf(m.get(SpellParams.PARAM_ID))))
+			.collect(Collectors.toList());
+		
+		for(WnWMap updSpell : updateSpells)
+		{
+			long id = Long.valueOf(updSpell.get(SpellParams.PARAM_ID));
+			
+			Spell spellToUpdate = objects.stream()
+				.filter(Spell.class::isInstance)
+				.map(Spell.class::cast)
+				.filter(spell -> spell.getId() == id)
+				.findFirst()
+				.orElse(null);
+			
+			if(spellToUpdate == null)
+			{
+				continue;
+			}
+			
+			spellToUpdate.setX(Integer.valueOf(updSpell.get(SpellParams.PARAM_X)));
+			spellToUpdate.setY(Integer.valueOf(updSpell.get(SpellParams.PARAM_Y)));
+			System.out.println(Integer.valueOf(updSpell.get(SpellParams.PARAM_X)));
+		}
+		
+		spellMap.stream()
+			.filter(m -> objects.stream()
+					.filter(Spell.class::isInstance)
+					.map(Spell.class::cast)
+					.noneMatch(spell -> spell.getId() == Long.valueOf(m.get(SpellParams.PARAM_ID))))
+			.forEach(m -> spellFromMap(m));
 	}
 	
 	public Collection<GameObject> getObjects()

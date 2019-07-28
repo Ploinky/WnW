@@ -2,6 +2,7 @@ package de.jjl.wnw.desktop.gui.frames;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -91,6 +92,7 @@ public class DesktopObjectPainter
 
 	private void drawSpell(Spell spell)
 	{
-		graphics.fillRect(spell.getX(), spell.getY(), spell.getWidth(), spell.getHeight());
+		System.out.println("Painting at " + spell.getX() + " on " + LocalDateTime.now());
+		graphics.fillRect(spell.getX(), 200, spell.getWidth(), spell.getHeight());
 	}
 }

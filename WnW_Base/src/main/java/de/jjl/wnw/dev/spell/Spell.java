@@ -1,10 +1,20 @@
 package de.jjl.wnw.dev.spell;
 
+import java.util.List;
+
+import de.jjl.wnw.base.util.WnWMap;
 import de.jjl.wnw.dev.game.*;
 import javafx.scene.canvas.GraphicsContext;
 
 public class Spell implements GameObject
 {
+	private static long spellCount = 0;
+	
+	private static long generateSpellId()
+	{
+		return spellCount++;
+	}
+	
 	private Player caster;
 
 	private int damage;
@@ -23,13 +33,20 @@ public class Spell implements GameObject
 
 	private int width;
 
-	private int x;
+	private volatile double x;
 
-	private int y;
+	private double y;
 	
 	private long castTime;
+	
+	private long id;
 
-	public Spell(Player player1, String name, int damage, long[] spellCombo, boolean shield)
+	public long getId()
+	{
+		return id;
+	}
+
+	public Spell(Player player, String name, int damage, long[] spellCombo, boolean shield)
 	{
 		this.name = name;
 		this.spellCombo = spellCombo;
@@ -42,8 +59,9 @@ public class Spell implements GameObject
 		y = 0;
 		speed = 100;
 		hit = false;
+		id = generateSpellId();
 
-		this.setCaster(player1);
+		this.setCaster(player);
 	}
 
 	public Player getCaster()
@@ -76,13 +94,13 @@ public class Spell implements GameObject
 	@Override
 	public int getX()
 	{
-		return x;
+		return (int) x;
 	}
 
 	@Override
 	public int getY()
 	{
-		return y;
+		return (int) y;
 	}
 
 	public void hit()
@@ -102,7 +120,7 @@ public class Spell implements GameObject
 	{
 		if (!shield)
 		{
-			x += frameTime * speed / 100000000;
+			x += frameTime * speed / 1000;
 		}
 	}
 
@@ -153,5 +171,10 @@ public class Spell implements GameObject
 	public long getCastTime()
 	{
 		return castTime;
+	}
+
+	public void setId(long id)
+	{
+		this.id = id;
 	}
 }

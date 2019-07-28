@@ -26,6 +26,7 @@ public class NetPlayerController implements PlayerController
 		try
 		{
 			socket.setSoTimeout(5);
+			socket.setTcpNoDelay(true);
 		}
 		catch (SocketException e)
 		{

@@ -19,9 +19,52 @@ public class WnWMap extends HashMap<String, String>
 			s += "|" + set.getKey() + "=" + set.getValue();
 		}
 		
-		s = s.substring(1, s.length());
+		if(!s.isEmpty())
+		{
+			s = s.substring(1, s.length());
+		}
 		
 		return s;
+	}
+	
+	public String toMapString()
+	{
+		String s = "";
+
+		for(Entry<String, String> set : this.entrySet())
+		{
+			s += "~" + set.getKey() + "^" + set.getValue();
+		}
+		
+		if(!s.isEmpty())
+		{
+			s = s.substring(1, s.length());
+		}
+		
+		return s;
+	}
+	
+	public void fromMapString(String s)
+	{
+		if(s.isEmpty())
+		{
+			return;
+		}
+		
+		String[] pairs = s.split("~");
+		
+		for(String pair : pairs)
+		{
+			if(!pair.matches(".+\\^.+"))
+			{
+				put(pair, null);
+				continue;
+			}
+			
+			String[] keyVal = pair.split("\\^");
+			
+			put(keyVal[0], keyVal[1]);
+		}
 	}
 	
 	public void fromString(String s)
@@ -44,7 +87,10 @@ public class WnWMap extends HashMap<String, String>
 	
 	public WnWMap(String s)
 	{
-		fromString(s);
+		if(!s.isEmpty())
+		{
+			fromString(s);
+		}
 	}
 
 	public WnWMap()

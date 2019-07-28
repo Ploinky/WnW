@@ -20,15 +20,15 @@ public class DesktopRune extends BaseRune
 		super(name, rune);
 
 		// TODO $Li 20.09.2017
-		try
-		{
-			img = SwingFXUtils.toFXImage(ImageIO.read(new File("res/" + rune + ".png")), new WritableImage(40, 40));
-		}
-		catch (IOException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		try
+//		{
+//			img = SwingFXUtils.toFXImage(ImageIO.read(new File("res/" + rune + ".png")), new WritableImage(40, 40));
+//		}
+//		catch (IOException e)
+//		{
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 
 	}
 

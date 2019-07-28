@@ -5,6 +5,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 import de.jjl.wnw.dev.game.GameInstance;
+import de.jjl.wnw.dev.game.ServerGameInstance;
 import de.jjl.wnw.dev.log.Debug;
 
 public class Server
@@ -56,15 +57,15 @@ public class Server
 					
 					NetPlayerController controller = new NetPlayerController(s);
 					
-					if(GameInstance.getInstance().getPlayer1Controller() == null)
+					if(ServerGameInstance.getInstance().getPlayer1Controller() == null)
 					{
 						Debug.log("Client at <" + s.getInetAddress() + "> is controller for player 1.");
-						GameInstance.getInstance().setControllerPlayer1(controller);
+						ServerGameInstance.getInstance().setControllerPlayer1(controller);
 					}
-					else if(GameInstance.getInstance().getPlayer2Controller() == null)
+					else if(ServerGameInstance.getInstance().getPlayer2Controller() == null)
 					{
 						Debug.log("Client at <" + s.getInetAddress() + "> is controller for player 2.");
-						GameInstance.getInstance().setControllerPlayer2(controller);
+						ServerGameInstance.getInstance().setControllerPlayer2(controller);
 					}
 				}
 				catch (IOException e)
@@ -84,7 +85,16 @@ public class Server
 		{
 			while(isRunning)
 			{
-				GameInstance.getInstance().handleFrame(System.currentTimeMillis());
+				ServerGameInstance.getInstance().handleFrame(System.currentTimeMillis());
+				try
+				{
+					Thread.sleep(5);
+				}
+				catch (InterruptedException e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}).start();
 	}

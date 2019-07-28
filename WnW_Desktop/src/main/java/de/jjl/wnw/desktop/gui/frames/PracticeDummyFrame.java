@@ -91,7 +91,7 @@ public class PracticeDummyFrame extends Frame implements PlayerController, Event
 
 		long rune = lookupRuneLong(filteredPath, new Config());
 
-		currentInput += currentInput.isEmpty() ? rune : "\\|" + rune;
+		currentInput += currentInput.isEmpty() ? rune : "|" + rune;
 		System.out.println(currentInput);
 	}
 
@@ -213,6 +213,7 @@ public class PracticeDummyFrame extends Frame implements PlayerController, Event
 			Debug.log("Attempting to connect to server at localhost.");
 			// TODO $Li 26.02.2019 close this
 			server = new Socket("127.0.0.1", 50002);
+			server.setTcpNoDelay(true);
 			
 			Debug.log("Connected to server at localhost.");
 			
@@ -268,14 +269,14 @@ public class PracticeDummyFrame extends Frame implements PlayerController, Event
 
 		root.addEventFilter(MouseEvent.ANY, this);
 		
-		startUpdateThread();
+		update();
 
 		AnimationTimer timer = new AnimationTimer()
 		{
 			@Override
 			public void handle(long now)
 			{
-				ClientGameInstance.getInstance().getObjects().forEach(o -> o.update(now));
+				update();
 				paintScene();
 
 				if (!ClientGameInstance.getInstance().isRunning())
@@ -328,7 +329,7 @@ public class PracticeDummyFrame extends Frame implements PlayerController, Event
 				
 				if(chat.isEnabled())
 				{
-					chat.addInput(e.getText());
+					chat.addInput(e.isShiftDown() ? e.getText().toUpperCase() : e.getText());
 					return;
 				}
 				
@@ -434,39 +435,34 @@ public class PracticeDummyFrame extends Frame implements PlayerController, Event
 		}
 	}
 
-	private void startUpdateThread()
+	private void update()
 	{
-		new Thread(() ->
+		if(ClientGameInstance.getInstance().isRunning())
 		{
-			while(ClientGameInstance.getInstance().isRunning())
+			try
 			{
-				try
-				{
-					sendInput();
-					
-					String s = reader.readLine();
+				sendInput();
+				
+				String s = reader.readLine();
 
-					if(s == null || s.isEmpty())
-					{
-						continue;
-					}
-					
-					WnWMap msgMap = new WnWMap(s);
-					
-					if(msgMap.containsKey(MsgConst.TYPE) && msgMap.get(MsgConst.TYPE) != null)
-					{
-						handleGameMessage(msgMap);
-					}
-				}
-				catch (IOException e)
+				if(s == null || s.isEmpty())
 				{
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					break;
+					return;
+				}
+				
+				WnWMap msgMap = new WnWMap(s);
+				
+				if(msgMap.containsKey(MsgConst.TYPE) && msgMap.get(MsgConst.TYPE) != null)
+				{
+					handleGameMessage(msgMap);
 				}
 			}
-			
-			Debug.log("Connection to server was closed.");
-		}).start();
+			catch (IOException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return;
+			}
+		}
 	}
 }

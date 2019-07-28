@@ -97,5 +97,4 @@ public class GamePlayer implements Player
 		
 		lives -= damage;
 	}
-
 }
