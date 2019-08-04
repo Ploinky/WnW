@@ -57,11 +57,11 @@ public class DesktopObjectPainter
 	
 	private void drawPlayer(GamePlayer player)
 	{
-		graphics.drawImage(playerSprite, player.getX() + (player.isFaceLeft() ? player.getWidth() : 0),
-				player.getY(), player.isFaceLeft() ? -player.getWidth() : player.getWidth(), player.getHeight());
+		graphics.drawImage(playerSprite, player.getX() + ((player.isFaceLeft() ? player.getWidth() : 0)) / 2,
+				player.getY() - player.getHeight() / 2, player.isFaceLeft() ? -player.getWidth() : player.getWidth(), player.getHeight());
 		graphics.setFont(new Font(20));
 		graphics.setFill(Color.BLACK);
-		graphics.fillText("" + player.getLives(), player.getX() + 20, player.getY() - 20);	
+		graphics.fillText("" + player.getLives(), player.getX(), player.getY());	
 	}
 	
 	public void draw(GameObject obj)
@@ -91,6 +91,7 @@ public class DesktopObjectPainter
 
 	private void drawSpell(Spell spell)
 	{
-		graphics.fillRect(spell.getX(), 200, spell.getWidth(), spell.getHeight());
+		graphics.fillRect(spell.getX() - spell.getWidth() / 2, spell.getY() - spell.getHeight() / 2,
+				spell.getWidth(), spell.getHeight());
 	}
 }

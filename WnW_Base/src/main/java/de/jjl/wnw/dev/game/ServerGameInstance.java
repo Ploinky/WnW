@@ -152,7 +152,7 @@ public class ServerGameInstance extends GameInstance
 		{
 			spell.setPos(player.getX(), player.getY());
 			objects.add(spell);
-			System.out.println("Adding spell <" + spell + "> from <" + player);
+			System.out.println("Adding spell <" + spell + "> from <" + player + ">");
 		}
 
 		currentRunes.forEach(dRune -> objects.remove(dRune));

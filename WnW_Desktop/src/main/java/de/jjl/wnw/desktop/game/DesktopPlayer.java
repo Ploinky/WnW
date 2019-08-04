@@ -12,14 +12,14 @@ public class DesktopPlayer implements Player
 {
 	private boolean faceLeft;
 
-	private int height = 100;
+	private int height = 98;
 
 	private Image image;
 
 	private int lives = 5;
 
 	private int width = 61;
-
+	
 	private int x;
 
 	private int y;
