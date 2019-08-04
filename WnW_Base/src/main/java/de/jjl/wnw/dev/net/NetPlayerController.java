@@ -4,6 +4,9 @@ import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
+import java.util.Queue;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 
 import de.jjl.wnw.base.msg.MsgChatMessage;
 import de.jjl.wnw.base.player.Player;
@@ -26,14 +29,13 @@ public class NetPlayerController implements PlayerController
 		try
 		{
 			socket.setSoTimeout(5);
-			socket.setTcpNoDelay(true);
 		}
 		catch (SocketException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			connected = false;
 		}
+
 		init();
 	}
 	
@@ -42,13 +44,13 @@ public class NetPlayerController implements PlayerController
 	{
 		try
 		{
-			if(reader.ready())
+			String s = reader.readLine();
+			
+			if(s != null)
 			{
-				return reader.readLine();
+				System.out.println("Received <" + s + "> from player1");
+				return s;
 			}
-			
-			return null;
-			
 		}
 		catch(SocketTimeoutException e)
 		{
@@ -58,10 +60,12 @@ public class NetPlayerController implements PlayerController
 		catch (IOException e)
 		{
 			// TODO $Li 26.02.2019 Close connection to controller
-			e.printStackTrace();
+			System.out.println("Lost connection to player");
 			connected = false;
 			return null;
 		}
+		
+		return null;
 	}
 	
 	public boolean isConnected()
@@ -74,7 +78,8 @@ public class NetPlayerController implements PlayerController
 	{
 		try
 		{
-			writer.write(state);
+			writer.write(state + "\n");
+			writer.flush();
 		}
 		catch (IOException e)
 		{
@@ -89,9 +94,9 @@ public class NetPlayerController implements PlayerController
 	{
 		try
 		{
+			connected = true;
 			reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-			connected = true;
 		}
 		catch (IOException e)
 		{
@@ -106,7 +111,6 @@ public class NetPlayerController implements PlayerController
 		try
 		{
 			writer.write(msg.getMsgMap().toString() + "\n");
-			writer.flush();
 		}
 		catch (IOException e)
 		{

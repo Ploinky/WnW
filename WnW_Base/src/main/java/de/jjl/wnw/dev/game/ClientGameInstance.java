@@ -112,7 +112,6 @@ public class ClientGameInstance extends GameInstance
 			
 			spellToUpdate.setX(Integer.valueOf(updSpell.get(SpellParams.PARAM_X)));
 			spellToUpdate.setY(Integer.valueOf(updSpell.get(SpellParams.PARAM_Y)));
-			System.out.println(Integer.valueOf(updSpell.get(SpellParams.PARAM_X)));
 		}
 		
 		spellMap.stream()
@@ -141,6 +140,11 @@ public class ClientGameInstance extends GameInstance
 	public boolean isRunning()
 	{
 		return isRunning;
+	}
+	
+	public void stop()
+	{
+		isRunning = false;
 	}
 
 	public void addChatMessage(MsgChatMessage msg)

@@ -3,6 +3,7 @@ package de.jjl.wnw.dev.net;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 
 import de.jjl.wnw.dev.game.GameInstance;
 import de.jjl.wnw.dev.game.ServerGameInstance;
@@ -26,6 +27,7 @@ public class Server
 			int port = 50002;
 			Debug.log("Creating server at port <" + port + ">");
 			serverSocket = new ServerSocket(port);
+			serverSocket.setSoTimeout(0);
 			Debug.log("Server created at port <" + serverSocket.getLocalPort() + ">");
 		}
 		catch (IOException e)
@@ -68,6 +70,10 @@ public class Server
 						ServerGameInstance.getInstance().setControllerPlayer2(controller);
 					}
 				}
+				catch (SocketTimeoutException e)
+				{
+					// Shit happens...
+				}
 				catch (IOException e)
 				{
 					// TODO Auto-generated catch block
@@ -83,12 +89,12 @@ public class Server
 		
 		new Thread(() ->
 		{
-			while(isRunning)
+			while(true)
 			{
 				ServerGameInstance.getInstance().handleFrame(System.currentTimeMillis());
 				try
 				{
-					Thread.sleep(5);
+					Thread.sleep(15);
 				}
 				catch (InterruptedException e)
 				{
@@ -96,6 +102,6 @@ public class Server
 					e.printStackTrace();
 				}
 			}
-		}).start();
+		}, "ServerUpdateThread").start();
 	}
 }

@@ -173,9 +173,7 @@ public class WnWConnection implements Closeable
 				try
 				{
 					WnWMsg msg = msgs.takeFirst();
-					writer.write(msg.buildMsgString());
-					writer.newLine();
-					writer.flush();
+					writer.write(msg.buildMsgString() + "\n");
 				}
 				catch (IOException | InterruptedException e)
 				{

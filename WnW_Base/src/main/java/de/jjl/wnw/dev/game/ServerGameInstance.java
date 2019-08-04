@@ -152,6 +152,7 @@ public class ServerGameInstance extends GameInstance
 		{
 			spell.setPos(player.getX(), player.getY());
 			objects.add(spell);
+			System.out.println("Adding spell <" + spell + "> from <" + player);
 		}
 
 		currentRunes.forEach(dRune -> objects.remove(dRune));
@@ -166,7 +167,7 @@ public class ServerGameInstance extends GameInstance
 	}
 	private void checkPlayer2Input()
 	{
-		if (player2Controller == null)
+		if (player2Controller == null || !player2Controller.isConnected())
 		{
 			return;
 		}
@@ -223,7 +224,7 @@ public class ServerGameInstance extends GameInstance
 	
 	private void checkPlayer1Input()
 	{
-		if (player1Controller == null)
+		if (player1Controller == null || !player1Controller.isConnected())
 		{
 			return;
 		}
@@ -234,20 +235,18 @@ public class ServerGameInstance extends GameInstance
 		{
 			return;
 		}
-
+		
 		WnWMap msgMap = new WnWMap();
 		msgMap.fromString(inputString);
 
 		if (msgMap.containsKey(MsgConst.TYPE))
 		{
 			handleMessage(msgMap);
-			return;
 		}
 	}
 	
 	private void handlePlayerInput(MsgPlayerInput msg)
 	{
-		
 		String[] p1Input = msg.getInput().split("\\|");
 
 		for (String s : p1Input)
@@ -259,11 +258,13 @@ public class ServerGameInstance extends GameInstance
 
 			if (s.equals("A"))
 			{
+				System.out.println("Player1 casting <" + p1Combo + ">");
 				cast(player1, p1Combo, false);
 				p1Combo.clear();
 			}
 			else if (s.equals("S"))
 			{
+				System.out.println("Player1 casting shield <" + p1Combo + ">");
 				cast(player1, p1Combo, true);
 				p1Combo.clear();
 			}
@@ -489,10 +490,11 @@ public class ServerGameInstance extends GameInstance
 		{
 			try
 			{
-				player1Controller.updateGameState(msgMap.toString() + "\n");
+				player1Controller.updateGameState(msgMap.toString());
 			}
 			catch(RuntimeException e)
 			{
+				System.out.println(e);
 				player1Controller = null;
 			}
 		}

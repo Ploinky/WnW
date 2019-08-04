@@ -14,7 +14,6 @@ public class WnWKeyboardInputParser implements WnWInputParser
 	{
 		if(input instanceof WnWKeyboardInput)
 		{
-			System.out.println(((WnWKeyboardInput) input).getInput());
 			return parsePath(((WnWKeyboardInput) input).getInput());
 		}
 		return null;

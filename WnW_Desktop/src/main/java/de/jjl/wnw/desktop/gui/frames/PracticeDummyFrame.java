@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
+import java.net.SocketException;
 import java.time.LocalDateTime;
 import java.util.Iterator;
 
@@ -92,7 +93,7 @@ public class PracticeDummyFrame extends Frame implements PlayerController, Event
 		long rune = lookupRuneLong(filteredPath, new Config());
 
 		currentInput += currentInput.isEmpty() ? rune : "|" + rune;
-		System.out.println(currentInput);
+		System.out.println("Player input: " + currentInput);
 	}
 
 	@Override
@@ -212,8 +213,8 @@ public class PracticeDummyFrame extends Frame implements PlayerController, Event
 		{
 			Debug.log("Attempting to connect to server at localhost.");
 			// TODO $Li 26.02.2019 close this
-			server = new Socket("127.0.0.1", 50002);
-			server.setTcpNoDelay(true);
+			server = new Socket("localhost", 50002);
+			server.setSoTimeout(0);
 			
 			Debug.log("Connected to server at localhost.");
 			
@@ -269,8 +270,6 @@ public class PracticeDummyFrame extends Frame implements PlayerController, Event
 
 		root.addEventFilter(MouseEvent.ANY, this);
 		
-		update();
-
 		AnimationTimer timer = new AnimationTimer()
 		{
 			@Override
@@ -444,7 +443,7 @@ public class PracticeDummyFrame extends Frame implements PlayerController, Event
 				sendInput();
 				
 				String s = reader.readLine();
-
+				
 				if(s == null || s.isEmpty())
 				{
 					return;
@@ -457,7 +456,13 @@ public class PracticeDummyFrame extends Frame implements PlayerController, Event
 					handleGameMessage(msgMap);
 				}
 			}
-			catch (IOException e)
+			catch(SocketException sock)
+			{
+				System.err.println("Lost connection to server at <" + server.getInetAddress() + ">");
+				ClientGameInstance.getInstance().stop();
+				return;
+			}
+			catch(IOException e)
 			{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
