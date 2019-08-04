@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import de.jjl.wnw.dev.game.GameInstance;
 import de.jjl.wnw.dev.game.ServerGameInstance;
@@ -87,21 +89,16 @@ public class Server
 	{
 		isRunning = true;
 		
-		new Thread(() ->
+		TimerTask task = new TimerTask()
 		{
-			while(true)
+			@Override
+			public void run()
 			{
 				ServerGameInstance.getInstance().handleFrame(System.currentTimeMillis());
-				try
-				{
-					Thread.sleep(15);
-				}
-				catch (InterruptedException e)
-				{
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
 			}
-		}, "ServerUpdateThread").start();
+		};
+		
+		Timer t = new Timer();
+		t.schedule(task, 0, 1000 / 60);
 	}
 }
