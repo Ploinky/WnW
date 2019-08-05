@@ -54,7 +54,7 @@ public class Server
 				try
 				{
 					Debug.log("Waiting for connections...");
-					
+
 					Socket s = serverSocket.accept();
 
 					Debug.log("Accepted connection from <" + s.getInetAddress() + ">");

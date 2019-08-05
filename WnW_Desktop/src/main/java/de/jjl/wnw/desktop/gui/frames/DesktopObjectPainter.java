@@ -57,8 +57,10 @@ public class DesktopObjectPainter
 	
 	private void drawPlayer(GamePlayer player)
 	{
-		graphics.drawImage(playerSprite, player.getX() + ((player.isFaceLeft() ? player.getWidth() : 0)) / 2,
-				player.getY() - player.getHeight() / 2, player.isFaceLeft() ? -player.getWidth() : player.getWidth(), player.getHeight());
+		graphics.drawImage(playerSprite, player.getX() + (player.isFaceLeft() ? player.getWidth() / 2 : player.getWidth() / -2),
+				player.getY() - player.getHeight() / 2,
+				player.isFaceLeft() ? -player.getWidth() : player.getWidth(),
+				player.getHeight());
 		graphics.setFont(new Font(20));
 		graphics.setFill(Color.BLACK);
 		graphics.fillText("" + player.getLives(), player.getX(), player.getY());	

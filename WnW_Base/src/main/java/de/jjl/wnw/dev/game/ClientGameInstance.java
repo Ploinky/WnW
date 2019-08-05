@@ -46,7 +46,7 @@ public class ClientGameInstance extends GameInstance
 		if(player1 == null)
 		{
 			String p1Character = msg.getP1Character();
-			player1 = new GamePlayer(5, 400);
+			player1 = new GamePlayer(50, 400);
 			objects.add(player1);
 		}
 

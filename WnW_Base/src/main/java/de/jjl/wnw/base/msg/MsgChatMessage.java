@@ -1,14 +1,15 @@
 package de.jjl.wnw.base.msg;
 
 import de.jjl.wnw.base.util.WnWMap;
+import de.jjl.wnw.dev.conn.WnWMsg;
 
-public class MsgChatMessage
+public class MsgChatMessage extends WnWMsg
 {
 	public static final String TYPE = "ChatMessage";
 
-	private static final String PARAM_PLAYER = "Player";
-
 	private static final String PARAM_MESSAGE = "Message";
+
+	private static final String PARAM_PLAYER = "Player";
 
 	private static final String PARAM_TIMESTAMP = "TimeStamp";
 
@@ -17,25 +18,10 @@ public class MsgChatMessage
 	private String player;
 
 	private String timeStamp;
-
-	public String getPlayer()
+	
+	public MsgChatMessage()
 	{
-		return player;
-	}
-
-	public void setPlayer(String player)
-	{
-		this.player = player;
-	}
-
-	public String getMsg()
-	{
-		return msg;
-	}
-
-	public void setMsg(String msg)
-	{
-		this.msg = msg;
+		super("");
 	}
 
 	public void fromMap(WnWMap map)
@@ -43,6 +29,11 @@ public class MsgChatMessage
 		msg = map.get(PARAM_MESSAGE);
 		player = map.get(PARAM_PLAYER);
 		timeStamp = map.get(PARAM_TIMESTAMP);
+	}
+
+	public String getMsg()
+	{
+		return msg;
 	}
 
 	public WnWMap getMsgMap()
@@ -57,9 +48,24 @@ public class MsgChatMessage
 		return map;
 	}
 
+	public String getPlayer()
+	{
+		return player;
+	}
+
 	public String getTimeStamp()
 	{
 		return timeStamp;
+	}
+
+	public void setMsg(String msg)
+	{
+		this.msg = msg;
+	}
+
+	public void setPlayer(String player)
+	{
+		this.player = player;
 	}
 
 	public void setTimeStamp(String timeStamp)

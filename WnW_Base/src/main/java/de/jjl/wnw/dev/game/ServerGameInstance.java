@@ -1,6 +1,5 @@
 package de.jjl.wnw.dev.game;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -49,6 +48,8 @@ public class ServerGameInstance extends GameInstance
 
 	private List<Long> p1Combo;
 
+	private List<Long> p2Combo;
+
 	private PlayerController player1Controller;
 
 	private PlayerController player2Controller;
@@ -63,6 +64,7 @@ public class ServerGameInstance extends GameInstance
 		removeObjects = new CopyOnWriteArrayList<>();
 		currentRunes = new CopyOnWriteArrayList<>();
 		p1Combo = new ArrayList<>();
+		p2Combo = new ArrayList<>();
 
 		player1 = new GamePlayer(5, 400);
 		player2 = new GamePlayer(600, 400);
@@ -99,7 +101,7 @@ public class ServerGameInstance extends GameInstance
 	{
 		frameTime = now - lastFrame;
 		lastFrame = now;
-		
+
 		updateObjects(frameTime);
 		collide();
 		checkPlayerInput();
@@ -144,6 +146,19 @@ public class ServerGameInstance extends GameInstance
 		}
 	}
 
+	private void addRunePlayer2(Long rune)
+	{
+		BaseRune dRune = RuneUtil.getRune(player2, rune);
+
+		if (dRune != null)
+		{
+			dRune.setX(10 + currentRunes.size() * 40);
+			dRune.setY(10);
+			currentRunes.add(dRune);
+			objects.add(dRune);
+		}
+	}
+
 	private void cast(Player player, List<Long> combo, boolean shield)
 	{
 		Spell spell = SpellUtil.getSpell(player, combo, shield);
@@ -160,11 +175,29 @@ public class ServerGameInstance extends GameInstance
 		currentRunes.clear();
 	}
 
-	private void checkPlayerInput()
+	private void checkPlayer1Input()
 	{
-		checkPlayer1Input();
-		checkPlayer2Input();
+		if (player1Controller == null || !player1Controller.isConnected())
+		{
+			return;
+		}
+
+		String inputString = player1Controller.getInputString();
+
+		if (inputString == null || inputString.isEmpty())
+		{
+			return;
+		}
+
+		WnWMap msgMap = new WnWMap();
+		msgMap.fromString(inputString);
+
+		if (msgMap.containsKey(MsgConst.TYPE))
+		{
+			handleMessage(msgMap, player1);
+		}
 	}
+
 	private void checkPlayer2Input()
 	{
 		if (player2Controller == null || !player2Controller.isConnected())
@@ -184,13 +217,13 @@ public class ServerGameInstance extends GameInstance
 
 		if (msgMap.containsKey(MsgConst.TYPE))
 		{
-			handleMessage(msgMap);
+			handleMessage(msgMap, player2);
 			return;
 		}
 
 		String[] p2Input = inputString.split("\\|");
 
-		for(String s : p2Input)
+		for (String s : p2Input)
 		{
 			if (s == null || s.isEmpty())
 			{
@@ -199,13 +232,13 @@ public class ServerGameInstance extends GameInstance
 
 			if (s.equals("A"))
 			{
-				cast(player2, p1Combo, false);
+				cast(player2, p2Combo, false);
 				p1Combo.clear();
 			}
 			else if (s.equals("S"))
 			{
-				cast(player2, p1Combo, true);
-				p1Combo.clear();
+				cast(player2, p2Combo, true);
+				p2Combo.clear();
 			}
 			else
 			{
@@ -215,82 +248,27 @@ public class ServerGameInstance extends GameInstance
 					continue;
 				}
 
-				addRunePlayer1(Long.valueOf(s));
+				addRunePlayer2(Long.valueOf(s));
 
-				p1Combo.add(Long.valueOf(s));
+				p2Combo.add(Long.valueOf(s));
 			}
 		}
 	}
-	
-	private void checkPlayer1Input()
+
+	private void checkPlayerInput()
 	{
-		if (player1Controller == null || !player1Controller.isConnected())
-		{
-			return;
-		}
-
-		String inputString = player1Controller.getInputString();
-
-		if (inputString == null || inputString.isEmpty())
-		{
-			return;
-		}
-		
-		WnWMap msgMap = new WnWMap();
-		msgMap.fromString(inputString);
-
-		if (msgMap.containsKey(MsgConst.TYPE))
-		{
-			handleMessage(msgMap);
-		}
-	}
-	
-	private void handlePlayerInput(MsgPlayerInput msg)
-	{
-		String[] p1Input = msg.getInput().split("\\|");
-
-		for (String s : p1Input)
-		{
-			if (s == null || s.isEmpty())
-			{
-				continue;
-			}
-
-			if (s.equals("A"))
-			{
-				System.out.println("Player1 casting <" + p1Combo + ">");
-				cast(player1, p1Combo, false);
-				p1Combo.clear();
-			}
-			else if (s.equals("S"))
-			{
-				System.out.println("Player1 casting shield <" + p1Combo + ">");
-				cast(player1, p1Combo, true);
-				p1Combo.clear();
-			}
-			else
-			{
-				if (!s.matches("[0-9]+"))
-				{
-					System.err.println("UNKNOWN INPUT PLAYER 1: <" + s + ">");
-					continue;
-				}
-
-				addRunePlayer1(Long.valueOf(s));
-
-				p1Combo.add(Long.valueOf(s));
-			}
-		}
+		checkPlayer1Input();
+		checkPlayer2Input();
 	}
 
 	private boolean chkCollision(GameObject obj1, GameObject obj2)
 	{
-		if((Spell.class.isInstance(obj1) && ((Spell) obj1).getCaster() == obj2)
+		if ((Spell.class.isInstance(obj1) && ((Spell) obj1).getCaster() == obj2)
 				|| (Spell.class.isInstance(obj2) && ((Spell) obj2).getCaster() == obj1))
 		{
 			return false;
 		}
-		
+
 		if (obj1.getX() + obj1.getWidth() < obj2.getX() || obj2.getX() + obj2.getWidth() < obj1.getX()
 				|| obj1.getY() + obj1.getHeight() < obj2.getY() || obj2.getY() + obj2.getHeight() < obj1.getY())
 		{
@@ -407,30 +385,66 @@ public class ServerGameInstance extends GameInstance
 		}
 	}
 
-	private void handleMessage(WnWMap msgMap)
+	private void handleMessage(WnWMap msgMap, Player player)
 	{
 		switch (msgMap.get(MsgConst.TYPE))
 		{
-			case MsgChatMessage.TYPE:
-				MsgChatMessage msgChat = new MsgChatMessage();
-				msgChat.fromMap(msgMap);
-				sendChatMessage(msgChat);
-				break;
-			case MsgPlayerInput.TYPE:
-				MsgPlayerInput msgInput = new MsgPlayerInput();
-				msgInput.fromMap(msgMap);
-				handlePlayerInput(msgInput);
-				break;
+		case MsgChatMessage.TYPE:
+			MsgChatMessage msgChat = new MsgChatMessage();
+			msgChat.fromMap(msgMap);
+			sendChatMessage(msgChat);
+			break;
+		case MsgPlayerInput.TYPE:
+			MsgPlayerInput msgInput = new MsgPlayerInput();
+			msgInput.fromMap(msgMap);
+			handlePlayerInput(msgInput, player);
+			break;
 		}
 	}
 
-	private void updateObjects(long frameTime)
+	private void handlePlayerInput(MsgPlayerInput msg, Player player)
 	{
-		for (GameObject obj : objects)
+		String[] input = msg.getInput().split("\\|");
+
+		List<Long> combo = player == player1 ? p1Combo : p2Combo;
+
+		for (String s : input)
 		{
-			if (!(obj instanceof Player) && !(obj instanceof DesktopRune))
+			if (s == null || s.isEmpty())
 			{
-				obj.update(frameTime);
+				continue;
+			}
+
+			if (s.equals("A"))
+			{
+				System.out.println("Player casting <" + combo + ">");
+				cast(player, combo, false);
+				combo.clear();
+			}
+			else if (s.equals("S"))
+			{
+				System.out.println("Player casting shield <" + combo + ">");
+				cast(player, combo, true);
+				combo.clear();
+			}
+			else
+			{
+				if (!s.matches("[0-9]+"))
+				{
+					System.err.println("UNKNOWN INPUT PLAYER 1: <" + s + ">");
+					continue;
+				}
+
+				if (player == player1)
+				{
+					addRunePlayer1(Long.valueOf(s));
+				}
+				else
+				{
+					addRunePlayer2(Long.valueOf(s));
+				}
+
+				combo.add(Long.valueOf(s));
 			}
 		}
 	}
@@ -442,21 +456,18 @@ public class ServerGameInstance extends GameInstance
 			running = false;
 		}
 
-		objects.stream()
-			.filter(Spell.class::isInstance)
-			.map(Spell.class::cast)
-			.forEach(spell ->
+		objects.stream().filter(Spell.class::isInstance).map(Spell.class::cast).forEach(spell ->
+		{
+			if (spell.isShield() && System.currentTimeMillis() - spell.getCastTime() > maxShieldLength)
 			{
-				if (spell.isShield() && System.currentTimeMillis() - spell.getCastTime() > maxShieldLength)
-				{
-					removeObjects.add(spell);
-				}
-				
-				if(spell.getX() > 10000)
-				{
-					removeObjects.add(spell);
-				}
-			});
+				removeObjects.add(spell);
+			}
+
+			if (spell.getX() > 10000)
+			{
+				removeObjects.add(spell);
+			}
+		});
 	}
 
 	private void sendChatMessage(MsgChatMessage msg)
@@ -478,11 +489,9 @@ public class ServerGameInstance extends GameInstance
 		msg.setGameTime(System.currentTimeMillis());
 		msg.setP1Character("");
 		msg.setP2Character("");
-		
-		objects.stream()
-			.filter(Spell.class::isInstance)
-			.map(Spell.class::cast)
-			.forEach(spell -> msg.addSpell(spellToMap(spell)));
+
+		objects.stream().filter(Spell.class::isInstance).map(Spell.class::cast)
+				.forEach(spell -> msg.addSpell(spellToMap(spell)));
 
 		WnWMap msgMap = msg.getMsgMap();
 
@@ -492,7 +501,7 @@ public class ServerGameInstance extends GameInstance
 			{
 				player1Controller.updateGameState(msgMap.toString());
 			}
-			catch(RuntimeException e)
+			catch (RuntimeException e)
 			{
 				System.out.println(e);
 				player1Controller = null;
@@ -505,12 +514,22 @@ public class ServerGameInstance extends GameInstance
 			{
 				player2Controller.updateGameState(msgMap.toString() + "\n");
 			}
-			catch(RuntimeException e)
+			catch (RuntimeException e)
 			{
 				player2Controller = null;
 			}
 		}
 	}
 
+	private void updateObjects(long frameTime)
+	{
+		for (GameObject obj : objects)
+		{
+			if (!(obj instanceof Player) && !(obj instanceof DesktopRune))
+			{
+				obj.update(frameTime);
+			}
+		}
+	}
 
 }

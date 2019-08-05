@@ -57,7 +57,7 @@ public class Spell implements GameObject
 		height = shield ? 100 : 30;
 		x = 0;
 		y = 0;
-		speed = 100;
+		speed = 800;
 		hit = false;
 		id = generateSpellId();
 
@@ -120,7 +120,14 @@ public class Spell implements GameObject
 	{
 		if (!shield)
 		{
-			x += frameTime * speed / 1000;
+			if(caster.isFaceLeft())
+			{
+				x -= frameTime * speed / 1000;
+			}
+			else
+			{
+				x += frameTime * speed / 1000;
+			}
 		}
 	}
 
@@ -131,7 +138,7 @@ public class Spell implements GameObject
 
 	public void setPos(int x, int y)
 	{
-		this.x = x + (shield ? (caster.isFaceLeft() ? -30 : 60) : 0);
+		this.x = x + (shield ? (caster.isFaceLeft() ? -30 : 30) : 0);
 		this.y = y;
 	}
 

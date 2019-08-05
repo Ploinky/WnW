@@ -1,15 +1,15 @@
 package de.jjl.wnw.dev.net;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
-import java.util.Queue;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
 
 import de.jjl.wnw.base.msg.MsgChatMessage;
-import de.jjl.wnw.base.player.Player;
 import de.jjl.wnw.dev.PlayerController;
 
 public class NetPlayerController implements PlayerController
@@ -21,7 +21,7 @@ public class NetPlayerController implements PlayerController
 	private Socket socket;
 	
 	private BufferedWriter writer;
-	
+
 	public NetPlayerController(Socket socket)
 	{	
 		connected = true;
@@ -48,7 +48,7 @@ public class NetPlayerController implements PlayerController
 			
 			if(s != null)
 			{
-				System.out.println("Received <" + s + "> from player1");
+				System.out.println("Received <" + s + ">");
 				return s;
 			}
 		}
@@ -114,7 +114,6 @@ public class NetPlayerController implements PlayerController
 		}
 		catch (IOException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
