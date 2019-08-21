@@ -40,7 +40,7 @@ public class LoadRunes
 			int damage = Integer.parseInt(map.get("Damage"));
 			long l = Long.valueOf(map.get("Long"));
 
-			Runes.addRuneLong(l, factory.cre(map.get("Name"), l, damage));
+			Runes.addRuneLong(l, factory.cre(l));
 		}
 	}
 }

@@ -11,10 +11,9 @@ import de.jjl.wnw.base.msg.MsgChatMessage;
 import de.jjl.wnw.base.msg.MsgConst;
 import de.jjl.wnw.base.msg.MsgGameState;
 import de.jjl.wnw.base.msg.MsgPlayerInput;
+import de.jjl.wnw.base.rune.WnWRune;
 import de.jjl.wnw.base.util.WnWMap;
 import de.jjl.wnw.dev.PlayerController;
-import de.jjl.wnw.dev.rune.BaseRune;
-import de.jjl.wnw.dev.rune.DesktopRune;
 import de.jjl.wnw.dev.rune.RuneUtil;
 import de.jjl.wnw.dev.spell.Spell;
 import de.jjl.wnw.dev.spell.SpellUtil;
@@ -35,7 +34,7 @@ public class ServerGameInstance extends GameInstance
 		return instance;
 	}
 
-	private List<BaseRune> currentRunes;
+	private List<WnWRune> currentRunes;
 
 	private long frameTime = 0;
 
@@ -135,27 +134,25 @@ public class ServerGameInstance extends GameInstance
 
 	private void addRunePlayer1(Long rune)
 	{
-		BaseRune dRune = RuneUtil.getRune(player1, rune);
+		WnWRune dRune = RuneUtil.getRune(player1, rune);
 
 		if (dRune != null)
 		{
 			dRune.setX(10 + currentRunes.size() * 40);
 			dRune.setY(10);
 			currentRunes.add(dRune);
-			objects.add(dRune);
 		}
 	}
 
 	private void addRunePlayer2(Long rune)
 	{
-		BaseRune dRune = RuneUtil.getRune(player2, rune);
+		WnWRune dRune = RuneUtil.getRune(player2, rune);
 
 		if (dRune != null)
 		{
 			dRune.setX(10 + currentRunes.size() * 40);
 			dRune.setY(10);
 			currentRunes.add(dRune);
-			objects.add(dRune);
 		}
 	}
 
@@ -287,7 +284,7 @@ public class ServerGameInstance extends GameInstance
 			for (GameObject obj2 : objects)
 			{
 				if (obj1 == obj2 || (GamePlayer.class.isInstance(obj1) && GamePlayer.class.isInstance(obj2))
-						|| DesktopRune.class.isInstance(obj1) || DesktopRune.class.isInstance(obj2))
+						|| WnWRune.class.isInstance(obj1) || WnWRune.class.isInstance(obj2))
 				{
 					continue;
 				}
@@ -525,7 +522,7 @@ public class ServerGameInstance extends GameInstance
 	{
 		for (GameObject obj : objects)
 		{
-			if (!(obj instanceof Player) && !(obj instanceof DesktopRune))
+			if (!(obj instanceof Player))
 			{
 				obj.update(frameTime);
 			}

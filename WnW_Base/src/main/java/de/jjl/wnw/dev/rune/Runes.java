@@ -29,6 +29,7 @@ public class Runes
 	{
 		if(instance == null)
 		{
+			init(new BaseRuneFactory());
 			throw new IllegalStateException("Runes not initialised!");
 		}
 		

@@ -17,9 +17,9 @@ public class SpellFactory
 		this.combo = combo;
 	}
 
-	public Spell cre(Player player1, boolean shield)
+	public Spell cre(Player player, boolean shield)
 	{
-		return new Spell(player1, name, damage, combo, shield);
+		return new Spell(player, name, damage, combo, shield);
 	}
 
 	public long[] getSpellCombo()

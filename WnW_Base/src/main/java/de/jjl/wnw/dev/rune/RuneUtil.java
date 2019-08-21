@@ -3,11 +3,12 @@ package de.jjl.wnw.dev.rune;
 import java.util.*;
 import java.util.function.Supplier;
 
+import de.jjl.wnw.base.rune.WnWRune;
 import de.jjl.wnw.dev.game.Player;
 
 public class RuneUtil
 {
-	private Map<Long, Supplier<BaseRune>> runes;
+	private Map<Long, RuneFactory> runes;
 
 	private static RuneUtil instance;
 
@@ -35,8 +36,8 @@ public class RuneUtil
 		runes.put(14789l, new BaseRuneFactory("14789", 14789));
 	}
 
-	public static BaseRune getRune(Player player1, long rune)
+	public static WnWRune getRune(Player player1, long rune)
 	{
-		return getInstance().runes.get(rune) != null ? getInstance().runes.get(rune).get() : null;
+		return getInstance().runes.get(rune) != null ? getInstance().runes.get(rune).cre(rune) : null;
 	}
 }

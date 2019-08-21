@@ -2,7 +2,9 @@ package de.jjl.wnw.dev.rune;
 
 import java.util.function.Supplier;
 
-public class BaseRuneFactory implements Supplier<BaseRune>
+import de.jjl.wnw.base.rune.WnWRune;
+
+public class BaseRuneFactory implements RuneFactory
 {
 	private final String name;
 
@@ -15,8 +17,8 @@ public class BaseRuneFactory implements Supplier<BaseRune>
 	}
 
 	@Override
-	public BaseRune get()
+	public WnWRune cre()
 	{
-		return new DesktopRune(name, rune);
+		return new ValueRune(name, rune, 1);
 	}
 }

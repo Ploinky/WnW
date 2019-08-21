@@ -9,10 +9,13 @@ public abstract class BaseRune implements GameObject, WnWRune
 	
 	private String name;
 	
-	public BaseRune(String name, long rune)
+	private RuneType type;
+	
+	protected BaseRune(String name, long rune, RuneType type)
 	{
 		this.name = name;
 		this.rune = rune;
+		this.type = type;
 	}
 	
 	@Override
@@ -24,5 +27,10 @@ public abstract class BaseRune implements GameObject, WnWRune
 	public String getName()
 	{
 		return name;
+	}
+	
+	public RuneType getType()
+	{
+		return type;
 	}
 }
