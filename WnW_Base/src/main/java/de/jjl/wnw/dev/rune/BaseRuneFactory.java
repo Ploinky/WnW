@@ -1,7 +1,5 @@
 package de.jjl.wnw.dev.rune;
 
-import java.util.function.Supplier;
-
 import de.jjl.wnw.base.rune.WnWRune;
 
 public class BaseRuneFactory implements RuneFactory

@@ -1,7 +1,7 @@
 package de.jjl.wnw.dev.rune;
 
-import java.util.*;
-import java.util.function.Supplier;
+import java.util.HashMap;
+import java.util.Map;
 
 import de.jjl.wnw.base.rune.WnWRune;
 import de.jjl.wnw.dev.game.Player;
@@ -38,6 +38,6 @@ public class RuneUtil
 
 	public static WnWRune getRune(Player player1, long rune)
 	{
-		return getInstance().runes.get(rune) != null ? getInstance().runes.get(rune).cre(rune) : null;
+		return getInstance().runes.get(rune) != null ? getInstance().runes.get(rune).cre() : null;
 	}
 }

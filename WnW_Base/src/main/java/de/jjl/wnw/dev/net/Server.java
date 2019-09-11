@@ -7,7 +7,6 @@ import java.net.SocketTimeoutException;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import de.jjl.wnw.dev.game.GameInstance;
 import de.jjl.wnw.dev.game.ServerGameInstance;
 import de.jjl.wnw.dev.log.Debug;
 
@@ -94,6 +93,11 @@ public class Server
 			@Override
 			public void run()
 			{
+				if(!isRunning)
+				{
+					cancel();
+				}
+				
 				ServerGameInstance.getInstance().handleFrame(System.currentTimeMillis());
 			}
 		};

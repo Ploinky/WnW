@@ -1,16 +1,20 @@
 package de.jjl.wnw.base.msg;
 
-public class Msg
+import de.jjl.wnw.base.util.WnWMap;
+
+public abstract class Msg
 {
-	private String type;
-	
-	protected Msg(String type)
+	public Msg()
 	{
-		this.type = type;
+		
 	}
 	
-	public String getType()
+	public Msg(WnWMap map)
 	{
-		return type;
+		fromMap(map);
 	}
+	
+	public abstract void fromMap(WnWMap map);
+
+	public abstract WnWMap getMsgMap();
 }

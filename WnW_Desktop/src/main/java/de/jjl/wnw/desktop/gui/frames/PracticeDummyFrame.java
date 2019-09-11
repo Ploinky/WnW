@@ -11,8 +11,10 @@ import java.time.LocalDateTime;
 import java.util.Iterator;
 
 import de.jjl.wnw.base.cfg.Settings;
+import de.jjl.wnw.base.msg.Msg;
 import de.jjl.wnw.base.msg.MsgChatMessage;
 import de.jjl.wnw.base.msg.MsgConst;
+import de.jjl.wnw.base.msg.MsgGameEnd;
 import de.jjl.wnw.base.msg.MsgGameState;
 import de.jjl.wnw.base.msg.MsgPlayerInput;
 import de.jjl.wnw.base.rune.parser.Config;
@@ -54,18 +56,18 @@ public class PracticeDummyFrame extends Frame implements PlayerController, Event
 	private DesktopObjectPainter painter;
 
 	private WnWPathInputParser parser;
-	
+
 	private WnWDesktopPath path;
 
 	private BufferedReader reader;
-	
+
 	@FXML
 	private BorderPane root;
-	
+
 	private Socket server;
 
 	private BufferedWriter writer;
-	
+
 	public PracticeDummyFrame(Game game)
 	{
 		super(game);
@@ -158,10 +160,10 @@ public class PracticeDummyFrame extends Frame implements PlayerController, Event
 	}
 
 	@Override
-	public void sendMsg(MsgChatMessage msg)
+	public void sendMsg(Msg msg)
 	{
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void startPath(WnWDisplaySystem display)
@@ -179,31 +181,45 @@ public class PracticeDummyFrame extends Frame implements PlayerController, Event
 	{
 		MsgChatMessage msg = new MsgChatMessage();
 		msg.fromMap(msgMap);
-		
-		ClientGameInstance.getInstance().getObjects().stream()
-			.filter(Chat.class::isInstance)
-			.map(Chat.class::cast)
-			.forEach(chat ->
-			{
-				chat.addChatMessage(msg);
-				chat.show();
-			});
+
+		ClientGameInstance.getInstance().getObjects().stream().filter(Chat.class::isInstance).map(Chat.class::cast)
+				.forEach(chat ->
+				{
+					chat.addChatMessage(msg);
+					chat.show();
+				});
 	}
 
 	private void handleGameMessage(WnWMap msgMap)
 	{
-		switch(msgMap.get(MsgConst.TYPE))
+		switch (msgMap.get(MsgConst.TYPE))
 		{
-			case MsgGameState.TYPE:
-				updateGameState(msgMap.toString());
-				break;
-			case MsgChatMessage.TYPE:
-				handleChatMessage(msgMap);
-				break;
-				default:
-					System.out.println("Unknown message type <" + msgMap.get(MsgConst.TYPE) + ">");
+		case MsgGameState.TYPE:
+			updateGameState(msgMap.toString());
+			break;
+		case MsgChatMessage.TYPE:
+			handleChatMessage(msgMap);
+			break;
+		case MsgGameEnd.TYPE:
+			handleGameEndMessage(msgMap);
+			break;
+		default:
+			System.out.println("Unknown message type <" + msgMap.get(MsgConst.TYPE) + ">");
 		}
-		
+
+	}
+
+	private void handleGameEndMessage(WnWMap msgMap)
+	{
+		MsgGameEnd msg = new MsgGameEnd(msgMap);
+
+		ClientGameInstance.getInstance().stop();
+
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("Game over");
+		alert.setHeaderText(msg.getVictor() + " wins!!!");
+		alert.setOnCloseRequest(e -> Platform.exit());
+		alert.show();
 	}
 
 	@FXML
@@ -215,9 +231,9 @@ public class PracticeDummyFrame extends Frame implements PlayerController, Event
 			// TODO $Li 26.02.2019 close this
 			server = new Socket("localhost", 50002);
 			server.setSoTimeout(0);
-			
+
 			Debug.log("Connected to server at localhost.");
-			
+
 			reader = new BufferedReader(new InputStreamReader(server.getInputStream()));
 			writer = new BufferedWriter(new OutputStreamWriter(server.getOutputStream()));
 		}
@@ -226,7 +242,7 @@ public class PracticeDummyFrame extends Frame implements PlayerController, Event
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		canvas = new Canvas();
 
 		Pane pane = new Pane()
@@ -238,8 +254,8 @@ public class PracticeDummyFrame extends Frame implements PlayerController, Event
 				final double x = snappedLeftInset();
 				final double y = snappedTopInset();
 				// Java 9 - snapSize is deprecated used snapSizeX() and snapSizeY() accordingly
-				final double w = snapSize(getWidth()) - x - snappedRightInset();
-				final double h = snapSize(getHeight()) - y - snappedBottomInset();
+				final double w = snapSizeX(getWidth()) - x - snappedRightInset();
+				final double h = snapSizeY(getHeight()) - y - snappedBottomInset();
 				canvas.setLayoutX(x);
 				canvas.setLayoutY(y);
 				canvas.setWidth(w);
@@ -250,7 +266,7 @@ public class PracticeDummyFrame extends Frame implements PlayerController, Event
 		painter = new DesktopObjectPainter(canvas.getGraphicsContext2D());
 
 		pane.getChildren().add(canvas);
-		
+
 		Chat chat = new Chat();
 		ClientGameInstance.getInstance().getObjects().add(chat);
 
@@ -269,7 +285,7 @@ public class PracticeDummyFrame extends Frame implements PlayerController, Event
 		});
 
 		root.addEventFilter(MouseEvent.ANY, this);
-		
+
 		AnimationTimer timer = new AnimationTimer()
 		{
 			@Override
@@ -282,29 +298,24 @@ public class PracticeDummyFrame extends Frame implements PlayerController, Event
 				{
 
 					stop();
-					Alert alert = new Alert(AlertType.INFORMATION);
-					alert.setTitle("Game over");
-					alert.setHeaderText("Player 1 wins!!! Great, you beat a dummy...");
-					alert.setOnCloseRequest(e -> Platform.exit());
-					alert.show();
 				}
 			}
 		};
 
 		timer.start();
-		
+
 		pane.sceneProperty().addListener((p, o, n) ->
 		{
-			if(n == null)
+			if (n == null)
 			{
 				return;
 			}
-			
+
 			n.addEventFilter(KeyEvent.KEY_PRESSED, e ->
 			{
 				if (e.getCode().equals(KeyCode.ENTER))
 				{
-					if(!chat.isEnabled())
+					if (!chat.isEnabled())
 					{
 						chat.setEnabled(true);
 					}
@@ -316,22 +327,22 @@ public class PracticeDummyFrame extends Frame implements PlayerController, Event
 					}
 					return;
 				}
-				
+
 				if (e.getCode().equals(KeyCode.BACK_SPACE))
 				{
-					if(chat.isEnabled())
+					if (chat.isEnabled())
 					{
 						chat.delChar();
 					}
 					return;
 				}
-				
-				if(chat.isEnabled())
+
+				if (chat.isEnabled())
 				{
 					chat.addInput(e.isShiftDown() ? e.getText().toUpperCase() : e.getText());
 					return;
 				}
-				
+
 				if (e.getCode().equals(Settings.getCastKey()))
 				{
 					path = null;
@@ -345,7 +356,7 @@ public class PracticeDummyFrame extends Frame implements PlayerController, Event
 					finishPath();
 					currentInput += currentInput.isEmpty() ? "S" : "|S";
 				}
-				
+
 			});
 		});
 	}
@@ -391,14 +402,15 @@ public class PracticeDummyFrame extends Frame implements PlayerController, Event
 			getPath().drawOn(graphics);
 		}
 	}
-	
+
 	private void sendChatMessage(String text)
 	{
 		MsgChatMessage msg = new MsgChatMessage();
 		msg.setPlayer("" + Thread.currentThread().getId());
-		msg.setTimeStamp("[" + LocalDateTime.now().getHour() + ":" + LocalDateTime.now().getMinute() + ":" + LocalDateTime.now().getSecond() + "]");
+		msg.setTimeStamp("[" + LocalDateTime.now().getHour() + ":" + LocalDateTime.now().getMinute() + ":"
+				+ LocalDateTime.now().getSecond() + "]");
 		msg.setMsg(text);
-		
+
 		try
 		{
 			writer.write(msg.getMsgMap().toString() + "\n");
@@ -413,15 +425,15 @@ public class PracticeDummyFrame extends Frame implements PlayerController, Event
 
 	private void sendInput()
 	{
-		if(currentInput == null || currentInput.isBlank())
+		if (currentInput == null || currentInput.isBlank())
 		{
 			return;
 		}
-		
+
 		MsgPlayerInput msg = new MsgPlayerInput();
 		msg.setInput(currentInput);
 		currentInput = "";
-		
+
 		try
 		{
 			writer.write(msg.getMsgMap().toString() + "\n");
@@ -436,33 +448,33 @@ public class PracticeDummyFrame extends Frame implements PlayerController, Event
 
 	private void update()
 	{
-		if(ClientGameInstance.getInstance().isRunning())
+		if (ClientGameInstance.getInstance().isRunning())
 		{
 			try
 			{
 				sendInput();
-				
+
 				String s = reader.readLine();
-				
-				if(s == null || s.isEmpty())
+
+				if (s == null || s.isEmpty())
 				{
 					return;
 				}
-				
+
 				WnWMap msgMap = new WnWMap(s);
-				
-				if(msgMap.containsKey(MsgConst.TYPE) && msgMap.get(MsgConst.TYPE) != null)
+
+				if (msgMap.containsKey(MsgConst.TYPE) && msgMap.get(MsgConst.TYPE) != null)
 				{
 					handleGameMessage(msgMap);
 				}
 			}
-			catch(SocketException sock)
+			catch (SocketException sock)
 			{
 				System.err.println("Lost connection to server at <" + server.getInetAddress() + ">");
 				ClientGameInstance.getInstance().stop();
 				return;
 			}
-			catch(IOException e)
+			catch (IOException e)
 			{
 				// TODO Auto-generated catch block
 				e.printStackTrace();

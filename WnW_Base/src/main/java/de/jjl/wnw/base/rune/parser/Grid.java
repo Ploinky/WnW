@@ -36,7 +36,6 @@ public class Grid
 	private int tolerance;
 	private WnWPoint start;
 	private WnWPoint fieldSize;
-	private WnWPoint fieldSizePerSqu;
 	private WnWPoint gridSize;
 	double radX;
 	double radY;
@@ -54,8 +53,6 @@ public class Grid
 
 		start = new WnWPoint(startX, startY);
 		fieldSize = new WnWPoint(fieldWidth, fieldHeight);
-		fieldSizePerSqu = new WnWPoint((int) Math.pow(fieldWidth * tolerance / 2 / 100.0, 2.0),
-				(int) Math.pow(fieldHeight * tolerance / 2 / 100.0, 2.0));
 		gridSize = new WnWPoint(cols, rows);
 		radX = fieldWidth * 0.5 * tolerance / 100;
 		radY = fieldHeight * 0.5 * tolerance / 100;

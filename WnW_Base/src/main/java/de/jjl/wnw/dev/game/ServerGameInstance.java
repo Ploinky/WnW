@@ -9,6 +9,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import de.jjl.wnw.base.msg.MsgChatMessage;
 import de.jjl.wnw.base.msg.MsgConst;
+import de.jjl.wnw.base.msg.MsgGameEnd;
 import de.jjl.wnw.base.msg.MsgGameState;
 import de.jjl.wnw.base.msg.MsgPlayerInput;
 import de.jjl.wnw.base.rune.WnWRune;
@@ -450,6 +451,15 @@ public class ServerGameInstance extends GameInstance
 	{
 		if (player1.getLives() <= 0 || player2.getLives() <= 0)
 		{
+			if(player1.getLives() <= 0)
+			{
+				sendGameEndMessage("Player1");
+			}
+			else if(player2.getLives() <= 0)
+			{
+				sendGameEndMessage("Player2");
+			}
+			
 			running = false;
 		}
 
@@ -465,6 +475,37 @@ public class ServerGameInstance extends GameInstance
 				removeObjects.add(spell);
 			}
 		});
+	}
+	
+	private void sendGameEndMessage(String victor)
+	{
+		MsgGameEnd msg = new MsgGameEnd();
+		msg.setVictor(victor);
+		
+		if (player1Controller != null && player1Controller.isConnected())
+		{
+			try
+			{
+				player1Controller.sendMsg(msg);
+			}
+			catch (RuntimeException e)
+			{
+				System.out.println(e);
+				player1Controller = null;
+			}
+		}
+
+		if (player2Controller != null && player2Controller.isConnected())
+		{
+			try
+			{
+				player2Controller.sendMsg(msg);
+			}
+			catch (RuntimeException e)
+			{
+				player2Controller = null;
+			}
+		}
 	}
 
 	private void sendChatMessage(MsgChatMessage msg)
@@ -486,6 +527,8 @@ public class ServerGameInstance extends GameInstance
 		msg.setGameTime(System.currentTimeMillis());
 		msg.setP1Character("");
 		msg.setP2Character("");
+		msg.setP1Lives(player1.getLives());
+		msg.setP2Lives(player2.getLives());
 
 		objects.stream().filter(Spell.class::isInstance).map(Spell.class::cast)
 				.forEach(spell -> msg.addSpell(spellToMap(spell)));

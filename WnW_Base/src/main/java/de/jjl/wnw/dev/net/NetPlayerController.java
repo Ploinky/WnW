@@ -9,6 +9,7 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 
+import de.jjl.wnw.base.msg.Msg;
 import de.jjl.wnw.base.msg.MsgChatMessage;
 import de.jjl.wnw.dev.PlayerController;
 
@@ -106,7 +107,7 @@ public class NetPlayerController implements PlayerController
 	}
 
 	@Override
-	public void sendMsg(MsgChatMessage msg)
+	public void sendMsg(Msg msg)
 	{
 		try
 		{

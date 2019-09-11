@@ -1,9 +1,8 @@
 package de.jjl.wnw.base.msg;
 
 import de.jjl.wnw.base.util.WnWMap;
-import de.jjl.wnw.dev.conn.WnWMsg;
 
-public class MsgChatMessage extends WnWMsg
+public class MsgChatMessage extends Msg
 {
 	public static final String TYPE = "ChatMessage";
 
@@ -19,11 +18,7 @@ public class MsgChatMessage extends WnWMsg
 
 	private String timeStamp;
 	
-	public MsgChatMessage()
-	{
-		super("");
-	}
-
+	@Override
 	public void fromMap(WnWMap map)
 	{
 		msg = map.get(PARAM_MESSAGE);
@@ -36,6 +31,7 @@ public class MsgChatMessage extends WnWMsg
 		return msg;
 	}
 
+	@Override
 	public WnWMap getMsgMap()
 	{
 		WnWMap map = new WnWMap();

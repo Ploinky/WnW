@@ -1,10 +1,7 @@
 package de.jjl.wnw.dev.spell;
 
-import java.util.List;
-
-import de.jjl.wnw.base.util.WnWMap;
-import de.jjl.wnw.dev.game.*;
-import javafx.scene.canvas.GraphicsContext;
+import de.jjl.wnw.dev.game.GameObject;
+import de.jjl.wnw.dev.game.Player;
 
 public class Spell implements GameObject
 {
@@ -20,8 +17,6 @@ public class Spell implements GameObject
 	private int damage;
 
 	private int height;
-
-	private boolean hit;
 
 	private String name;
 
@@ -58,7 +53,6 @@ public class Spell implements GameObject
 		x = 0;
 		y = 0;
 		speed = 800;
-		hit = false;
 		id = generateSpellId();
 
 		this.setCaster(player);
@@ -105,7 +99,6 @@ public class Spell implements GameObject
 
 	public void hit()
 	{
-		hit = true;
 		damage = 0;
 		speed = 0;
 	}

@@ -3,7 +3,7 @@
  */
 package de.jjl.wnw.dev;
 
-import de.jjl.wnw.base.msg.MsgChatMessage;
+import de.jjl.wnw.base.msg.Msg;
 
 public interface PlayerController
 {
@@ -13,5 +13,5 @@ public interface PlayerController
 
 	public boolean isConnected();
 
-	public void sendMsg(MsgChatMessage msg);
+	public void sendMsg(Msg msg);
 }

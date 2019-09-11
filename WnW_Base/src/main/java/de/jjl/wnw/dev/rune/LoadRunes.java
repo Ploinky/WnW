@@ -37,10 +37,9 @@ public class LoadRunes
 			WnWMap map = new WnWMap(s);
 			
 			// TODO $Li 20.09.2017 MAGIC STRINGS
-			int damage = Integer.parseInt(map.get("Damage"));
-			long l = Long.valueOf(map.get("Long"));
+			long l = Long.parseLong(map.get("Long"));
 
-			Runes.addRuneLong(l, factory.cre(l));
+			Runes.addRuneLong(l, factory.cre());
 		}
 	}
 }

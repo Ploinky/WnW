@@ -1,23 +1,15 @@
 package de.jjl.wnw.dev.game;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
-import org.junit.experimental.theories.FromDataPoints;
-
-import de.jjl.wnw.base.msg.ChatMessage;
 import de.jjl.wnw.base.msg.MsgChatMessage;
 import de.jjl.wnw.base.msg.MsgGameState;
 import de.jjl.wnw.base.msg.MsgGameState.SpellParams;
 import de.jjl.wnw.base.util.WnWMap;
 import de.jjl.wnw.dev.spell.Spell;
-import de.jjl.wnw.dev.spell.SpellUtil;
 
 public class ClientGameInstance extends GameInstance
 {
@@ -45,18 +37,20 @@ public class ClientGameInstance extends GameInstance
 		
 		if(player1 == null)
 		{
-			String p1Character = msg.getP1Character();
 			player1 = new GamePlayer(50, 400);
 			objects.add(player1);
 		}
+		
+		player1.setLives(msg.getP1Lives());
 
 		if(player2 == null)
 		{
-			String p2Character = msg.getP2Character();
 			player2 = new GamePlayer(600, 400);
 			player2.faceLeft();
 			objects.add(player2);
 		}
+		
+		player2.setLives(msg.getP2Lives());
 		
 		List<WnWMap> spellMap = msg.getSpells().stream()
 				.filter(s -> !s.isEmpty())
