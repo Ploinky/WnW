@@ -1,10 +1,17 @@
 package de.jjl.wnw.base.msg;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.List;
 
 import de.jjl.wnw.base.util.WnWMap;
+import de.jjl.wnw.dev.game.GamePlayer;
 
 public class MsgGameState
 {
@@ -41,11 +48,11 @@ public class MsgGameState
 
 	private long gameTime;
 
-	private String p1Character;
+	private GamePlayer p1Character;
 
 	private Integer p1Lives;
 
-	private String p2Character;
+	private GamePlayer p2Character;
 
 	private Integer p2Lives;
 
@@ -61,11 +68,18 @@ public class MsgGameState
 		spells.add(spellMap.toMapString());
 	}
 
-	public void fromMap(WnWMap map)
+	public void fromMap(WnWMap map) throws IOException, ClassNotFoundException
 	{
 		gameTime = Long.parseLong(map.get(PARAM_GAMETIME));
-		p1Character = map.get(PARAM_P1_CHARACTER);
-		p2Character = map.get(PARAM_P2_CHARACTER);
+		
+		ByteArrayInputStream bo = new ByteArrayInputStream(Base64.getDecoder().decode(map.get(PARAM_P1_CHARACTER).getBytes()));
+		ObjectInputStream so = new ObjectInputStream(bo);
+		p1Character = (GamePlayer) so.readObject();
+		
+		bo = new ByteArrayInputStream(Base64.getDecoder().decode(map.get(PARAM_P2_CHARACTER).getBytes()));
+		so = new ObjectInputStream(bo);
+		p2Character = (GamePlayer) so.readObject();
+		
 		p1Lives = Integer.parseInt(map.get(PARAM_P1_LIVES));
 		p2Lives = Integer.parseInt(map.get(PARAM_P2_LIVES));
 
@@ -82,14 +96,25 @@ public class MsgGameState
 		return gameTime;
 	}
 
-	public WnWMap getMsgMap()
+	public WnWMap getMsgMap() throws IOException
 	{
 		WnWMap map = new WnWMap();
 
 		map.put(MsgConst.TYPE, TYPE);
 		map.put(PARAM_GAMETIME, "" + gameTime);
-		map.put(PARAM_P2_CHARACTER, p1Character);
-		map.put(PARAM_P1_CHARACTER, p2Character);
+		
+		ByteArrayOutputStream bo = new ByteArrayOutputStream();
+		ObjectOutputStream so = new ObjectOutputStream(bo);
+		so.writeObject(p1Character);
+		so.flush();
+		map.put(PARAM_P1_CHARACTER, new String(Base64.getEncoder().encode(bo.toByteArray())));
+
+		bo = new ByteArrayOutputStream();
+		so = new ObjectOutputStream(bo);
+		so.writeObject(p2Character);
+		so.flush();
+		map.put(PARAM_P2_CHARACTER, new String(Base64.getEncoder().encode(bo.toByteArray())));
+		
 		map.put(PARAM_SPELLS, spells.toString());
 		map.put(PARAM_P1_LIVES, "" + p1Lives);
 		map.put(PARAM_P2_LIVES, "" + p2Lives);
@@ -97,7 +122,7 @@ public class MsgGameState
 		return map;
 	}
 
-	public String getP1Character()
+	public GamePlayer getP1Character()
 	{
 		return p1Character;
 	}
@@ -107,7 +132,7 @@ public class MsgGameState
 		return p1Lives;
 	}
 
-	public String getP2Character()
+	public GamePlayer getP2Character()
 	{
 		return p2Character;
 	}
@@ -127,7 +152,7 @@ public class MsgGameState
 		this.gameTime = gameTime;
 	}
 
-	public void setP1Character(String p1Character)
+	public void setP1Character(GamePlayer p1Character)
 	{
 		this.p1Character = p1Character;
 	}
@@ -137,7 +162,7 @@ public class MsgGameState
 		this.p1Lives = p1Lives;
 	}
 
-	public void setP2Character(String p2Character)
+	public void setP2Character(GamePlayer p2Character)
 	{
 		this.p2Character = p2Character;
 	}

@@ -1,5 +1,6 @@
 package de.jjl.wnw.dev.game;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -66,7 +67,8 @@ public class ServerGameInstance extends GameInstance
 		p1Combo = new ArrayList<>();
 		p2Combo = new ArrayList<>();
 
-		player1 = new GamePlayer(5, 400);
+		// TODO $Li 19.09.2019 dynamic arena sizing (and player positioning)
+		player1 = new GamePlayer(50, 400);
 		player2 = new GamePlayer(600, 400);
 		player2.faceLeft();
 
@@ -267,8 +269,10 @@ public class ServerGameInstance extends GameInstance
 			return false;
 		}
 
-		if (obj1.getX() + obj1.getWidth() < obj2.getX() || obj2.getX() + obj2.getWidth() < obj1.getX()
-				|| obj1.getY() + obj1.getHeight() < obj2.getY() || obj2.getY() + obj2.getHeight() < obj1.getY())
+		if (obj1.getX() + obj1.getWidth() / 2 < obj2.getX()
+				|| obj2.getX() + obj2.getWidth() / 2 < obj1.getX()
+				|| obj1.getY() + obj1.getHeight() < obj2.getY()
+				|| obj2.getY() + obj2.getHeight() < obj1.getY())
 		{
 			return false;
 		}
@@ -374,11 +378,13 @@ public class ServerGameInstance extends GameInstance
 
 		if (s1.getDamage() < 1)
 		{
+			System.out.println("SPELL DEFENDED!");
 			removeObjects.add(s1);
 		}
 
 		if (s2.getDamage() < 1)
 		{
+			System.out.println("SPELL DEFENDED!");
 			removeObjects.add(s2);
 		}
 	}
@@ -525,15 +531,24 @@ public class ServerGameInstance extends GameInstance
 	{
 		MsgGameState msg = new MsgGameState();
 		msg.setGameTime(System.currentTimeMillis());
-		msg.setP1Character("");
-		msg.setP2Character("");
+		msg.setP1Character(player1);
+		msg.setP2Character(player2);
 		msg.setP1Lives(player1.getLives());
 		msg.setP2Lives(player2.getLives());
 
 		objects.stream().filter(Spell.class::isInstance).map(Spell.class::cast)
 				.forEach(spell -> msg.addSpell(spellToMap(spell)));
 
-		WnWMap msgMap = msg.getMsgMap();
+		WnWMap msgMap = null;
+		try
+		{
+			msgMap = msg.getMsgMap();
+		}
+		catch (IOException e1)
+		{
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 
 		if (player1Controller != null && player1Controller.isConnected())
 		{

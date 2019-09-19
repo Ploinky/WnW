@@ -1,5 +1,6 @@
 package de.jjl.wnw.dev.game;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -33,11 +34,19 @@ public class ClientGameInstance extends GameInstance
 		map.fromString(gameState);
 		
 		MsgGameState msg = new MsgGameState();
-		msg.fromMap(map);
+		try
+		{
+			msg.fromMap(map);
+		}
+		catch (ClassNotFoundException | IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		if(player1 == null)
 		{
-			player1 = new GamePlayer(50, 400);
+			player1 = msg.getP1Character();
 			objects.add(player1);
 		}
 		
@@ -45,11 +54,11 @@ public class ClientGameInstance extends GameInstance
 
 		if(player2 == null)
 		{
-			player2 = new GamePlayer(600, 400);
+			player2 = msg.getP2Character();
 			player2.faceLeft();
 			objects.add(player2);
 		}
-		
+
 		player2.setLives(msg.getP2Lives());
 		
 		List<WnWMap> spellMap = msg.getSpells().stream()

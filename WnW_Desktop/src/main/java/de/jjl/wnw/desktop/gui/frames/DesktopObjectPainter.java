@@ -83,6 +83,12 @@ public class DesktopObjectPainter
 		graphics.setFont(new Font(20));
 		graphics.setFill(Color.BLACK);
 		graphics.fillText("" + player.getLives(), player.getX(), player.getY());
+
+		graphics.setFill(Color.GREEN);
+//		graphics.fillRect(
+//				(double) player.getX() + (player.isFaceLeft() ? player.getWidth() / 2 : player.getWidth() / -2),
+//				(double) player.getY() - player.getHeight() / 2,
+//				player.isFaceLeft() ? -player.getWidth() : player.getWidth(), (double) player.getHeight());
 	}
 
 	public void draw(GameObject obj)
@@ -119,6 +125,10 @@ public class DesktopObjectPainter
 			s += l;
 		}
 
-		graphics.drawImage(spellSprites.get(s), spell.getX(), spell.getY(), 30, 30);
+		// TODO $Li 19.09.2019 Painting, sizing dynamically?!
+		graphics.drawImage(spellSprites.get(s), spell.getX() - 15, spell.getY() - 15, 30, spell.isShield() ? 100 : 30);
+
+		graphics.setFill(Color.RED);
+		graphics.fillRect(spell.getX() - 1, spell.getY() - 1, 3, 3);
 	}
 }

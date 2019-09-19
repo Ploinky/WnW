@@ -1,7 +1,11 @@
 package de.jjl.wnw.dev.game;
 
-public class GamePlayer implements Player
+import java.io.Serializable;
+
+public class GamePlayer implements Player, Serializable
 {
+	private static final long serialVersionUID = -3838210747472502302L;
+
 	private boolean faceLeft;
 
 	private int height;

@@ -12,9 +12,9 @@ import de.jjl.wnw.dev.spell.SpellUtil;
 
 public abstract class GameInstance
 {
-	protected Player player1;
+	protected GamePlayer player1;
 	
-	protected Player player2;
+	protected GamePlayer player2;
 	
 	protected Collection<GameObject> objects;
 	
