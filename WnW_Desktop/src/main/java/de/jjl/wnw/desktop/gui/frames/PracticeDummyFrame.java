@@ -311,52 +311,68 @@ public class PracticeDummyFrame extends Frame implements PlayerController, Event
 				return;
 			}
 
-			n.addEventFilter(KeyEvent.KEY_PRESSED, e ->
+			n.addEventHandler(KeyEvent.ANY, new EventHandler<KeyEvent>()
 			{
-				if (e.getCode().equals(KeyCode.ENTER))
+				@Override
+				public void handle(KeyEvent event)
 				{
-					if (!chat.isEnabled())
+					if (event.getEventType() == KeyEvent.KEY_PRESSED)
 					{
-						chat.setEnabled(true);
+						if (event.getCode().equals(KeyCode.ENTER))
+						{
+							if (!chat.isEnabled())
+							{
+								chat.setEnabled(true);
+							}
+							else
+							{
+								chat.setEnabled(false);
+								sendChatMessage(chat.getInput());
+								chat.clear();
+								event.consume();
+							}
+							return;
+						}
+
+						if (event.getCode().equals(KeyCode.BACK_SPACE))
+						{
+							if (chat.isEnabled())
+							{
+								chat.delChar();
+							}
+							return;
+						}
+
+						if (event.getCode().equals(KeyCode.SPACE))
+						{
+							chat.addInput(" ");
+							return;
+						}
 					}
-					else
+					else if (event.getEventType() == KeyEvent.KEY_TYPED && !event.getCharacter().isBlank())
 					{
-						chat.setEnabled(false);
-						sendChatMessage(chat.getInput());
-						chat.clear();
+						if (chat.isEnabled() && !event.getCharacter().equals(KeyCode.ENTER.getChar()))
+						{
+							chat.addInput(event.getCharacter());
+							return;
+						}
+
+						if (event.getCharacter().equals(Settings.getCastKey().getChar()))
+						{
+							path = null;
+							finishPath();
+							currentInput += currentInput.isEmpty() ? "A" : "|A";
+						}
+
+						if (event.getCharacter().equals(Settings.getShieldKey().getChar()))
+						{
+							path = null;
+							finishPath();
+							currentInput += currentInput.isEmpty() ? "S" : "|S";
+						}
+
 					}
-					return;
 				}
-
-				if (e.getCode().equals(KeyCode.BACK_SPACE))
-				{
-					if (chat.isEnabled())
-					{
-						chat.delChar();
-					}
-					return;
-				}
-
-				if (chat.isEnabled())
-				{
-					chat.addInput(e.isShiftDown() ? e.getText().toUpperCase() : e.getText());
-					return;
-				}
-
-				if (e.getCode().equals(Settings.getCastKey()))
-				{
-					path = null;
-					finishPath();
-					currentInput += currentInput.isEmpty() ? "A" : "|A";
-				}
-
-				if (e.getCode().equals(Settings.getShieldKey()))
-				{
-					path = null;
-					finishPath();
-					currentInput += currentInput.isEmpty() ? "S" : "|S";
-				}
-
 			});
 		});
 	}
