@@ -10,8 +10,9 @@ import de.jjl.wnw.base.lang.Translator;
 import de.jjl.wnw.base.msg.MsgConst;
 import de.jjl.wnw.desktop.consts.Frames;
 import de.jjl.wnw.desktop.gui.Frame;
+import de.jjl.wnw.desktop.gui.frames.ConnectFrame;
 import de.jjl.wnw.desktop.gui.frames.MainFrame;
-import de.jjl.wnw.desktop.gui.frames.PracticeDummyFrame;
+import de.jjl.wnw.desktop.gui.frames.OnlineMatchFrame;
 import de.jjl.wnw.desktop.gui.frames.PracticeFrame;
 import de.jjl.wnw.desktop.gui.frames.SettingsFrame;
 import de.jjl.wnw.dev.conn.WnWConnection;
@@ -52,7 +53,8 @@ public class Game extends Application implements FrameListener, WnWMsgListener
 		frames.put(Frames.MAIN, () -> new MainFrame(this));
 		frames.put(Frames.SETTINGS, () -> new SettingsFrame(this));
 		frames.put(Frames.PRACTICE, () -> new PracticeFrame(this));
-		frames.put(Frames.PRACTICEDUMMY, () -> new PracticeDummyFrame(this));
+		frames.put(Frames.ONLINEMATCH, () -> new OnlineMatchFrame(this));
+		frames.put(Frames.CONNECT, () -> new ConnectFrame(this));
 
 		requestSceneChange(Frames.MAIN);
 
@@ -97,11 +99,11 @@ public class Game extends Application implements FrameListener, WnWMsgListener
 	{
 		switch (msg.getType())
 		{
-		case MsgConst.TYPE_REQ_NAME:
-			Map<String, String> info = new HashMap<>();
-			info.put(MsgConst.PARAM_NAME, name);
-			conn.sendMsg(new WnWMsg(MsgConst.TYPE_NAME, info));
-			break;
+			case MsgConst.TYPE_REQ_NAME:
+				Map<String, String> info = new HashMap<>();
+				info.put(MsgConst.PARAM_NAME, name);
+				conn.sendMsg(new WnWMsg(MsgConst.TYPE_NAME, info));
+				break;
 		}
 	}
 
@@ -109,5 +111,15 @@ public class Game extends Application implements FrameListener, WnWMsgListener
 	{
 		// TODO Shutdown gracefully
 		Platform.exit();
+	}
+
+	public void setPlayerName(String name)
+	{
+		this.name = name;
+	}
+
+	public String getName()
+	{
+		return name;
 	}
 }

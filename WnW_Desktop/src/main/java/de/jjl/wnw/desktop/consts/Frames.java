@@ -5,9 +5,9 @@ package de.jjl.wnw.desktop.consts;
 
 public class Frames
 {
-	public static final String MAIN = "MAIN";
-	public static final String SETTINGS = "SETTINGS";
 	public static final String CONNECT = "CONNECT";
+	public static final String MAIN = "MAIN";
+	public static final String ONLINEMATCH = "ONLINEMATCH";
 	public static final String PRACTICE = "PRACTICE";
-	public static final String PRACTICEDUMMY = "PRACTICEDUMMY";
+	public static final String SETTINGS = "SETTINGS";
 }

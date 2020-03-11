@@ -24,6 +24,7 @@ import de.jjl.wnw.base.util.WnWMap;
 import de.jjl.wnw.base.util.path.WnWDisplaySystem;
 import de.jjl.wnw.base.util.path.WnWPath;
 import de.jjl.wnw.base.util.path.WnWPoint;
+import de.jjl.wnw.desktop.consts.Frames;
 import de.jjl.wnw.desktop.game.Chat;
 import de.jjl.wnw.desktop.game.Game;
 import de.jjl.wnw.desktop.gui.Frame;
@@ -47,7 +48,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 
-public class PracticeDummyFrame extends Frame implements PlayerController, EventHandler<MouseEvent>
+public class OnlineMatchFrame extends Frame implements PlayerController, EventHandler<MouseEvent>
 {
 	private Canvas canvas;
 
@@ -68,7 +69,7 @@ public class PracticeDummyFrame extends Frame implements PlayerController, Event
 
 	private BufferedWriter writer;
 
-	public PracticeDummyFrame(Game game)
+	public OnlineMatchFrame(Game game)
 	{
 		super(game);
 		currentInput = "";
@@ -106,7 +107,7 @@ public class PracticeDummyFrame extends Frame implements PlayerController, Event
 
 		try
 		{
-			return loader.load(getClass().getResourceAsStream("/xml/PRACTICEDUMMY.fxml"));
+			return loader.load(getClass().getResourceAsStream("/xml/" + Frames.ONLINEMATCH + ".fxml"));
 		}
 		catch (IOException e)
 		{
@@ -115,7 +116,6 @@ public class PracticeDummyFrame extends Frame implements PlayerController, Event
 		}
 
 		return null;
-
 	}
 
 	@Override
@@ -194,17 +194,17 @@ public class PracticeDummyFrame extends Frame implements PlayerController, Event
 	{
 		switch (msgMap.get(MsgConst.TYPE))
 		{
-		case MsgGameState.TYPE:
-			updateGameState(msgMap.toString());
-			break;
-		case MsgChatMessage.TYPE:
-			handleChatMessage(msgMap);
-			break;
-		case MsgGameEnd.TYPE:
-			handleGameEndMessage(msgMap);
-			break;
-		default:
-			System.out.println("Unknown message type <" + msgMap.get(MsgConst.TYPE) + ">");
+			case MsgGameState.TYPE:
+				updateGameState(msgMap.toString());
+				break;
+			case MsgChatMessage.TYPE:
+				handleChatMessage(msgMap);
+				break;
+			case MsgGameEnd.TYPE:
+				handleGameEndMessage(msgMap);
+				break;
+			default:
+				System.out.println("Unknown message type <" + msgMap.get(MsgConst.TYPE) + ">");
 		}
 
 	}
@@ -422,9 +422,9 @@ public class PracticeDummyFrame extends Frame implements PlayerController, Event
 	private void sendChatMessage(String text)
 	{
 		MsgChatMessage msg = new MsgChatMessage();
-		msg.setPlayer("" + Thread.currentThread().getId());
-		msg.setTimeStamp("[" + LocalDateTime.now().getHour() + ":" + LocalDateTime.now().getMinute() + ":"
-				+ LocalDateTime.now().getSecond() + "]");
+		msg.setPlayer(game.getName());
+		msg.setTimeStamp(String.format("[%02d:%02d:%02d]", LocalDateTime.now().getHour(),
+				LocalDateTime.now().getMinute(), LocalDateTime.now().getSecond()));
 		msg.setMsg(text);
 
 		try

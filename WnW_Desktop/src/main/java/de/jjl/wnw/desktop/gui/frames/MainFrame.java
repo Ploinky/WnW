@@ -14,7 +14,7 @@ import javafx.scene.control.Button;
 public class MainFrame extends Frame
 {
 	private Parent root;
-	
+
 	public MainFrame(Game game)
 	{
 		super(game);
@@ -25,7 +25,7 @@ public class MainFrame extends Frame
 
 	@FXML
 	private Button btnSettings;
-	
+
 	@FXML
 	private Button btnPractice;
 
@@ -43,35 +43,35 @@ public class MainFrame extends Frame
 	{
 		game.exit();
 	}
-	
+
 	@FXML
 	void btnPracticeOnAction(ActionEvent event)
 	{
 		game.requestSceneChange(Frames.PRACTICE);
 	}
-	
+
 	@FXML
 	void btnPracticeKeyOnAction(ActionEvent event)
 	{
-		game.requestSceneChange(Frames.PRACTICEDUMMY);
+		game.requestSceneChange(Frames.CONNECT);
 	}
 
 	@Override
 	public Parent getAsNode()
 	{
-		if(root!= null)
+		if (root != null)
 		{
 			return root;
 		}
-		
+
 		FXMLLoader loader = new FXMLLoader();
 		loader.setController(this);
-		
+
 		try
 		{
 			root = loader.load(getClass().getResourceAsStream("/xml/MAIN.fxml"));
 		}
-		catch(IOException e)
+		catch (IOException e)
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
