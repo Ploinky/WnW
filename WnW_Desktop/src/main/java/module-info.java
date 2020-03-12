@@ -6,6 +6,7 @@ module WnW_Desktop {
 	exports de.jjl.wnw.desktop.util;
 	exports de.jjl.wnw.desktop.gui.frames;
 	exports de.jjl.wnw.desktop.client;
+	exports de.jjl.wnw.desktop.gui.server;
 
 	requires java.desktop;
 	requires javafx.graphics;

@@ -1,11 +1,16 @@
 package de.jjl.wnw.dev.game;
 
 import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import de.jjl.wnw.base.msg.MsgChatMessage;
@@ -16,6 +21,8 @@ import de.jjl.wnw.base.msg.MsgPlayerInput;
 import de.jjl.wnw.base.rune.WnWRune;
 import de.jjl.wnw.base.util.WnWMap;
 import de.jjl.wnw.dev.PlayerController;
+import de.jjl.wnw.dev.log.Debug;
+import de.jjl.wnw.dev.net.NetPlayerController;
 import de.jjl.wnw.dev.rune.RuneUtil;
 import de.jjl.wnw.dev.spell.Spell;
 import de.jjl.wnw.dev.spell.SpellUtil;
@@ -24,6 +31,79 @@ import javafx.scene.text.Font;
 
 public class ServerGameInstance extends GameInstance
 {
+	public static void main(String[] args)
+	{
+		new ServerGameInstance();
+	}
+	
+	private ServerSocket serverSocket;
+	
+	private boolean isRunning;
+	
+	private void startConnectionThread()
+	{
+		isRunning = true;
+		
+		new Thread(() ->
+		{
+			while(isRunning)
+			{
+				try
+				{
+					Debug.log("Waiting for connections...");
+
+					Socket s = serverSocket.accept();
+
+					Debug.log("Accepted connection from <" + s.getInetAddress() + ">");
+					
+					NetPlayerController controller = new NetPlayerController(s);
+					
+					if(ServerGameInstance.getInstance().getPlayer1Controller() == null)
+					{
+						Debug.log("Client at <" + s.getInetAddress() + "> is controller for player 1.");
+						ServerGameInstance.getInstance().setControllerPlayer1(controller);
+					}
+					else if(ServerGameInstance.getInstance().getPlayer2Controller() == null)
+					{
+						Debug.log("Client at <" + s.getInetAddress() + "> is controller for player 2.");
+						ServerGameInstance.getInstance().setControllerPlayer2(controller);
+					}
+				}
+				catch (SocketTimeoutException e)
+				{
+					// Shit happens...
+				}
+				catch (IOException e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}).start();
+	}
+
+	private void startServerThread()
+	{
+		isRunning = true;
+		
+		TimerTask task = new TimerTask()
+		{
+			@Override
+			public void run()
+			{
+				if(!isRunning)
+				{
+					cancel();
+				}
+				
+				ServerGameInstance.getInstance().handleFrame(System.currentTimeMillis());
+			}
+		};
+		
+		Timer t = new Timer();
+		t.schedule(task, 0, 1000 / 60);
+	}
+
 	private static ServerGameInstance instance;
 
 	public static ServerGameInstance getInstance()
@@ -76,6 +156,24 @@ public class ServerGameInstance extends GameInstance
 
 		objects.add(player1);
 		objects.add(player2);
+		
+		try
+		{
+			int port = 50002;
+			Debug.log("Creating server at port <" + port + ">");
+			serverSocket = new ServerSocket(port);
+			serverSocket.setSoTimeout(0);
+			Debug.log("Server created at port <" + serverSocket.getLocalPort() + ">");
+		}
+		catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		startConnectionThread();
+		
+		startServerThread();
 	}
 
 	public void drawDebug(GraphicsContext graphics)

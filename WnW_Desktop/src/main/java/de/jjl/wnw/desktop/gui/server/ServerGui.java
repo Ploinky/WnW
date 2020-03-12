@@ -1,7 +1,7 @@
 /*
  * Copyright © 2017 Unitechnik Systems GmbH. All Rights Reserved.
  */
-package de.jjl.wnw.desktop.gui;
+package de.jjl.wnw.desktop.gui.server;
 
 import de.jjl.wnw.base.player.Player;
 
