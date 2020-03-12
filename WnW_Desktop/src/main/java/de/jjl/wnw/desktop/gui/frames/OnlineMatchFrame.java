@@ -194,17 +194,17 @@ public class OnlineMatchFrame extends Frame implements PlayerController, EventHa
 	{
 		switch (msgMap.get(MsgConst.TYPE))
 		{
-			case MsgGameState.TYPE:
-				updateGameState(msgMap.toString());
-				break;
-			case MsgChatMessage.TYPE:
-				handleChatMessage(msgMap);
-				break;
-			case MsgGameEnd.TYPE:
-				handleGameEndMessage(msgMap);
-				break;
-			default:
-				System.out.println("Unknown message type <" + msgMap.get(MsgConst.TYPE) + ">");
+		case MsgGameState.TYPE:
+			updateGameState(msgMap.toString());
+			break;
+		case MsgChatMessage.TYPE:
+			handleChatMessage(msgMap);
+			break;
+		case MsgGameEnd.TYPE:
+			handleGameEndMessage(msgMap);
+			break;
+		default:
+			System.out.println("Unknown message type <" + msgMap.get(MsgConst.TYPE) + ">");
 		}
 
 	}
@@ -296,7 +296,6 @@ public class OnlineMatchFrame extends Frame implements PlayerController, EventHa
 
 				if (!ClientGameInstance.getInstance().isRunning())
 				{
-
 					stop();
 				}
 			}
@@ -478,18 +477,16 @@ public class OnlineMatchFrame extends Frame implements PlayerController, EventHa
 			{
 				sendInput();
 
-				String s = reader.readLine();
-
-				if (s == null || s.isEmpty())
+				while (reader.ready())
 				{
-					return;
-				}
+					String s = reader.readLine();
 
-				WnWMap msgMap = new WnWMap(s);
+					WnWMap msgMap = new WnWMap(s);
 
-				if (msgMap.containsKey(MsgConst.TYPE) && msgMap.get(MsgConst.TYPE) != null)
-				{
-					handleGameMessage(msgMap);
+					if (msgMap.containsKey(MsgConst.TYPE) && msgMap.get(MsgConst.TYPE) != null)
+					{
+						handleGameMessage(msgMap);
+					}
 				}
 			}
 			catch (SocketException sock)
