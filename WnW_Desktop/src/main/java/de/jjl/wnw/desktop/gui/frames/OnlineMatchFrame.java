@@ -351,7 +351,7 @@ public class OnlineMatchFrame extends Frame implements PlayerController, EventHa
 							return;
 						}
 					}
-					else if (event.getEventType() == KeyEvent.KEY_TYPED && !event.getCharacter().isBlank())
+					else if (event.getEventType() == KeyEvent.KEY_TYPED)
 					{
 						if (event.getCharacter().equals(KeyCode.BACK_SPACE.getChar()))
 						{
