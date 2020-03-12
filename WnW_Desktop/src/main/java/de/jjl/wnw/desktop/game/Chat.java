@@ -123,7 +123,19 @@ public class Chat implements GameObject, Drawable
 		graphics.setFill(Color.BLACK);
 		graphics.getFont();
 		graphics.setFont(Font.font(16));
-		graphics.fillText(input, x, y + height - 5);
+
+		Text t = new Text(input);
+		t.setFont(graphics.getFont());
+
+		String tempInput = input;
+
+		while (t.getLayoutBounds().getWidth() > getWidth())
+		{
+			tempInput = tempInput.substring(1);
+			t.setText(tempInput);
+		}
+
+		graphics.fillText(tempInput, x, y + height - 5);
 
 		List<MsgChatMessage> reverseMsgs = new ArrayList<>(chatHistory);
 		Collections.reverse(reverseMsgs);
@@ -135,9 +147,6 @@ public class Chat implements GameObject, Drawable
 			String msgTxt = msg.toChatString();
 
 			List<String> msgParts = new ArrayList<>();
-
-			Text t = new Text("");
-			t.setFont(graphics.getFont());
 
 			while (msgTxt.length() > 0)
 			{
@@ -196,6 +205,11 @@ public class Chat implements GameObject, Drawable
 
 	public void delChar()
 	{
+		if (input == null || input.length() < 1)
+		{
+			return;
+		}
+
 		input = input.substring(0, input.length() - 1);
 	}
 

@@ -194,17 +194,17 @@ public class OnlineMatchFrame extends Frame implements PlayerController, EventHa
 	{
 		switch (msgMap.get(MsgConst.TYPE))
 		{
-		case MsgGameState.TYPE:
-			updateGameState(msgMap.toString());
-			break;
-		case MsgChatMessage.TYPE:
-			handleChatMessage(msgMap);
-			break;
-		case MsgGameEnd.TYPE:
-			handleGameEndMessage(msgMap);
-			break;
-		default:
-			System.out.println("Unknown message type <" + msgMap.get(MsgConst.TYPE) + ">");
+			case MsgGameState.TYPE:
+				updateGameState(msgMap.toString());
+				break;
+			case MsgChatMessage.TYPE:
+				handleChatMessage(msgMap);
+				break;
+			case MsgGameEnd.TYPE:
+				handleGameEndMessage(msgMap);
+				break;
+			default:
+				System.out.println("Unknown message type <" + msgMap.get(MsgConst.TYPE) + ">");
 		}
 
 	}
@@ -315,73 +315,76 @@ public class OnlineMatchFrame extends Frame implements PlayerController, EventHa
 				@Override
 				public void handle(KeyEvent event)
 				{
-					if (event.getEventType() == KeyEvent.KEY_PRESSED)
+
+					if (chat.isEnabled())
 					{
-						if (event.getCode().equals(KeyCode.ENTER))
+						if (event.getEventType() == KeyEvent.KEY_PRESSED)
 						{
-							if (!chat.isEnabled())
-							{
-								chat.setEnabled(true);
-							}
-							else
+							if (event.getCode().equals(KeyCode.ENTER))
 							{
 								chat.setEnabled(false);
 								sendChatMessage(chat.getInput());
 								chat.clear();
 								event.consume();
+								return;
 							}
-							return;
-						}
-
-						if (event.getCode().equals(KeyCode.SPACE))
-						{
-							if (chat.isEnabled())
+							else if (event.getCode().equals(KeyCode.BACK_SPACE))
 							{
-								chat.addInput(" ");
+								if (chat.isEnabled())
+								{
+									chat.delChar();
+								}
+								return;
 							}
 							return;
 						}
-
-						if (event.getCode().equals(KeyCode.BACK_SPACE))
+						else if (event.getEventType() == KeyEvent.KEY_TYPED)
 						{
-							if (chat.isEnabled())
+							if (event.getCharacter().equals("\r") || event.getCharacter().equals("\b"))
 							{
-								chat.delChar();
+								return;
 							}
-							return;
-						}
-					}
-					else if (event.getEventType() == KeyEvent.KEY_TYPED)
-					{
-						if (event.getCharacter().equals(KeyCode.BACK_SPACE.getChar()))
-						{
-							return;
-						}
 
-						if (chat.isEnabled() && !event.getCharacter().equals(KeyCode.ENTER.getChar()))
-						{
 							chat.addInput(event.getCharacter());
 							return;
 						}
 
-						if (event.getCharacter().equals(Settings.getCastKey().getChar()))
-						{
-							path = null;
-							finishPath();
-							currentInput += currentInput.isEmpty() ? "A" : "|A";
-						}
+						return;
+					}
 
-						if (event.getCharacter().equals(Settings.getShieldKey().getChar()))
-						{
-							path = null;
-							finishPath();
-							currentInput += currentInput.isEmpty() ? "S" : "|S";
-						}
+					// Chat is disabled
 
+					if (event.getEventType() != KeyEvent.KEY_PRESSED)
+					{
+						// Use key pressed events
+						return;
+					}
+
+					if (event.getCode().equals(KeyCode.ENTER))
+					{
+						chat.setEnabled(true);
+						return;
+					}
+
+					if (event.getCharacter().equals(Settings.getCastKey().getChar()))
+					{
+						path = null;
+						finishPath();
+						currentInput += currentInput.isEmpty() ? "A" : "|A";
+						return;
+					}
+
+					if (event.getCharacter().equals(Settings.getShieldKey().getChar()))
+					{
+						path = null;
+						finishPath();
+						currentInput += currentInput.isEmpty() ? "S" : "|S";
+						return;
 					}
 				}
 			});
 		});
+
 	}
 
 	private long lookupRuneLong(WnWPath path, Config config)
