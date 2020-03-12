@@ -334,6 +334,15 @@ public class OnlineMatchFrame extends Frame implements PlayerController, EventHa
 							return;
 						}
 
+						if (event.getCode().equals(KeyCode.SPACE))
+						{
+							if (chat.isEnabled())
+							{
+								chat.addInput(" ");
+							}
+							return;
+						}
+
 						if (event.getCode().equals(KeyCode.BACK_SPACE))
 						{
 							if (chat.isEnabled())
@@ -342,15 +351,14 @@ public class OnlineMatchFrame extends Frame implements PlayerController, EventHa
 							}
 							return;
 						}
-
-						if (event.getCode().equals(KeyCode.SPACE))
-						{
-							chat.addInput(" ");
-							return;
-						}
 					}
 					else if (event.getEventType() == KeyEvent.KEY_TYPED && !event.getCharacter().isBlank())
 					{
+						if (event.getCharacter().equals(KeyCode.BACK_SPACE.getChar()))
+						{
+							return;
+						}
+
 						if (chat.isEnabled() && !event.getCharacter().equals(KeyCode.ENTER.getChar()))
 						{
 							chat.addInput(event.getCharacter());
