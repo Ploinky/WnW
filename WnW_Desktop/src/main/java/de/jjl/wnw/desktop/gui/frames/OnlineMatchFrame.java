@@ -310,81 +310,76 @@ public class OnlineMatchFrame extends Frame implements PlayerController, EventHa
 				return;
 			}
 
-			n.addEventHandler(KeyEvent.ANY, new EventHandler<KeyEvent>()
+			n.addEventHandler(KeyEvent.ANY, e ->
 			{
-				@Override
-				public void handle(KeyEvent event)
+
+				if (chat.isEnabled())
 				{
-
-					if (chat.isEnabled())
+					if (e.getEventType() == KeyEvent.KEY_PRESSED)
 					{
-						if (event.getEventType() == KeyEvent.KEY_PRESSED)
+						if (e.getCode().equals(KeyCode.ENTER))
 						{
-							if (event.getCode().equals(KeyCode.ENTER))
+							chat.setEnabled(false);
+							sendChatMessage(chat.getInput());
+							chat.clear();
+							e.consume();
+							return;
+						}
+						else if (e.getCode().equals(KeyCode.BACK_SPACE))
+						{
+							if (chat.isEnabled())
 							{
-								chat.setEnabled(false);
-								sendChatMessage(chat.getInput());
-								chat.clear();
-								event.consume();
-								return;
-							}
-							else if (event.getCode().equals(KeyCode.BACK_SPACE))
-							{
-								if (chat.isEnabled())
-								{
-									chat.delChar();
-								}
-								return;
+								chat.delChar();
 							}
 							return;
 						}
-						else if (event.getEventType() == KeyEvent.KEY_TYPED)
+						return;
+					}
+					else if (e.getEventType() == KeyEvent.KEY_TYPED)
+					{
+						if (e.getCharacter().equals("\r") || e.getCharacter().equals("\b"))
 						{
-							if (event.getCharacter().equals("\r") || event.getCharacter().equals("\b"))
-							{
-								return;
-							}
-
-							chat.addInput(event.getCharacter());
 							return;
 						}
 
+						chat.addInput(e.getCharacter());
 						return;
 					}
 
-					// Chat is disabled
+					return;
+				}
 
-					if (event.getEventType() != KeyEvent.KEY_PRESSED)
-					{
-						// Use key pressed events
-						return;
-					}
+				// Chat is disabled
 
-					if (event.getCode().equals(KeyCode.ENTER))
-					{
-						chat.setEnabled(true);
-						return;
-					}
+				if (e.getEventType() != KeyEvent.KEY_PRESSED)
+				{
+					// Use key pressed events
+					return;
+				}
 
-					if (event.getCharacter().equals(Settings.getCastKey().getChar()))
-					{
-						path = null;
-						finishPath();
-						currentInput += currentInput.isEmpty() ? "A" : "|A";
-						return;
-					}
+				if (e.getCode().equals(KeyCode.ENTER))
+				{
+					chat.setEnabled(true);
+					return;
+				}
 
-					if (event.getCharacter().equals(Settings.getShieldKey().getChar()))
-					{
-						path = null;
-						finishPath();
-						currentInput += currentInput.isEmpty() ? "S" : "|S";
-						return;
-					}
+				if (e.getCode().equals(Settings.getCastKey()))
+				{
+					path = null;
+					finishPath();
+					currentInput += currentInput.isEmpty() ? "A" : "|A";
+					return;
+				}
+
+				if (e.getCode().equals(Settings.getShieldKey()))
+				{
+					path = null;
+					finishPath();
+					currentInput += currentInput.isEmpty() ? "S" : "|S";
+					return;
 				}
 			});
 		});
-
 	}
 
 	private long lookupRuneLong(WnWPath path, Config config)
