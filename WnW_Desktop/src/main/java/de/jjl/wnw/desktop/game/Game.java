@@ -36,6 +36,8 @@ public class Game extends Application implements FrameListener, WnWMsgListener
 	private WnWConnection conn;
 
 	private String name;
+	
+	private String host;
 
 	private Map<String, Supplier<Frame>> frames;
 
@@ -121,5 +123,15 @@ public class Game extends Application implements FrameListener, WnWMsgListener
 	public String getName()
 	{
 		return name;
+	}
+
+	public void setHost(String host)
+	{
+		this.host = host;
+	}
+	
+	public String getHost()
+	{
+		return host;
 	}
 }

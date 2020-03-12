@@ -218,7 +218,7 @@ public class OnlineMatchFrame extends Frame implements PlayerController, EventHa
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle("Game over");
 		alert.setHeaderText(msg.getVictor() + " wins!!!");
-		alert.setOnCloseRequest(e -> Platform.exit());
+		alert.setOnCloseRequest(e -> game.requestSceneChange(Frames.MAIN));
 		alert.show();
 	}
 
@@ -229,7 +229,7 @@ public class OnlineMatchFrame extends Frame implements PlayerController, EventHa
 		{
 			Debug.log("Attempting to connect to server at localhost.");
 			// TODO $Li 26.02.2019 close this
-			server = new Socket("localhost", 50002);
+			server = new Socket(game.getHost(), 50002);
 			server.setSoTimeout(0);
 
 			Debug.log("Connected to server at localhost.");
@@ -475,7 +475,7 @@ public class OnlineMatchFrame extends Frame implements PlayerController, EventHa
 			{
 				sendInput();
 
-				while (reader.ready())
+				while (ClientGameInstance.getInstance().isRunning() && reader.ready())
 				{
 					String s = reader.readLine();
 
