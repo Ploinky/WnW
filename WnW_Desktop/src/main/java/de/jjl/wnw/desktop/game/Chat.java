@@ -128,21 +128,44 @@ public class Chat implements GameObject, Drawable
 		List<MsgChatMessage> reverseMsgs = new ArrayList<>(chatHistory);
 		Collections.reverse(reverseMsgs);
 
+		int line = 0;
+
 		for (MsgChatMessage msg : reverseMsgs)
 		{
 			String msgTxt = msg.toChatString();
 
-			Text t = new Text(msgTxt);
+			List<String> msgParts = new ArrayList<>();
+
+			Text t = new Text("");
 			t.setFont(graphics.getFont());
 
-			while (msgTxt.length() > 0 && t.getLayoutBounds().getWidth() > getWidth())
+			while (msgTxt.length() > 0)
 			{
-				msgTxt = msgTxt.substring(0, msgTxt.length() - 1);
-				t = new Text(msgTxt);
-				t.setFont(graphics.getFont());
+				String tempTxt = "";
+				t.setText("");
+
+				while (msgTxt.length() > 0)
+				{
+					t.setText(tempTxt + msgTxt.substring(0, 1));
+
+					if (t.getLayoutBounds().getWidth() > getWidth())
+					{
+						break;
+					}
+
+					tempTxt += msgTxt.substring(0, 1);
+					msgTxt = msgTxt.substring(1);
+				}
+
+				msgParts.add(tempTxt);
 			}
 
-			graphics.fillText(msgTxt, x, y + height - 5 - (20 * (reverseMsgs.indexOf(msg) + 1)));
+			Collections.reverse(msgParts);
+
+			for (String txtPart : msgParts)
+			{
+				graphics.fillText(txtPart, x, y + height - 5 - (20 * (line++ + 1)));
+			}
 		}
 	}
 
