@@ -1,5 +1,7 @@
 package de.jjl.wnw.desktop.gui.server;
 
+import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Timer;
 
 import de.jjl.wnw.base.msg.MsgChatMessage;
@@ -8,8 +10,12 @@ import javafx.application.Application;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class DesktopServerGui extends Application
@@ -23,6 +29,33 @@ public class DesktopServerGui extends Application
 		TextArea txtChat = new TextArea();
 		root.setCenter(txtChat);
 		
+		TextField txtChatEnter = new TextField();
+		Button btnSend = new Button("Send");
+		
+		btnSend.disableProperty().bind(txtChatEnter.textProperty().isEmpty());
+		
+		btnSend.setOnAction(e ->
+		{
+			MsgChatMessage msg = new MsgChatMessage();
+			
+			msg.setPlayer("<SERVER>");
+			msg.setTimeStamp(String.format("[%02d:%02d:%02d]", LocalDateTime.now().getHour(),
+					LocalDateTime.now().getMinute(), LocalDateTime.now().getSecond()));
+			msg.setMsg(txtChatEnter.getText());
+
+			server.sendServerChatMessage(msg);
+		});
+		
+		HBox boxChat = new HBox();
+		boxChat.getChildren().addAll(txtChatEnter, btnSend);
+		
+		root.setBottom(boxChat);
+		
+		primaryStage.setOnCloseRequest(e ->
+		{
+			// TODO Shut down gracefully?
+			System.exit(0);
+		});
 		primaryStage.setScene(new Scene(root));
 		primaryStage.show();
 		

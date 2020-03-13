@@ -223,6 +223,11 @@ public class ServerGameInstance extends GameInstance
 	{
 		return running;
 	}
+	
+	public void sendServerChatMessage(MsgChatMessage msg)
+	{
+		sendChatMessage(msg);
+	}
 
 	public void setControllerPlayer1(PlayerController controller)
 	{
@@ -501,16 +506,16 @@ public class ServerGameInstance extends GameInstance
 	{
 		switch (msgMap.get(MsgConst.TYPE))
 		{
-		case MsgChatMessage.TYPE:
-			MsgChatMessage msgChat = new MsgChatMessage();
-			msgChat.fromMap(msgMap);
-			sendChatMessage(msgChat);
-			break;
-		case MsgPlayerInput.TYPE:
-			MsgPlayerInput msgInput = new MsgPlayerInput();
-			msgInput.fromMap(msgMap);
-			handlePlayerInput(msgInput, player);
-			break;
+			case MsgChatMessage.TYPE:
+				MsgChatMessage msgChat = new MsgChatMessage();
+				msgChat.fromMap(msgMap);
+				sendChatMessage(msgChat);
+				break;
+			case MsgPlayerInput.TYPE:
+				MsgPlayerInput msgInput = new MsgPlayerInput();
+				msgInput.fromMap(msgMap);
+				handlePlayerInput(msgInput, player);
+				break;
 		}
 	}
 
@@ -621,7 +626,7 @@ public class ServerGameInstance extends GameInstance
 			}
 		}
 	}
-
+	
 	private void sendChatMessage(MsgChatMessage msg)
 	{
 		chatMsgs.add(msg);
