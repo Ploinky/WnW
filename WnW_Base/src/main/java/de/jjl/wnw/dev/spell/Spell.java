@@ -1,5 +1,6 @@
 package de.jjl.wnw.dev.spell;
 
+import de.jjl.wnw.base.consts.Const;
 import de.jjl.wnw.dev.game.GameObject;
 import de.jjl.wnw.dev.game.Player;
 
@@ -52,7 +53,7 @@ public class Spell implements GameObject
 		height = shield ? 100 : 30;
 		x = 0;
 		y = 0;
-		speed = 800;
+		speed = Const.SPELL_SPEED;
 		id = generateSpellId();
 
 		this.setCaster(player);

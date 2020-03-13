@@ -22,4 +22,6 @@ public class Const
 	
 	public static final int PLAYER2_POS_X = 1800;
 	public static final int PLAYER2_POS_Y = 800;
+	
+	public static final int SPELL_SPEED = 1600;
 }
