@@ -26,6 +26,8 @@ import de.jjl.wnw.dev.net.NetPlayerController;
 import de.jjl.wnw.dev.rune.RuneUtil;
 import de.jjl.wnw.dev.spell.Spell;
 import de.jjl.wnw.dev.spell.SpellUtil;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.text.Font;
 
@@ -39,6 +41,8 @@ public class ServerGameInstance extends GameInstance
 	private ServerSocket serverSocket;
 	
 	private boolean isRunning;
+	
+	private ObservableList<MsgChatMessage> chatMsgs;
 	
 	private void startConnectionThread()
 	{
@@ -144,6 +148,7 @@ public class ServerGameInstance extends GameInstance
 		objects = new CopyOnWriteArrayList<>();
 		removeObjects = new CopyOnWriteArrayList<>();
 		currentRunes = new CopyOnWriteArrayList<>();
+		chatMsgs = FXCollections.observableArrayList();
 		p1Combo = new ArrayList<>();
 		p2Combo = new ArrayList<>();
 
@@ -182,6 +187,11 @@ public class ServerGameInstance extends GameInstance
 		graphics.fillText("GameObjects: " + objects.size(), 20, 60);
 	}
 
+	public ObservableList<MsgChatMessage> getChatMsgs()
+	{
+		return chatMsgs;
+	}
+	
 	public Collection<GameObject> getObjects()
 	{
 		return objects;
@@ -614,6 +624,7 @@ public class ServerGameInstance extends GameInstance
 
 	private void sendChatMessage(MsgChatMessage msg)
 	{
+		chatMsgs.add(msg);
 		if (player1Controller != null && player1Controller.isConnected())
 		{
 			player1Controller.sendMsg(msg);
