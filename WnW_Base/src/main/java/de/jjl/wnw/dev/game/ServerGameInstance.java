@@ -13,6 +13,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import de.jjl.wnw.base.consts.Const;
 import de.jjl.wnw.base.msg.MsgChatMessage;
 import de.jjl.wnw.base.msg.MsgConst;
 import de.jjl.wnw.base.msg.MsgGameEnd;
@@ -153,8 +154,8 @@ public class ServerGameInstance extends GameInstance
 		p2Combo = new ArrayList<>();
 
 		// TODO $Li 19.09.2019 dynamic arena sizing (and player positioning)
-		player1 = new GamePlayer(20, 80);
-		player2 = new GamePlayer(180, 80);
+		player1 = new GamePlayer(Const.PLAYER1_POS_X, Const.PLAYER1_POS_Y);
+		player2 = new GamePlayer(Const.PLAYER2_POS_X, Const.PLAYER2_POS_Y);
 		player2.faceLeft();
 
 		running = true;

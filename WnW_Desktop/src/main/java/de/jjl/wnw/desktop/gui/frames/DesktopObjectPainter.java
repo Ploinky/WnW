@@ -9,6 +9,7 @@ import java.util.Map;
 
 import javax.imageio.ImageIO;
 
+import de.jjl.wnw.base.consts.Const;
 import de.jjl.wnw.dev.game.Drawable;
 import de.jjl.wnw.dev.game.GameObject;
 import de.jjl.wnw.dev.game.GamePlayer;
@@ -37,8 +38,7 @@ public class DesktopObjectPainter
 		try
 		{
 			loadResources();
-		}
-		catch (IOException e)
+		} catch (IOException e)
 		{
 			// TODO $Li 23.02.2019 How do we clean this up?!
 			e.printStackTrace();
@@ -81,9 +81,9 @@ public class DesktopObjectPainter
 
 		// Draw player model
 		graphics.drawImage(playerSprite,
-				(player.getX() / 200d) * screenWidth
+				(player.getX() / (double) Const.ARENA_WIDTH) * screenWidth
 						+ (player.isFaceLeft() ? player.getWidth() / 2 : player.getWidth() / -2),
-				(player.getY() / 100d) * screenHeight - player.getHeight() / 2,
+				(player.getY() / (double) Const.ARENA_HEIGHT) * screenHeight - player.getHeight() / 2,
 				player.isFaceLeft() ? -player.getWidth() : player.getWidth(), player.getHeight());
 
 		// Draw healthbar
@@ -92,11 +92,13 @@ public class DesktopObjectPainter
 		double gap = 5;
 		double width = screenWidth / 50;
 		double height = screenWidth / 50;
-		double xCurr = (player.getX() / 200d) * screenWidth - (player.getLives() / 2) * (width + gap);
+		double xCurr = (player.getX() / (double) Const.ARENA_WIDTH) * screenWidth
+				- (player.getLives() / 2) * (width + gap);
 
 		for (int i = 0; i < player.getLives(); i++)
 		{
-			graphics.fillRect(xCurr, (player.getY() / 100d) * screenHeight + player.getHeight() / 2 + 10, width,
+			graphics.fillRect(xCurr,
+					(player.getY() / (double) Const.ARENA_HEIGHT) * screenHeight + player.getHeight() / 2 + 10, width,
 					height);
 
 			xCurr += (width + gap);
@@ -108,16 +110,13 @@ public class DesktopObjectPainter
 		if (obj instanceof Spell)
 		{
 			drawSpell((Spell) obj);
-		}
-		else if (obj instanceof GamePlayer)
+		} else if (obj instanceof GamePlayer)
 		{
 			drawPlayer((GamePlayer) obj);
-		}
-		else if (obj instanceof BaseRune)
+		} else if (obj instanceof BaseRune)
 		{
 			drawRune((BaseRune) obj);
-		}
-		else if (obj instanceof Drawable)
+		} else if (obj instanceof Drawable)
 		{
 			((Drawable) obj).drawOn(graphics);
 		}
@@ -137,10 +136,13 @@ public class DesktopObjectPainter
 			s += l;
 		}
 
-		// TODO $Li 19.09.2019 Painting, sizing dynamically?!
-		graphics.drawImage(spellSprites.get(s), spell.getX() - 15, spell.getY() - 15, 30, spell.isShield() ? 100 : 30);
+		double screenWidth = graphics.getCanvas().getWidth();
+		double screenHeight = graphics.getCanvas().getHeight();
 
-		graphics.setFill(Color.RED);
-		graphics.fillRect(spell.getX() - 1, spell.getY() - 1, 3, 3);
+		// TODO $Li 19.09.2019 Painting, sizing dynamically?!
+		graphics.drawImage(spellSprites.get(s),
+				(spell.getX() / (double) Const.ARENA_WIDTH) * screenWidth - spell.getWidth() / 2,
+				(spell.getY() / (double) Const.ARENA_HEIGHT) * screenHeight - spell.getHeight() / 2, 30,
+				spell.isShield() ? 100 : 30);
 	}
 }
