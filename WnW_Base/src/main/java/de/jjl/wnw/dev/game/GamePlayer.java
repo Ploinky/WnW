@@ -14,8 +14,10 @@ public class GamePlayer implements Player, Serializable
 
 	private int width;
 
+	/** X-Position in the arena */
 	private int x;
 
+	/** Y-Position in the arena */
 	private int y;
 
 	public GamePlayer(int x, int y)

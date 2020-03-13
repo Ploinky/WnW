@@ -33,7 +33,6 @@ import de.jjl.wnw.dev.PlayerController;
 import de.jjl.wnw.dev.game.ClientGameInstance;
 import de.jjl.wnw.dev.log.Debug;
 import javafx.animation.AnimationTimer;
-import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -194,17 +193,17 @@ public class OnlineMatchFrame extends Frame implements PlayerController, EventHa
 	{
 		switch (msgMap.get(MsgConst.TYPE))
 		{
-			case MsgGameState.TYPE:
-				updateGameState(msgMap.toString());
-				break;
-			case MsgChatMessage.TYPE:
-				handleChatMessage(msgMap);
-				break;
-			case MsgGameEnd.TYPE:
-				handleGameEndMessage(msgMap);
-				break;
-			default:
-				System.out.println("Unknown message type <" + msgMap.get(MsgConst.TYPE) + ">");
+		case MsgGameState.TYPE:
+			updateGameState(msgMap.toString());
+			break;
+		case MsgChatMessage.TYPE:
+			handleChatMessage(msgMap);
+			break;
+		case MsgGameEnd.TYPE:
+			handleGameEndMessage(msgMap);
+			break;
+		default:
+			System.out.println("Unknown message type <" + msgMap.get(MsgConst.TYPE) + ">");
 		}
 
 	}
@@ -229,7 +228,7 @@ public class OnlineMatchFrame extends Frame implements PlayerController, EventHa
 		{
 			Debug.log("Attempting to connect to server at localhost.");
 			// TODO $Li 26.02.2019 close this
-			server = new Socket(game.getHost(), 50002);
+			server = new Socket(game.getHost(), 51234);
 			server.setSoTimeout(0);
 
 			Debug.log("Connected to server at localhost.");

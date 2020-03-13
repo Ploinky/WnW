@@ -153,8 +153,8 @@ public class ServerGameInstance extends GameInstance
 		p2Combo = new ArrayList<>();
 
 		// TODO $Li 19.09.2019 dynamic arena sizing (and player positioning)
-		player1 = new GamePlayer(50, 400);
-		player2 = new GamePlayer(600, 400);
+		player1 = new GamePlayer(20, 80);
+		player2 = new GamePlayer(180, 80);
 		player2.faceLeft();
 
 		running = true;
@@ -164,7 +164,7 @@ public class ServerGameInstance extends GameInstance
 		
 		try
 		{
-			int port = 50002;
+			int port = 51234;
 			Debug.log("Creating server at port <" + port + ">");
 			serverSocket = new ServerSocket(port);
 			serverSocket.setSoTimeout(0);

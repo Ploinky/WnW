@@ -19,7 +19,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 
 public class DesktopObjectPainter
 {
@@ -28,6 +27,7 @@ public class DesktopObjectPainter
 	private Image playerSprite;
 
 	private Map<Long, Image> runeSprites;
+
 	private Map<String, Image> spellSprites;
 
 	public DesktopObjectPainter(GraphicsContext graphics)
@@ -76,19 +76,31 @@ public class DesktopObjectPainter
 
 	private void drawPlayer(GamePlayer player)
 	{
-		graphics.drawImage(playerSprite,
-				player.getX() + (player.isFaceLeft() ? player.getWidth() / 2 : player.getWidth() / -2),
-				player.getY() - player.getHeight() / 2, player.isFaceLeft() ? -player.getWidth() : player.getWidth(),
-				player.getHeight());
-		graphics.setFont(new Font(20));
-		graphics.setFill(Color.BLACK);
-		graphics.fillText("" + player.getLives(), player.getX(), player.getY());
+		double screenWidth = graphics.getCanvas().getWidth();
+		double screenHeight = graphics.getCanvas().getHeight();
 
+		// Draw player model
+		graphics.drawImage(playerSprite,
+				(player.getX() / 200d) * screenWidth
+						+ (player.isFaceLeft() ? player.getWidth() / 2 : player.getWidth() / -2),
+				(player.getY() / 100d) * screenHeight - player.getHeight() / 2,
+				player.isFaceLeft() ? -player.getWidth() : player.getWidth(), player.getHeight());
+
+		// Draw healthbar
 		graphics.setFill(Color.GREEN);
-//		graphics.fillRect(
-//				(double) player.getX() + (player.isFaceLeft() ? player.getWidth() / 2 : player.getWidth() / -2),
-//				(double) player.getY() - player.getHeight() / 2,
-//				player.isFaceLeft() ? -player.getWidth() : player.getWidth(), (double) player.getHeight());
+
+		double gap = 5;
+		double width = screenWidth / 50;
+		double height = screenWidth / 50;
+		double xCurr = (player.getX() / 200d) * screenWidth - (player.getLives() / 2) * (width + gap);
+
+		for (int i = 0; i < player.getLives(); i++)
+		{
+			graphics.fillRect(xCurr, (player.getY() / 100d) * screenHeight + player.getHeight() / 2 + 10, width,
+					height);
+
+			xCurr += (width + gap);
+		}
 	}
 
 	public void draw(GameObject obj)
