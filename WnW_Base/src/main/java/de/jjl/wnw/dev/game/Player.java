@@ -9,4 +9,6 @@ public interface Player extends GameObject
 	public void setLives(int lives);
 
 	public boolean isFaceLeft();
+
+	public void setName(String name);
 }

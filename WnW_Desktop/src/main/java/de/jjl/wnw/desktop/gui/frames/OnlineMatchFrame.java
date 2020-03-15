@@ -17,6 +17,8 @@ import de.jjl.wnw.base.msg.MsgConst;
 import de.jjl.wnw.base.msg.MsgGameEnd;
 import de.jjl.wnw.base.msg.MsgGameState;
 import de.jjl.wnw.base.msg.MsgPlayerInput;
+import de.jjl.wnw.base.msg.MsgPlayerName;
+import de.jjl.wnw.base.msg.MsgReqPlayerName;
 import de.jjl.wnw.base.rune.parser.Config;
 import de.jjl.wnw.base.rune.parser.Grid;
 import de.jjl.wnw.base.rune.parser.WnWPathInputParser;
@@ -107,8 +109,7 @@ public class OnlineMatchFrame extends Frame implements PlayerController, EventHa
 		try
 		{
 			return loader.load(getClass().getResourceAsStream("/xml/" + Frames.ONLINEMATCH + ".fxml"));
-		}
-		catch (IOException e)
+		} catch (IOException e)
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -202,6 +203,9 @@ public class OnlineMatchFrame extends Frame implements PlayerController, EventHa
 		case MsgGameEnd.TYPE:
 			handleGameEndMessage(msgMap);
 			break;
+		case MsgReqPlayerName.TYPE:
+			sendPlayerName();
+			break;
 		default:
 			System.out.println("Unknown message type <" + msgMap.get(MsgConst.TYPE) + ">");
 		}
@@ -224,6 +228,23 @@ public class OnlineMatchFrame extends Frame implements PlayerController, EventHa
 	@FXML
 	private void initialize()
 	{
+		AnimationTimer timer = new AnimationTimer()
+		{
+			@Override
+			public void handle(long now)
+			{
+				update();
+				paintScene();
+
+				if (!ClientGameInstance.getInstance().isRunning())
+				{
+					stop();
+				}
+			}
+		};
+
+		timer.start();
+
 		try
 		{
 			Debug.log("Attempting to connect to server at localhost.");
@@ -235,8 +256,7 @@ public class OnlineMatchFrame extends Frame implements PlayerController, EventHa
 
 			reader = new BufferedReader(new InputStreamReader(server.getInputStream()));
 			writer = new BufferedWriter(new OutputStreamWriter(server.getOutputStream()));
-		}
-		catch (IOException e)
+		} catch (IOException e)
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -285,23 +305,6 @@ public class OnlineMatchFrame extends Frame implements PlayerController, EventHa
 
 		root.addEventFilter(MouseEvent.ANY, this);
 
-		AnimationTimer timer = new AnimationTimer()
-		{
-			@Override
-			public void handle(long now)
-			{
-				update();
-				paintScene();
-
-				if (!ClientGameInstance.getInstance().isRunning())
-				{
-					stop();
-				}
-			}
-		};
-
-		timer.start();
-
 		pane.sceneProperty().addListener((p, o, n) ->
 		{
 			if (n == null)
@@ -323,8 +326,7 @@ public class OnlineMatchFrame extends Frame implements PlayerController, EventHa
 							chat.clear();
 							e.consume();
 							return;
-						}
-						else if (e.getCode().equals(KeyCode.BACK_SPACE))
+						} else if (e.getCode().equals(KeyCode.BACK_SPACE))
 						{
 							if (chat.isEnabled())
 							{
@@ -333,8 +335,7 @@ public class OnlineMatchFrame extends Frame implements PlayerController, EventHa
 							return;
 						}
 						return;
-					}
-					else if (e.getEventType() == KeyEvent.KEY_TYPED)
+					} else if (e.getEventType() == KeyEvent.KEY_TYPED)
 					{
 						if (e.getCharacter().equals("\r") || e.getCharacter().equals("\b"))
 						{
@@ -379,6 +380,8 @@ public class OnlineMatchFrame extends Frame implements PlayerController, EventHa
 				}
 			});
 		});
+
+		sendPlayerName();
 	}
 
 	private long lookupRuneLong(WnWPath path, Config config)
@@ -435,8 +438,23 @@ public class OnlineMatchFrame extends Frame implements PlayerController, EventHa
 		{
 			writer.write(msg.getMsgMap().toString() + "\n");
 			writer.flush();
+		} catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		catch (IOException e)
+	}
+
+	private void sendPlayerName()
+	{
+		MsgPlayerName msg = new MsgPlayerName();
+		msg.setName(game.getName());
+
+		try
+		{
+			writer.write(msg.getMsgMap().toString() + "\n");
+			writer.flush();
+		} catch (IOException e)
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -458,8 +476,7 @@ public class OnlineMatchFrame extends Frame implements PlayerController, EventHa
 		{
 			writer.write(msg.getMsgMap().toString() + "\n");
 			writer.flush();
-		}
-		catch (IOException e)
+		} catch (IOException e)
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -485,14 +502,12 @@ public class OnlineMatchFrame extends Frame implements PlayerController, EventHa
 						handleGameMessage(msgMap);
 					}
 				}
-			}
-			catch (SocketException sock)
+			} catch (SocketException sock)
 			{
 				System.err.println("Lost connection to server at <" + server.getInetAddress() + ">");
 				ClientGameInstance.getInstance().stop();
 				return;
-			}
-			catch (IOException e)
+			} catch (IOException e)
 			{
 				// TODO Auto-generated catch block
 				e.printStackTrace();

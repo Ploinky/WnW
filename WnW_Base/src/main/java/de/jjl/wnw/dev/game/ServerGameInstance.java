@@ -19,6 +19,7 @@ import de.jjl.wnw.base.msg.MsgConst;
 import de.jjl.wnw.base.msg.MsgGameEnd;
 import de.jjl.wnw.base.msg.MsgGameState;
 import de.jjl.wnw.base.msg.MsgPlayerInput;
+import de.jjl.wnw.base.msg.MsgPlayerName;
 import de.jjl.wnw.base.rune.WnWRune;
 import de.jjl.wnw.base.util.WnWMap;
 import de.jjl.wnw.dev.PlayerController;
@@ -485,21 +486,35 @@ public class ServerGameInstance extends GameInstance
 		{
 			return;
 		}
-
+		
+		// TODO this is temporary until i figure out how i want spells and shields to work...
+		if(s1.getSpellCombo().length != s2.getSpellCombo().length)
+		{
+			return;
+		}
+		
+		for(int i = 0; i < s1.getSpellCombo().length; i++)
+		{
+			if(s1.getSpellCombo()[i] != s2.getSpellCombo()[i])
+			{
+				return;
+			}
+		}
+		
 		int s1Temp = s1.getDamage();
 		s1.weaken(s2.getDamage());
 		s2.weaken(s1Temp);
 
 		if (s1.getDamage() < 1)
 		{
-			System.out.println("SPELL DEFENDED!");
 			removeObjects.add(s1);
+			return;
 		}
 
 		if (s2.getDamage() < 1)
 		{
-			System.out.println("SPELL DEFENDED!");
 			removeObjects.add(s2);
+			return;
 		}
 	}
 
@@ -517,9 +532,14 @@ public class ServerGameInstance extends GameInstance
 				msgInput.fromMap(msgMap);
 				handlePlayerInput(msgInput, player);
 				break;
+			case MsgPlayerName.TYPE:
+				MsgPlayerName msgName= new MsgPlayerName();
+				msgName.fromMap(msgMap);
+				handlePlayerName(msgName, player);
+				break;
 		}
 	}
-
+	
 	private void handlePlayerInput(MsgPlayerInput msg, Player player)
 	{
 		String[] input = msg.getInput().split("\\|");
@@ -566,6 +586,10 @@ public class ServerGameInstance extends GameInstance
 			}
 		}
 	}
+	
+	private void handlePlayerName(MsgPlayerName msg, Player player)
+	{
+		player.setName(msg.getName());}
 
 	private void refresh()
 	{
@@ -648,6 +672,8 @@ public class ServerGameInstance extends GameInstance
 		msg.setGameTime(System.currentTimeMillis());
 		msg.setP1Character(player1);
 		msg.setP2Character(player2);
+		msg.setP1Name(player1.getName());
+		msg.setP2Name(player2.getName());
 		msg.setP1Lives(player1.getLives());
 		msg.setP2Lives(player2.getLives());
 

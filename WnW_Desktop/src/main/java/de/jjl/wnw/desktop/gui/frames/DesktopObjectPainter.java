@@ -84,6 +84,10 @@ public class DesktopObjectPainter
 				(player.getY() / (double) Const.ARENA_HEIGHT) * screenHeight - player.getHeight() / 2,
 				player.isFaceLeft() ? -player.getWidth() : player.getWidth(), player.getHeight());
 
+		graphics.setFill(Color.GREEN);
+		graphics.fillText(player.getName(), (player.getX() / (double) Const.ARENA_WIDTH) * screenWidth,
+				(player.getY() / (double) Const.ARENA_HEIGHT) * screenHeight - player.getHeight());
+
 		// Draw healthbar
 		graphics.setFill(Color.GREEN);
 
@@ -148,7 +152,8 @@ public class DesktopObjectPainter
 		{
 			graphics.drawImage(spellSprites.get(s),
 					(spell.getX() / (double) Const.ARENA_WIDTH) * screenWidth - spell.getWidth() / 2,
-					(spell.getY() / (double) Const.ARENA_HEIGHT) * screenHeight - spell.getHeight() / 2, 60, 60);
+					(spell.getY() / (double) Const.ARENA_HEIGHT) * screenHeight - spell.getHeight() / 2,
+					spell.getCaster().isFaceLeft() ? -60 : 60, 60);
 		}
 	}
 }

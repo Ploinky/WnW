@@ -38,9 +38,13 @@ public class MsgGameState
 
 	private static final String PARAM_P1_CHARACTER = "P1Character";
 
+	private static final String PARAM_P1_NAME = "P1Name";
+	
 	private static final String PARAM_P1_LIVES = "P1Lives";
 
 	private static final String PARAM_P2_CHARACTER = "P2Character";
+	
+	private static final String PARAM_P2_NAME = "P2Name";
 
 	private static final String PARAM_P2_LIVES = "P2Lives";
 
@@ -49,10 +53,14 @@ public class MsgGameState
 	private long gameTime;
 
 	private GamePlayer p1Character;
+	
+	private String p1Name;
 
 	private Integer p1Lives;
 
 	private GamePlayer p2Character;
+	
+	private String p2Name;
 
 	private Integer p2Lives;
 
@@ -79,6 +87,9 @@ public class MsgGameState
 		bo = new ByteArrayInputStream(Base64.getDecoder().decode(map.get(PARAM_P2_CHARACTER).getBytes()));
 		so = new ObjectInputStream(bo);
 		p2Character = (GamePlayer) so.readObject();
+		
+		p1Name = map.get(PARAM_P1_NAME);
+		p2Name = map.get(PARAM_P2_NAME);
 		
 		p1Lives = Integer.parseInt(map.get(PARAM_P1_LIVES));
 		p2Lives = Integer.parseInt(map.get(PARAM_P2_LIVES));
@@ -116,6 +127,10 @@ public class MsgGameState
 		map.put(PARAM_P2_CHARACTER, new String(Base64.getEncoder().encode(bo.toByteArray())));
 		
 		map.put(PARAM_SPELLS, spells.toString());
+		
+		map.put(PARAM_P1_NAME, p1Name);
+		map.put(PARAM_P2_NAME, p2Name);
+		
 		map.put(PARAM_P1_LIVES, "" + p1Lives);
 		map.put(PARAM_P2_LIVES, "" + p2Lives);
 
@@ -125,6 +140,11 @@ public class MsgGameState
 	public GamePlayer getP1Character()
 	{
 		return p1Character;
+	}
+	
+	public String getP1Name()
+	{
+		return p1Name;
 	}
 
 	public Integer getP1Lives()
@@ -137,6 +157,11 @@ public class MsgGameState
 		return p2Character;
 	}
 
+	public String getP2Name()
+	{
+		return p2Name;
+	}
+	
 	public Integer getP2Lives()
 	{
 		return p2Lives;
@@ -156,6 +181,11 @@ public class MsgGameState
 	{
 		this.p1Character = p1Character;
 	}
+	
+	public void setP1Name(String name)
+	{
+		this.p1Name = name;
+	}
 
 	public void setP1Lives(Integer p1Lives)
 	{
@@ -165,6 +195,11 @@ public class MsgGameState
 	public void setP2Character(GamePlayer p2Character)
 	{
 		this.p2Character = p2Character;
+	}
+	
+	public void setP2Name(String name)
+	{
+		this.p2Name = name;
 	}
 
 	public void setP2Lives(Integer p2Lives)

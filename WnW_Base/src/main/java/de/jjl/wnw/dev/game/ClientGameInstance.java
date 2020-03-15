@@ -50,6 +50,11 @@ public class ClientGameInstance extends GameInstance
 			objects.add(player1);
 		}
 		
+		if(msg.getP1Name() != null && !msg.getP1Name().equals(player1.getName()))
+		{
+			player1.setName(msg.getP1Name());
+		}
+		
 		player1.setLives(msg.getP1Lives());
 
 		if(player2 == null)
@@ -57,6 +62,11 @@ public class ClientGameInstance extends GameInstance
 			player2 = msg.getP2Character();
 			player2.faceLeft();
 			objects.add(player2);
+		}
+		
+		if(msg.getP2Name() != null && !msg.getP2Name().equals(player2.getName()))
+		{
+			player2.setName(msg.getP2Name());
 		}
 
 		player2.setLives(msg.getP2Lives());

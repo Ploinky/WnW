@@ -12,6 +12,8 @@ public class GamePlayer implements Player, Serializable
 
 	private int lives;
 
+	private String name;
+	
 	private int width;
 
 	/** X-Position in the arena */
@@ -32,6 +34,8 @@ public class GamePlayer implements Player, Serializable
 
 		lives = 5;
 		faceLeft = false;
+		
+		name = "BOT_NAME";
 	}
 
 	public void damage(int damage)
@@ -62,7 +66,18 @@ public class GamePlayer implements Player, Serializable
 	{
 		return lives;
 	}
+	
+	@Override
+	public void setName(String name)
+	{
+		this.name = name;
+	}
 
+	public String getName()
+	{
+		return name;
+	}
+	
 	@Override
 	public int getWidth()
 	{
