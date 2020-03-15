@@ -123,6 +123,19 @@ public class Spell implements GameObject
 				x += frameTime * speed / 1000;
 			}
 		}
+		else
+		{
+			this.x = getCaster().getX();
+			
+			if(caster.isFaceLeft())
+			{
+				x -= (getWidth() + getCaster().getWidth());
+			}
+			else
+			{
+				x += (getWidth() + getCaster().getWidth()) * 2;
+			}
+		}
 	}
 
 	public void setCaster(Player caster)
@@ -132,7 +145,7 @@ public class Spell implements GameObject
 
 	public void setPos(int x, int y)
 	{
-		this.x = x + (shield ? (caster.isFaceLeft() ? -30 : 30) : 0);
+		this.x = x;
 		this.y = y;
 	}
 

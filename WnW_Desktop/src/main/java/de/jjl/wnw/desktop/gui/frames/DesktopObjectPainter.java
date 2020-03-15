@@ -1,8 +1,5 @@
 package de.jjl.wnw.desktop.gui.frames;
 
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -52,26 +49,27 @@ public class DesktopObjectPainter
 
 		runeSprites = new HashMap<>();
 		// TODO $Li 23.02.2019 boy we REALLY need to fix this!
-		runeSprites.put(14789l,
-				SwingFXUtils.toFXImage(ImageIO.read(new File("res/14789.png")), new WritableImage(40, 40)));
-		runeSprites.put(159l, SwingFXUtils.toFXImage(ImageIO.read(new File("res/159.png")), new WritableImage(40, 40)));
-		runeSprites.put(753l, SwingFXUtils.toFXImage(ImageIO.read(new File("res/753.png")), new WritableImage(40, 40)));
+		runeSprites.put(14789l, SwingFXUtils.toFXImage(
+				ImageIO.read(getClass().getResourceAsStream("/img/runes/14789.png")), new WritableImage(40, 40)));
+		runeSprites.put(159l, SwingFXUtils.toFXImage(ImageIO.read(getClass().getResourceAsStream("/img/runes/159.png")),
+				new WritableImage(40, 40)));
+		runeSprites.put(753l, SwingFXUtils.toFXImage(ImageIO.read(getClass().getResourceAsStream("/img/runes/753.png")),
+				new WritableImage(40, 40)));
 
 		spellSprites = new HashMap<>();
-		BufferedImage image = new BufferedImage(30, 30, BufferedImage.TYPE_INT_BGR);
-		Graphics2D graphics = image.createGraphics();
-		graphics.setColor(java.awt.Color.red);
-		graphics.fillRect(0, 0, 30, 30);
 
-		spellSprites.put("159", SwingFXUtils.toFXImage(image, null));
-
-		graphics.setColor(java.awt.Color.green);
-		graphics.fillRect(0, 0, 30, 30);
-		spellSprites.put("753", SwingFXUtils.toFXImage(image, null));
-
-		graphics.setColor(java.awt.Color.blue);
-		graphics.fillRect(0, 0, 30, 30);
-		spellSprites.put("14789", SwingFXUtils.toFXImage(image, null));
+		spellSprites.put("159",
+				new Image(getClass().getResource("/img/spells/159.png").openStream(), 500, 500, false, true));
+		spellSprites.put("753",
+				new Image(getClass().getResource("/img/spells/753.png").openStream(), 500, 500, false, true));
+		spellSprites.put("14789",
+				new Image(getClass().getResource("/img/spells/14789.png").openStream(), 500, 500, false, true));
+		spellSprites.put("159_S",
+				new Image(getClass().getResource("/img/spells/159_S.png").openStream(), 500, 500, false, true));
+		spellSprites.put("753_S",
+				new Image(getClass().getResource("/img/spells/753_S.png").openStream(), 500, 500, false, true));
+		spellSprites.put("14789_S",
+				new Image(getClass().getResource("/img/spells/14789_S.png").openStream(), 500, 500, false, true));
 	}
 
 	private void drawPlayer(GamePlayer player)
@@ -140,9 +138,17 @@ public class DesktopObjectPainter
 		double screenHeight = graphics.getCanvas().getHeight();
 
 		// TODO $Li 19.09.2019 Painting, sizing dynamically?!
-		graphics.drawImage(spellSprites.get(s),
-				(spell.getX() / (double) Const.ARENA_WIDTH) * screenWidth - spell.getWidth() / 2,
-				(spell.getY() / (double) Const.ARENA_HEIGHT) * screenHeight - spell.getHeight() / 2, 30,
-				spell.isShield() ? 100 : 30);
+		if (spell.isShield())
+		{
+			graphics.drawImage(spellSprites.get(s + "_S"),
+					(spell.getX() / (double) Const.ARENA_WIDTH) * screenWidth - spell.getWidth() / 2,
+					(spell.getY() / (double) Const.ARENA_HEIGHT) * screenHeight - spell.getHeight() / 2,
+					spell.getCaster().isFaceLeft() ? 60 : -60, 100);
+		} else
+		{
+			graphics.drawImage(spellSprites.get(s),
+					(spell.getX() / (double) Const.ARENA_WIDTH) * screenWidth - spell.getWidth() / 2,
+					(spell.getY() / (double) Const.ARENA_HEIGHT) * screenHeight - spell.getHeight() / 2, 60, 60);
+		}
 	}
 }

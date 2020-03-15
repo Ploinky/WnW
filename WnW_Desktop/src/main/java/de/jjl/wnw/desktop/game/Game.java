@@ -36,7 +36,7 @@ public class Game extends Application implements FrameListener, WnWMsgListener
 	private WnWConnection conn;
 
 	private String name;
-	
+
 	private String host;
 
 	private Map<String, Supplier<Frame>> frames;
@@ -50,7 +50,7 @@ public class Game extends Application implements FrameListener, WnWMsgListener
 
 		stage.setScene(new Scene(new Pane()));
 
-		stage.getScene().getStylesheets().add("css/main.css");
+		stage.getScene().getStylesheets().add(getClass().getResource("/css/main.css").toString());
 
 		frames.put(Frames.MAIN, () -> new MainFrame(this));
 		frames.put(Frames.SETTINGS, () -> new SettingsFrame(this));
@@ -71,8 +71,7 @@ public class Game extends Application implements FrameListener, WnWMsgListener
 		try
 		{
 			stage.getScene().setRoot(frames.get(newFrame).get().getAsNode());
-		}
-		catch (Exception e)
+		} catch (Exception e)
 		{
 			// TODO Handle
 			throw new RuntimeException("Error loading new scene for String <" + newFrame + ">", e);
@@ -88,8 +87,7 @@ public class Game extends Application implements FrameListener, WnWMsgListener
 		{
 			conn = new WnWConnection(host, Const.DEFAULT_PORT);
 			conn.addMsgListener(this);
-		}
-		catch (IOException e)
+		} catch (IOException e)
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -101,11 +99,11 @@ public class Game extends Application implements FrameListener, WnWMsgListener
 	{
 		switch (msg.getType())
 		{
-			case MsgConst.TYPE_REQ_NAME:
-				Map<String, String> info = new HashMap<>();
-				info.put(MsgConst.PARAM_NAME, name);
-				conn.sendMsg(new WnWMsg(MsgConst.TYPE_NAME, info));
-				break;
+		case MsgConst.TYPE_REQ_NAME:
+			Map<String, String> info = new HashMap<>();
+			info.put(MsgConst.PARAM_NAME, name);
+			conn.sendMsg(new WnWMsg(MsgConst.TYPE_NAME, info));
+			break;
 		}
 	}
 
@@ -129,7 +127,7 @@ public class Game extends Application implements FrameListener, WnWMsgListener
 	{
 		this.host = host;
 	}
-	
+
 	public String getHost()
 	{
 		return host;
