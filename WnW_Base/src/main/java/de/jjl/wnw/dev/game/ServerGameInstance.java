@@ -597,11 +597,11 @@ public class ServerGameInstance extends GameInstance
 		{
 			if(player1.getLives() <= 0)
 			{
-				sendGameEndMessage("Player1");
+				sendGameEndMessage(player2.getName());
 			}
 			else if(player2.getLives() <= 0)
 			{
-				sendGameEndMessage("Player2");
+				sendGameEndMessage(player1.getName());
 			}
 			
 			running = false;

@@ -418,6 +418,8 @@ public class OnlineMatchFrame extends Frame implements PlayerController, EventHa
 		GraphicsContext graphics = canvas.getGraphicsContext2D();
 		graphics.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
+		painter.drawMap();
+
 		ClientGameInstance.getInstance().getObjects().forEach(e -> painter.draw(e));
 
 		if (getPath() != null)

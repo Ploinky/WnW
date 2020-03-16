@@ -17,6 +17,9 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 
 public class DesktopObjectPainter
 {
@@ -28,6 +31,8 @@ public class DesktopObjectPainter
 
 	private Map<String, Image> spellSprites;
 
+	private Image mapSprite;
+
 	public DesktopObjectPainter(GraphicsContext graphics)
 	{
 		this.graphics = graphics;
@@ -35,7 +40,8 @@ public class DesktopObjectPainter
 		try
 		{
 			loadResources();
-		} catch (IOException e)
+		}
+		catch (IOException e)
 		{
 			// TODO $Li 23.02.2019 How do we clean this up?!
 			e.printStackTrace();
@@ -44,6 +50,8 @@ public class DesktopObjectPainter
 
 	private void loadResources() throws IOException
 	{
+		mapSprite = new Image(getClass().getResource("/img/maps/Castle.png").openStream());
+
 		playerSprite = SwingFXUtils
 				.toFXImage(ImageIO.read(getClass().getResourceAsStream("/img/Lil' Wizzy Cropped.png")), null);
 
@@ -77,15 +85,20 @@ public class DesktopObjectPainter
 		double screenWidth = graphics.getCanvas().getWidth();
 		double screenHeight = graphics.getCanvas().getHeight();
 
+		double playerDrawX = (player.getX() / (double) Const.ARENA_WIDTH) * screenWidth;
+
 		// Draw player model
 		graphics.drawImage(playerSprite,
-				(player.getX() / (double) Const.ARENA_WIDTH) * screenWidth
-						+ (player.isFaceLeft() ? player.getWidth() / 2 : player.getWidth() / -2),
+				playerDrawX + (player.isFaceLeft() ? player.getWidth() / 2 : player.getWidth() / -2),
 				(player.getY() / (double) Const.ARENA_HEIGHT) * screenHeight - player.getHeight() / 2,
 				player.isFaceLeft() ? -player.getWidth() : player.getWidth(), player.getHeight());
 
+		graphics.setFont(Font.font("Sans-Serif", FontWeight.BOLD, 30));
+
+		Text t = new Text(player.getName());
+		t.setFont(graphics.getFont());
 		graphics.setFill(Color.GREEN);
-		graphics.fillText(player.getName(), (player.getX() / (double) Const.ARENA_WIDTH) * screenWidth,
+		graphics.fillText(player.getName(), playerDrawX - t.getLayoutBounds().getWidth() / 2,
 				(player.getY() / (double) Const.ARENA_HEIGHT) * screenHeight - player.getHeight());
 
 		// Draw healthbar
@@ -112,13 +125,16 @@ public class DesktopObjectPainter
 		if (obj instanceof Spell)
 		{
 			drawSpell((Spell) obj);
-		} else if (obj instanceof GamePlayer)
+		}
+		else if (obj instanceof GamePlayer)
 		{
 			drawPlayer((GamePlayer) obj);
-		} else if (obj instanceof BaseRune)
+		}
+		else if (obj instanceof BaseRune)
 		{
 			drawRune((BaseRune) obj);
-		} else if (obj instanceof Drawable)
+		}
+		else if (obj instanceof Drawable)
 		{
 			((Drawable) obj).drawOn(graphics);
 		}
@@ -148,12 +164,39 @@ public class DesktopObjectPainter
 					(spell.getX() / (double) Const.ARENA_WIDTH) * screenWidth - spell.getWidth() / 2,
 					(spell.getY() / (double) Const.ARENA_HEIGHT) * screenHeight - spell.getHeight() / 2,
 					spell.getCaster().isFaceLeft() ? 60 : -60, 100);
-		} else
+		}
+		else
 		{
 			graphics.drawImage(spellSprites.get(s),
 					(spell.getX() / (double) Const.ARENA_WIDTH) * screenWidth - spell.getWidth() / 2,
 					(spell.getY() / (double) Const.ARENA_HEIGHT) * screenHeight - spell.getHeight() / 2,
 					spell.getCaster().isFaceLeft() ? -60 : 60, 60);
+		}
+	}
+
+	public void drawMap()
+	{
+		double screenWidth = graphics.getCanvas().getWidth();
+		double screenHeight = graphics.getCanvas().getHeight();
+
+		try
+		{
+			mapSprite = new Image(getClass().getResource("/img/maps/Castle.png").openStream(), screenWidth,
+					screenHeight, true, false);
+		}
+		catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		if (screenWidth > screenHeight * 2)
+		{
+			graphics.drawImage(mapSprite, 0, 0, screenWidth, screenWidth / 2);
+		}
+		else
+		{
+			graphics.drawImage(mapSprite, 0, 0, screenHeight * 2, screenHeight);
 		}
 	}
 }
