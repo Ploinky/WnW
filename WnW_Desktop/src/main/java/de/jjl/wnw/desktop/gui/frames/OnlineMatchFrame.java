@@ -48,6 +48,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.stage.Modality;
 
 public class OnlineMatchFrame extends Frame implements PlayerController, EventHandler<MouseEvent>
 {
@@ -109,7 +110,8 @@ public class OnlineMatchFrame extends Frame implements PlayerController, EventHa
 		try
 		{
 			return loader.load(getClass().getResourceAsStream("/xml/" + Frames.ONLINEMATCH + ".fxml"));
-		} catch (IOException e)
+		}
+		catch (IOException e)
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -222,6 +224,8 @@ public class OnlineMatchFrame extends Frame implements PlayerController, EventHa
 		alert.setTitle("Game over");
 		alert.setHeaderText(msg.getVictor() + " wins!!!");
 		alert.setOnCloseRequest(e -> game.requestSceneChange(Frames.MAIN));
+		alert.initOwner(game.getStage());
+		alert.initModality(Modality.WINDOW_MODAL);
 		alert.show();
 	}
 
@@ -256,7 +260,8 @@ public class OnlineMatchFrame extends Frame implements PlayerController, EventHa
 
 			reader = new BufferedReader(new InputStreamReader(server.getInputStream()));
 			writer = new BufferedWriter(new OutputStreamWriter(server.getOutputStream()));
-		} catch (IOException e)
+		}
+		catch (IOException e)
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -326,7 +331,8 @@ public class OnlineMatchFrame extends Frame implements PlayerController, EventHa
 							chat.clear();
 							e.consume();
 							return;
-						} else if (e.getCode().equals(KeyCode.BACK_SPACE))
+						}
+						else if (e.getCode().equals(KeyCode.BACK_SPACE))
 						{
 							if (chat.isEnabled())
 							{
@@ -335,7 +341,8 @@ public class OnlineMatchFrame extends Frame implements PlayerController, EventHa
 							return;
 						}
 						return;
-					} else if (e.getEventType() == KeyEvent.KEY_TYPED)
+					}
+					else if (e.getEventType() == KeyEvent.KEY_TYPED)
 					{
 						if (e.getCharacter().equals("\r") || e.getCharacter().equals("\b"))
 						{
@@ -440,7 +447,8 @@ public class OnlineMatchFrame extends Frame implements PlayerController, EventHa
 		{
 			writer.write(msg.getMsgMap().toString() + "\n");
 			writer.flush();
-		} catch (IOException e)
+		}
+		catch (IOException e)
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -456,7 +464,8 @@ public class OnlineMatchFrame extends Frame implements PlayerController, EventHa
 		{
 			writer.write(msg.getMsgMap().toString() + "\n");
 			writer.flush();
-		} catch (IOException e)
+		}
+		catch (IOException e)
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -478,7 +487,8 @@ public class OnlineMatchFrame extends Frame implements PlayerController, EventHa
 		{
 			writer.write(msg.getMsgMap().toString() + "\n");
 			writer.flush();
-		} catch (IOException e)
+		}
+		catch (IOException e)
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -504,12 +514,14 @@ public class OnlineMatchFrame extends Frame implements PlayerController, EventHa
 						handleGameMessage(msgMap);
 					}
 				}
-			} catch (SocketException sock)
+			}
+			catch (SocketException sock)
 			{
 				System.err.println("Lost connection to server at <" + server.getInetAddress() + ">");
 				ClientGameInstance.getInstance().stop();
 				return;
-			} catch (IOException e)
+			}
+			catch (IOException e)
 			{
 				// TODO Auto-generated catch block
 				e.printStackTrace();

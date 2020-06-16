@@ -14,7 +14,7 @@
                <children>
                   <VBox alignment="CENTER" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <Button fx:id="btnPracticeKey" mnemonicParsing="false" onAction="#btnPracticeKeyOnAction" text="PracticeDummy" />
+                        <Button fx:id="btnPracticeKey" mnemonicParsing="false" onAction="#btnPracticeKeyOnAction" text="Online" />
                         <Button fx:id="btnPractice" mnemonicParsing="false" onAction="#btnPracticeOnAction" text="Practice" />
                         <Button fx:id="btnSettings" mnemonicParsing="false" onAction="#btnSettingsOnAction" text="Settings" />
                         <Button fx:id="btnExit" mnemonicParsing="false" onAction="#btnExitOnAction" text="Exit" />

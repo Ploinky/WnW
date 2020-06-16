@@ -71,7 +71,8 @@ public class Game extends Application implements FrameListener, WnWMsgListener
 		try
 		{
 			stage.getScene().setRoot(frames.get(newFrame).get().getAsNode());
-		} catch (Exception e)
+		}
+		catch (Exception e)
 		{
 			// TODO Handle
 			throw new RuntimeException("Error loading new scene for String <" + newFrame + ">", e);
@@ -87,7 +88,8 @@ public class Game extends Application implements FrameListener, WnWMsgListener
 		{
 			conn = new WnWConnection(host, Const.DEFAULT_PORT);
 			conn.addMsgListener(this);
-		} catch (IOException e)
+		}
+		catch (IOException e)
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -131,5 +133,15 @@ public class Game extends Application implements FrameListener, WnWMsgListener
 	public String getHost()
 	{
 		return host;
+	}
+
+	public Stage getStage()
+	{
+		return stage;
+	}
+
+	public void setStage(Stage stage)
+	{
+		this.stage = stage;
 	}
 }
