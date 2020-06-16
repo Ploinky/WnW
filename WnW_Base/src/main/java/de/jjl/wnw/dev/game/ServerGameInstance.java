@@ -25,6 +25,7 @@ import de.jjl.wnw.base.util.WnWMap;
 import de.jjl.wnw.dev.PlayerController;
 import de.jjl.wnw.dev.log.Debug;
 import de.jjl.wnw.dev.net.NetPlayerController;
+import de.jjl.wnw.dev.net.PlayerControllerListener;
 import de.jjl.wnw.dev.rune.RuneUtil;
 import de.jjl.wnw.dev.spell.Spell;
 import de.jjl.wnw.dev.spell.SpellUtil;
@@ -33,7 +34,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.text.Font;
 
-public class ServerGameInstance extends GameInstance
+public class ServerGameInstance extends GameInstance implements PlayerControllerListener
 {
 	public static void main(String[] args)
 	{
@@ -45,6 +46,8 @@ public class ServerGameInstance extends GameInstance
 	private boolean isRunning;
 	
 	private ObservableList<MsgChatMessage> chatMsgs;
+	
+	private List<ServerListener> listeners;
 	
 	private void startConnectionThread()
 	{
@@ -68,11 +71,13 @@ public class ServerGameInstance extends GameInstance
 					{
 						Debug.log("Client at <" + s.getInetAddress() + "> is controller for player 1.");
 						ServerGameInstance.getInstance().setControllerPlayer1(controller);
+						listeners.forEach(l -> l.playerConnected(player1));
 					}
 					else if(ServerGameInstance.getInstance().getPlayer2Controller() == null)
 					{
 						Debug.log("Client at <" + s.getInetAddress() + "> is controller for player 2.");
 						ServerGameInstance.getInstance().setControllerPlayer2(controller);
+						listeners.forEach(l -> l.playerConnected(player2));
 					}
 				}
 				catch (SocketTimeoutException e)
@@ -137,10 +142,6 @@ public class ServerGameInstance extends GameInstance
 
 	private List<Long> p2Combo;
 
-	private PlayerController player1Controller;
-
-	private PlayerController player2Controller;
-
 	private Collection<GameObject> removeObjects;
 
 	private boolean running;
@@ -151,6 +152,7 @@ public class ServerGameInstance extends GameInstance
 		removeObjects = new CopyOnWriteArrayList<>();
 		currentRunes = new CopyOnWriteArrayList<>();
 		chatMsgs = FXCollections.observableArrayList();
+		listeners = new ArrayList<>();
 		p1Combo = new ArrayList<>();
 		p2Combo = new ArrayList<>();
 
@@ -201,12 +203,12 @@ public class ServerGameInstance extends GameInstance
 
 	public PlayerController getPlayer1Controller()
 	{
-		return player1Controller;
+		return player1.getController();
 	}
 
 	public PlayerController getPlayer2Controller()
 	{
-		return player2Controller;
+		return player2.getController();
 	}
 
 	public void handleFrame(long now)
@@ -233,12 +235,14 @@ public class ServerGameInstance extends GameInstance
 
 	public void setControllerPlayer1(PlayerController controller)
 	{
-		player1Controller = controller;
+		player1.setController(controller);
+		controller.addListener(this);
 	}
 
 	public void setControllerPlayer2(PlayerController controller)
 	{
-		player2Controller = controller;
+		player2.setController(controller);
+		controller.addListener(this);
 	}
 
 	public void setDrawSize(double width, double height)
@@ -292,12 +296,12 @@ public class ServerGameInstance extends GameInstance
 
 	private void checkPlayer1Input()
 	{
-		if (player1Controller == null || !player1Controller.isConnected())
+		if (player1.getController() == null || !player1.getController().isConnected())
 		{
 			return;
 		}
 
-		String inputString = player1Controller.getInputString();
+		String inputString = player1.getController().getInputString();
 
 		if (inputString == null || inputString.isEmpty())
 		{
@@ -315,12 +319,12 @@ public class ServerGameInstance extends GameInstance
 
 	private void checkPlayer2Input()
 	{
-		if (player2Controller == null || !player2Controller.isConnected())
+		if (player2.getController() == null || !player2.getController().isConnected())
 		{
 			return;
 		}
 
-		String inputString = player2Controller.getInputString();
+		String inputString = player2.getController().getInputString();
 
 		if (inputString == null || inputString.isEmpty())
 		{
@@ -472,6 +476,8 @@ public class ServerGameInstance extends GameInstance
 
 		player.damage(spell.getDamage());
 
+		listeners.forEach(ServerListener::refreshPlayers);
+		
 		removeObjects.add(spell);
 	}
 
@@ -589,7 +595,10 @@ public class ServerGameInstance extends GameInstance
 	
 	private void handlePlayerName(MsgPlayerName msg, Player player)
 	{
-		player.setName(msg.getName());}
+		player.setName(msg.getName());
+		
+		listeners.forEach(ServerListener::refreshPlayers);
+	}
 
 	private void refresh()
 	{
@@ -626,28 +635,28 @@ public class ServerGameInstance extends GameInstance
 		MsgGameEnd msg = new MsgGameEnd();
 		msg.setVictor(victor);
 		
-		if (player1Controller != null && player1Controller.isConnected())
+		if (player1.getController() != null && player1.getController().isConnected())
 		{
 			try
 			{
-				player1Controller.sendMsg(msg);
+				player1.getController().sendMsg(msg);
 			}
 			catch (RuntimeException e)
 			{
 				System.out.println(e);
-				player1Controller = null;
+				player1.setController(null);
 			}
 		}
 
-		if (player2Controller != null && player2Controller.isConnected())
+		if (player2.getController() != null && player2.getController().isConnected())
 		{
 			try
 			{
-				player2Controller.sendMsg(msg);
+				player2.getController().sendMsg(msg);
 			}
 			catch (RuntimeException e)
 			{
-				player2Controller = null;
+				player2.setController(null);
 			}
 		}
 	}
@@ -655,14 +664,14 @@ public class ServerGameInstance extends GameInstance
 	private void sendChatMessage(MsgChatMessage msg)
 	{
 		chatMsgs.add(msg);
-		if (player1Controller != null && player1Controller.isConnected())
+		if (player1.getController() != null && player1.getController().isConnected())
 		{
-			player1Controller.sendMsg(msg);
+			player1.getController().sendMsg(msg);
 		}
 
-		if (player2Controller != null && player2Controller.isConnected())
+		if (player2.getController() != null && player2.getController().isConnected())
 		{
-			player2Controller.sendMsg(msg);
+			player2.getController().sendMsg(msg);
 		}
 	}
 
@@ -691,28 +700,28 @@ public class ServerGameInstance extends GameInstance
 			e1.printStackTrace();
 		}
 
-		if (player1Controller != null && player1Controller.isConnected())
+		if (player1.getController() != null && player1.getController().isConnected())
 		{
 			try
 			{
-				player1Controller.updateGameState(msgMap.toString());
+				player1.getController().updateGameState(msgMap.toString());
 			}
 			catch (RuntimeException e)
 			{
 				System.out.println(e);
-				player1Controller = null;
+				player1.setController(null);
 			}
 		}
 
-		if (player2Controller != null && player2Controller.isConnected())
+		if (player2.getController() != null && player2.getController().isConnected())
 		{
 			try
 			{
-				player2Controller.updateGameState(msgMap.toString() + "\n");
+				player2.getController().updateGameState(msgMap.toString() + "\n");
 			}
 			catch (RuntimeException e)
 			{
-				player2Controller = null;
+				player2.setController(null);
 			}
 		}
 	}
@@ -728,4 +737,23 @@ public class ServerGameInstance extends GameInstance
 		}
 	}
 
+	public void addServerListener(ServerListener listener)
+	{
+		listeners.add(listener);
+	}
+
+	@Override
+	public void connectionLost(PlayerController playerController)
+	{
+		if(playerController == player1.getController())
+		{
+			player1.setName("BOT_Player_1");
+			listeners.forEach(l -> l.playerDisconnected(player1));
+		}
+		else if(playerController == player2.getController())
+		{
+			player1.setName("BOT_Player_2");
+			listeners.forEach(l -> l.playerDisconnected(player2));
+		}
+	}
 }

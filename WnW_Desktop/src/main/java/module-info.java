@@ -1,4 +1,5 @@
-module WnW_Desktop {
+module WnW_Desktop
+{
 	exports de.jjl.wnw.desktop.game;
 	exports de.jjl.wnw.desktop.gui;
 	exports de.jjl.wnw.desktop.consts;

@@ -8,6 +8,8 @@ import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
+import java.util.ArrayList;
+import java.util.List;
 
 import de.jjl.wnw.base.msg.Msg;
 import de.jjl.wnw.base.msg.MsgChatMessage;
@@ -22,10 +24,13 @@ public class NetPlayerController implements PlayerController
 	private Socket socket;
 	
 	private BufferedWriter writer;
+	
+	private List<PlayerControllerListener> listeners;
 
 	public NetPlayerController(Socket socket)
-	{	
-		connected = true;
+	{
+		listeners = new ArrayList<>();
+		setConnected(true);
 		this.socket = socket;
 		try
 		{
@@ -34,7 +39,7 @@ public class NetPlayerController implements PlayerController
 		catch (SocketException e)
 		{
 			e.printStackTrace();
-			connected = false;
+			setConnected(false);
 		}
 
 		init();
@@ -62,7 +67,7 @@ public class NetPlayerController implements PlayerController
 		{
 			// TODO $Li 26.02.2019 Close connection to controller
 			System.out.println("Lost connection to player");
-			connected = false;
+			setConnected(false);
 			return null;
 		}
 		
@@ -86,7 +91,7 @@ public class NetPlayerController implements PlayerController
 		{
 			// TODO Auto-generated catch block
 			System.err.println("Lost connection to <" + socket.getInetAddress() + ">");
-			connected = false;
+			setConnected(false);
 			throw new RuntimeException("Player connection lost");
 		}
 	}
@@ -95,14 +100,14 @@ public class NetPlayerController implements PlayerController
 	{
 		try
 		{
-			connected = true;
+			setConnected(true);
 			reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 		}
 		catch (IOException e)
 		{
 			e.printStackTrace();
-			connected = false;
+			setConnected(false);
 		}
 	}
 
@@ -116,6 +121,22 @@ public class NetPlayerController implements PlayerController
 		catch (IOException e)
 		{
 			e.printStackTrace();
+		}
+	}
+	
+	@Override
+	public void addListener(PlayerControllerListener listener)
+	{
+		listeners.add(listener);
+	}
+	
+	private void setConnected(boolean connected)
+	{
+		this.connected = connected;
+		
+		if(connected == false)
+		{
+			listeners.forEach(l -> l.connectionLost(this));
 		}
 	}
 }

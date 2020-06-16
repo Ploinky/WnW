@@ -2,6 +2,8 @@ package de.jjl.wnw.dev.game;
 
 import java.io.Serializable;
 
+import de.jjl.wnw.dev.PlayerController;
+
 public class GamePlayer implements Player, Serializable
 {
 	private static final long serialVersionUID = -3838210747472502302L;
@@ -15,6 +17,8 @@ public class GamePlayer implements Player, Serializable
 	private String name;
 	
 	private int width;
+	
+	private transient PlayerController controller;
 
 	/** X-Position in the arena */
 	private int x;
@@ -123,5 +127,21 @@ public class GamePlayer implements Player, Serializable
 	@Override
 	public void update(float frameTime)
 	{
+	}
+	
+	@Override
+	public String toString()
+	{
+		return name + " (" + getLives() + ")";
+	}
+	
+	public void setController(PlayerController controller)
+	{
+		this.controller = controller;
+	}
+	
+	public PlayerController getController()
+	{
+		return controller;
 	}
 }

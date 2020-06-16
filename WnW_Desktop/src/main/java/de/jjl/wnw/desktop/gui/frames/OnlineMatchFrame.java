@@ -34,6 +34,7 @@ import de.jjl.wnw.desktop.util.WnWDesktopPath;
 import de.jjl.wnw.dev.PlayerController;
 import de.jjl.wnw.dev.game.ClientGameInstance;
 import de.jjl.wnw.dev.log.Debug;
+import de.jjl.wnw.dev.net.PlayerControllerListener;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -528,5 +529,12 @@ public class OnlineMatchFrame extends Frame implements PlayerController, EventHa
 				return;
 			}
 		}
+	}
+
+	@Override
+	public void addListener(PlayerControllerListener listener)
+	{
+		// TODO Auto-generated method stub
+
 	}
 }
