@@ -116,24 +116,24 @@ public class Spell implements GameObject
 		{
 			if(caster.isFaceLeft())
 			{
-				x -= frameTime * speed / 1000;
+				setX((int) (x - frameTime * speed / 1000));
 			}
 			else
 			{
-				x += frameTime * speed / 1000;
+				setX((int) (x + frameTime * speed / 1000));
 			}
 		}
 		else
 		{
-			this.x = getCaster().getX();
+			setX(getCaster().getX());
 			
 			if(caster.isFaceLeft())
 			{
-				x -= (getWidth() + getCaster().getWidth());
+				setX((int) (x - (getWidth() + getCaster().getWidth())));
 			}
 			else
 			{
-				x += (getWidth() + getCaster().getWidth()) * 2;
+				setX((int) (x + (getWidth() + getCaster().getWidth()) * 2));
 			}
 		}
 	}
@@ -145,8 +145,8 @@ public class Spell implements GameObject
 
 	public void setPos(int x, int y)
 	{
-		this.x = x;
-		this.y = y;
+		setX(x);
+		setY(y);
 	}
 
 	public void setShield(boolean shield)

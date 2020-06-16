@@ -214,9 +214,9 @@ public class ServerGameInstance extends GameInstance
 		frameTime = now - lastFrame;
 		lastFrame = now;
 
+		checkPlayerInput();
 		updateObjects(frameTime);
 		collide();
-		checkPlayerInput();
 		refresh();
 		sendGameState();
 	}
